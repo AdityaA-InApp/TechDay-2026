@@ -352,7 +352,7 @@
     font-size: clamp(13px,1.6vw,16px); color:#d7dfec; line-height:1.6;
   }
   .candor b{ color: var(--accent) }
-  .slide.dense{ gap: 1.9vh; padding-bottom: 9vh }
+  .slide.dense{ gap: 2.8vh; padding-bottom: 9vh }
   .sidecol{ display:flex; flex-direction:column; gap:12px; width:min(380px,46vw); text-align:left }
   .sidecol .human-card{ width:100% }
   .sidecol .candor{ padding: 12px 16px; font-size: clamp(12px,1.4vw,14.5px) }
@@ -360,6 +360,186 @@
   .mut-note{ font-family: var(--mono); font-size: 12.5px; color: var(--mut) }
   .spark{ animation: sparkjit .16s steps(2) infinite }
   @keyframes sparkjit{ 50%{ transform: translate(3px,-2px) } }
+
+  /* ── harness engineering ──────────────────────────────── */
+  .eq{ display:flex; align-items:center; gap: clamp(10px,1.8vw,22px); flex-wrap:wrap; justify-content:center }
+  .eqbox{
+    font-family: var(--mono); font-weight: 800; letter-spacing: .08em;
+    font-size: clamp(15px, 2.4vw, 28px);
+    padding: 14px 28px; border-radius: 14px;
+    background: var(--panel); border: 2px solid var(--line);
+  }
+  .eq .eqop{ font-size: clamp(20px, 3vw, 36px); font-weight: 700; color: var(--accent) }
+  .eq-agent{ border-color: hsl(var(--hue) 75% 58% / .65); background: var(--accent-soft) }
+  .eq-harness{
+    border-color: var(--accent); background: var(--accent-soft); position: relative;
+    animation: eqglow 2.4s ease-out infinite;
+  }
+  @keyframes eqglow{
+    0%{ box-shadow: 0 0 0 0 hsl(var(--hue) 85% 55% / .4) }
+    100%{ box-shadow: 0 0 0 16px hsl(var(--hue) 85% 55% / 0) }
+  }
+  .eqcap{ font-size: clamp(13.5px,1.6vw,17px); color: var(--mut) }
+  .eqcap strong{ color: var(--ink) }
+  .hlayers{ display:flex; gap: 18px; flex-wrap:wrap; justify-content:center; max-width: 1060px }
+  .hlayer{
+    width: 186px; text-align:left; padding: 15px 15px 16px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--line);
+    border-top: 3px solid var(--accent);
+  }
+  .hlayer .hl-num{ font-family: var(--mono); font-size: 11px; letter-spacing: .24em; color: var(--accent) }
+  .hlayer h4{ font-size: 14.5px; margin: 7px 0 6px }
+  .hlayer p{ font-size: 12.5px; color: var(--mut); line-height: 1.55 }
+  [data-step].on .hlayer{ animation: unpack .6s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .hlayer:nth-child(2){ animation-delay:.1s }
+  [data-step].on .hlayer:nth-child(3){ animation-delay:.2s }
+  [data-step].on .hlayer:nth-child(4){ animation-delay:.3s }
+  [data-step].on .hlayer:nth-child(5){ animation-delay:.4s }
+  @keyframes unpack{ from{ opacity:0; transform: translateY(-38px) scale(.82) } }
+
+  /* ── failure modes → harness fixes ────────────────────── */
+  .fmrow{ display:flex; align-items:stretch; gap: 14px; width: min(880px, 92vw) }
+  .fm-bad, .fm-fix{
+    flex:1; text-align:left; padding: 13px 17px; border-radius: 12px;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  .fm-bad{ border-left: 4px solid #e2564f }
+  .fm-fix{ border-left: 4px solid #1f9d5c }
+  .fm-bad b, .fm-fix b{ font-family: var(--mono); font-size: 11.5px; letter-spacing: .2em; display:block; margin-bottom: 6px }
+  .fm-bad b{ color: #e2564f }
+  .fm-fix b{ color: #1f9d5c }
+  .fm-bad p, .fm-fix p{ font-size: clamp(12.5px,1.5vw,15px); line-height: 1.5; color: var(--mut) }
+  .fm-bad p strong, .fm-fix p strong{ color: var(--ink) }
+  .fm-arr{ align-self: center; font-size: clamp(18px,2.2vw,26px); font-weight: 700; color: var(--accent) }
+  [data-step].on .fm-bad{ animation: fmL .5s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .fm-arr{ animation: fmPop .35s ease .22s backwards }
+  [data-step].on .fm-fix{ animation: fmR .5s cubic-bezier(.16,1,.3,1) .3s backwards }
+  @keyframes fmL{ from{ opacity:0; transform: translateX(-48px) } }
+  @keyframes fmR{ from{ opacity:0; transform: translateX(48px) } }
+  @keyframes fmPop{ from{ opacity:0; transform: scale(.3) } }
+
+  /* ── openspec slide ──────────────────────────────────── */
+  .os2col{ display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center }
+  .filetree{
+    font-family:var(--mono); font-size:clamp(11.5px,1.35vw,13.5px);
+    text-align:left; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:16px 22px; min-width:256px; line-height:2.15;
+  }
+  .tl{ display:block; color:var(--mut); white-space:pre }
+  .tl .dir{ color:var(--ink); font-weight:700 }
+  .tl .tlac{ color:var(--accent); font-weight:700 }
+  .tl .badge{
+    display:inline-block; font-size:9.5px; padding:1px 7px; border-radius:99px;
+    margin-left:8px; background:var(--accent-soft); color:var(--accent);
+    vertical-align:middle; letter-spacing:.1em;
+  }
+  [data-step].on .tl{ animation:treefly .42s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .tl:nth-child(2){ animation-delay:.07s }
+  [data-step].on .tl:nth-child(3){ animation-delay:.14s }
+  [data-step].on .tl:nth-child(4){ animation-delay:.21s }
+  [data-step].on .tl:nth-child(5){ animation-delay:.28s }
+  [data-step].on .tl:nth-child(6){ animation-delay:.35s }
+  [data-step].on .tl:nth-child(7){ animation-delay:.42s }
+  [data-step].on .tl:nth-child(8){ animation-delay:.49s }
+  @keyframes treefly{ from{ opacity:0; transform:translateX(-22px) } }
+
+  .specsnip{
+    font-family:var(--mono); font-size:clamp(11px,1.3vw,13.5px);
+    text-align:left; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; overflow:hidden; min-width:256px;
+  }
+  .specsnip header{ padding:7px 14px; background:var(--line); font-size:10.5px; color:var(--mut); letter-spacing:.12em }
+  .specsnip pre{ padding:14px 18px; line-height:2; color:var(--mut); white-space:pre-wrap }
+  .specsnip .sh{ color:var(--accent); font-weight:700 }
+  .specsnip .kw{ color:#4aae6b; font-weight:700 }
+  .specsnip .gw{ color:hsl(var(--hue) 78% 62%) }
+  [data-step].on .specsnip{ animation:sniprise .5s cubic-bezier(.16,1,.3,1) backwards }
+  @keyframes sniprise{ from{ opacity:0; transform:translateY(28px) scale(.96) } }
+
+  .phase-strip{ display:flex; align-items:stretch; gap:0; flex-wrap:wrap; justify-content:center }
+  .pbox{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:12px 22px; min-width:128px; border-radius:10px;
+    border:2px solid var(--line); background:var(--panel);
+    font-family:var(--mono); font-weight:700; letter-spacing:.1em;
+    font-size:clamp(11px,1.3vw,14px);
+  }
+  .pbox .ph-label{ color:var(--ink) }
+  .pbox .ph-sub{ font-size:10px; color:var(--mut); margin-top:3px; letter-spacing:.04em; font-weight:400; text-transform:none }
+  .pbox.ph-active{ border-color:var(--accent); background:var(--accent-soft) }
+  .ph-arr{ align-self:center; font-size:clamp(16px,2vw,22px); color:var(--accent); padding:0 12px; font-weight:700; line-height:1 }
+  [data-step].on .pbox{ animation:phaseup .5s cubic-bezier(.16,1,.3,1) var(--ad,0s) backwards }
+  [data-step].on .ph-arr{ animation:fmPop .3s ease var(--ad,0s) backwards }
+  @keyframes phaseup{ from{ opacity:0; transform:translateY(26px) } }
+
+  /* enhanced war cards */
+  .war[data-step].on{ animation:warslide .52s cubic-bezier(.16,1,.3,1) backwards }
+  @keyframes warslide{ from{ opacity:0; transform:translateX(52px) } }
+
+  /* ── RLM: recursive language models ──────────────────── */
+  .rlm-child{ transform-box: fill-box; transform-origin: center; opacity:0 }
+  [data-step].on .rlm-child{ animation: popin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  .stats3{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center }
+  .statcard{
+    width: 216px; padding: 16px 17px 14px; border-radius: 14px; text-align:left;
+    background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--accent);
+  }
+  .statcard .stat-num{ font-family: var(--mono); font-size: clamp(20px,2.6vw,26px); font-weight:800; color: var(--accent) }
+  .statcard p{ font-size: 12.5px; color: var(--mut); line-height:1.5; margin-top:6px }
+  [data-step].on .statcard{ animation: rise .55s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .statcard:nth-child(2){ animation-delay:.1s }
+  [data-step].on .statcard:nth-child(3){ animation-delay:.2s }
+
+  /* ── Ralph loop ───────────────────────────────────────── */
+  .rline{ opacity:0 }
+  .slide.active .rline{ animation: rline-in .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(var(--d,0s) + .4s) }
+  @keyframes rline-in{ from{ opacity:0; transform:translateY(10px) } to{ opacity:1; transform:none } }
+  .rline .car{ display:inline-block; width:9px; color:var(--accent); animation: blink .9s steps(1) infinite }
+  .ralphwrap{ display:flex; gap:36px; align-items:center; flex-wrap:wrap; justify-content:center }
+  .loopcol{ display:flex; flex-direction:column; gap:16px; align-items:center; max-width:340px }
+  .receipts{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; align-items:stretch }
+  .receipt{
+    width: 190px; padding: 16px; border-radius: 12px; text-align:left; font-family: var(--mono);
+    background: var(--panel); border: 1px dashed var(--line);
+  }
+  .receipt .rnum{ font-size: clamp(19px,2.4vw,24px); font-weight:800; color: var(--accent) }
+  .receipt p{ font-size: 12px; color: var(--mut); margin-top:6px; line-height:1.5; font-family: var(--sans) }
+  .fm-bad.ralph-fail{ width:min(300px,90vw) }
+  [data-step].on .receipt, [data-step].on .fm-bad.ralph-fail{ animation: rise .55s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .receipt:nth-child(2){ animation-delay:.1s }
+  [data-step].on .fm-bad.ralph-fail{ animation-delay:.2s }
+
+  /* ── loop engineering staircase ──────────────────────── */
+  .stairwrap{ display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; justify-content:center }
+  .stair{
+    width: 192px; padding: 16px 14px; border-radius: 12px 12px 4px 4px; text-align:left;
+    background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--line);
+    opacity:0; transform: translateY(50px);
+  }
+  .stair:nth-child(1){ margin-bottom:0 }
+  .stair:nth-child(2){ margin-bottom:26px }
+  .stair:nth-child(3){ margin-bottom:52px }
+  .stair:nth-child(4){ margin-bottom:78px }
+  .slide.active .stair{ animation: stairup .6s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  @keyframes stairup{ to{ opacity:1; transform: translateY(0) } }
+  .stair .st-era{ font-family: var(--mono); font-size:11px; letter-spacing:.14em; color: var(--accent) }
+  .stair .st-txt{ font-size: 13.5px; color: var(--mut); margin-top:6px; line-height:1.4 }
+  .stair.stair-top{ border-color: var(--accent); background: var(--accent-soft) }
+  .stair.stair-top .st-era{ color: var(--ink); font-weight:800 }
+  .slide.active .stair.stair-top{
+    animation-name: stairup, eqglow;
+    animation-duration: .6s, 2.4s;
+    animation-timing-function: cubic-bezier(.16,1,.3,1), ease-out;
+    animation-delay: var(--d,0s), calc(var(--d,0s) + .6s);
+    animation-iteration-count: 1, infinite;
+    animation-fill-mode: forwards, none;
+  }
+  .widecard{
+    max-width: 780px; padding: 18px 26px; border-radius: 14px; text-align:left;
+    background: var(--panel); border: 1px solid var(--line);
+    font-size: clamp(13.5px,1.6vw,16px); color: var(--mut); line-height:1.9;
+  }
+  .widecard strong{ color: var(--ink) }
 
   /* ── ops dashboard ────────────────────────────────────── */
   .ops{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center }
@@ -726,46 +906,44 @@
   <section class="slide dense" id="s-harness" data-hue="222" data-chlabel="3 · Discipline">
     <p class="kicker" data-anim>Taming the tiger</p>
     <h2 data-anim style="--d:.08s">Harness engineering</h2>
-    <div class="loopwrap">
-      <svg viewBox="0 0 460 412" style="width:min(380px,50vw)" data-anim aria-label="A harness of guardrails closing around an agent">
-        <g data-hide-on="1">
-          <g class="spark" stroke="#e2564f" fill="none" stroke-width="2.5" opacity=".8">
-            <path d="M230,200 L302,124 L338,146 L396,74"/>
-            <path d="M230,200 L152,156 L124,184 L58,128"/>
-            <path d="M230,200 L262,288 L226,326 L286,376"/>
-          </g>
-          <text x="360" y="52" fill="#e2564f" class="lbl-s" style="font-size:15px">unpredictable</text>
-        </g>
-        <circle class="pulse-ring" cx="230" cy="200" r="54" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2"/>
-        <circle cx="230" cy="200" r="46" class="box-acc"/>
-        <text x="230" y="207" text-anchor="middle" class="lbl" style="font-size:18px">AGENT</text>
-        <g data-step="1">
-          <g fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="4" stroke-linecap="round">
-            <path class="draw" pathLength="1000" d="M175.1,82.2 A130,130 0 0 1 284.9,82.2"/>
-            <path class="draw" style="--d:.12s" pathLength="1000" d="M304.6,93.5 A130,130 0 0 1 359.5,188.7"/>
-            <path class="draw" style="--d:.24s" pathLength="1000" d="M359.5,211.3 A130,130 0 0 1 304.6,306.5"/>
-            <path class="draw" style="--d:.36s" pathLength="1000" d="M284.9,317.8 A130,130 0 0 1 175.1,317.8"/>
-            <path class="draw" style="--d:.48s" pathLength="1000" d="M155.4,306.5 A130,130 0 0 1 100.5,211.3"/>
-            <path class="draw" style="--d:.6s" pathLength="1000" d="M100.5,188.7 A130,130 0 0 1 155.4,93.5"/>
-          </g>
-          <g>
-            <text x="230" y="30" text-anchor="middle" class="lbl-s" style="font-size:17px">Permissions</text>
-            <text x="378" y="114" text-anchor="middle" class="lbl-s" style="font-size:17px">Sandbox</text>
-            <text x="380" y="292" text-anchor="middle" class="lbl-s" style="font-size:17px">Tests</text>
-            <text x="230" y="398" text-anchor="middle" class="lbl-s" style="font-size:17px">Review gates</text>
-            <text x="82" y="292" text-anchor="middle" class="lbl-s" style="font-size:17px">Budgets</text>
-            <text x="80" y="114" text-anchor="middle" class="lbl-s" style="font-size:17px">Telemetry</text>
-          </g>
-        </g>
-      </svg>
-      <div class="sidecol" data-step="2">
-        <div class="kcard"><h4><span class="dot"></span>Claude Code</h4><p>Hooks, permission modes, skills, CLAUDE.md — the harness is a first-class product surface.</p></div>
-        <div class="kcard"><h4><span class="dot"></span>OpenAI Codex</h4><p>Sandboxed cloud runs per task — nothing lands without a reviewable PR.</p></div>
-        <div class="kcard"><h4><span class="dot"></span>AWS Kiro</h4><p>Spec-first IDE — requirements and agent hooks live where the code does.</p></div>
-        <p class="mut-note">+ Cursor · Copilot · Gemini CLI — different cockpits, same instinct: build the cage.</p>
-      </div>
+    <div class="eq" data-anim style="--d:.22s">
+      <span class="eqbox eq-agent">AGENT</span>
+      <span class="eqop">=</span>
+      <span class="eqbox">MODEL</span>
+      <span class="eqop">+</span>
+      <span class="eqbox eq-harness">HARNESS</span>
     </div>
-    <p class="sub" data-step="3"><strong>The model is the engine. The harness is the vehicle.</strong> We engineer the vehicle.</p>
+    <p class="eqcap" data-anim style="--d:.36s">The model is the raw intelligence. <strong>The harness is everything wrapped around it that makes it dependable.</strong></p>
+    <div class="hlayers" data-step="1">
+      <div class="hlayer"><span class="hl-num">01</span><h4>Tool orchestration</h4><p>What it may call, in what order — and what happens when a call fails.</p></div>
+      <div class="hlayer"><span class="hl-num">02</span><h4>Verification loops</h4><p>Tests and self-critique run <em>during</em> the work, not after it.</p></div>
+      <div class="hlayer"><span class="hl-num">03</span><h4>Context &amp; memory</h4><p>CLAUDE.md, indexed code, state that survives the session.</p></div>
+      <div class="hlayer"><span class="hl-num">04</span><h4>Guardrails</h4><p>Permissions, sandboxes, budgets, human approval gates.</p></div>
+      <div class="hlayer"><span class="hl-num">05</span><h4>Observability</h4><p>Telemetry and audit trails — you can see <em>why</em> it did what it did.</p></div>
+    </div>
+    <p class="sub" data-step="2"><strong>The model is the engine. The harness is the vehicle.</strong> We engineer the vehicle.</p>
+  </section>
+
+  <section class="slide dense" id="s-failmodes" data-hue="222" data-chlabel="3 · Discipline">
+    <p class="kicker" data-anim>Why it matters</p>
+    <h2 data-anim style="--d:.08s">Failure modes no prompt can fix</h2>
+    <p class="eqcap" data-anim style="--d:.2s">These are properties of the <strong>model</strong>. They get solved in the <strong>harness</strong>.</p>
+    <div class="fmrow" data-step="1">
+      <div class="fm-bad"><b>🏁 VICTORY DECLARATION</b><p><strong>"Done!"</strong> — task marked complete, outcome never verified.</p></div>
+      <span class="fm-arr">→</span>
+      <div class="fm-fix"><b>HARNESS FIX</b><p>Verification loops — <strong>"done" doesn't exist until the tests say so.</strong></p></div>
+    </div>
+    <div class="fmrow" data-step="2">
+      <div class="fm-bad"><b>😰 CONTEXT ANXIETY</b><p>The context window fills up — the model <strong>panics and rushes</strong>, cutting corners.</p></div>
+      <span class="fm-arr">→</span>
+      <div class="fm-fix"><b>HARNESS FIX</b><p>Progress trackers and memory that <strong>survive across sessions</strong>.</p></div>
+    </div>
+    <div class="fmrow" data-step="3">
+      <div class="fm-bad"><b>🌀 ONE-SHOT OVERREACH</b><p>Attacks the whole problem at once — an <strong>undocumented tangle</strong> of changes.</p></div>
+      <span class="fm-arr">→</span>
+      <div class="fm-fix"><b>HARNESS FIX</b><p>Plan/build separation — <strong>small, reviewable diffs</strong>.</p></div>
+    </div>
+    <p class="sub" data-step="4"><strong>It's not about the cockpit.</strong> Claude Code, Codex, Kiro, Cursor — every tool ships <em>a</em> harness. Engineering <em>yours</em> — for your codebase, your gates — is the job.</p>
   </section>
 
   <section class="slide" id="s-sdd" data-hue="222" data-chlabel="3 · Discipline">
@@ -795,10 +973,50 @@
     <p class="sub" data-anim style="--d:.3s">A real OpenSpec build. <strong>A war story, not a demo.</strong> We're not describing a theory — here's a thing we shipped.</p>
   </section>
 
+  <section class="slide dense" id="s-openspec" data-hue="148" data-chlabel="4 · Proof">
+    <p class="kicker" data-anim>Before a line of code runs</p>
+    <h2 data-anim style="--d:.08s">OpenSpec: spec is the interface</h2>
+    <div class="os2col">
+      <div data-step="1">
+        <div class="filetree">
+          <span class="tl"><span class="dir">openspec/</span></span>
+          <span class="tl">  ├── <span class="dir">specs/</span><span class="badge">SOURCE OF TRUTH</span></span>
+          <span class="tl">  │   └── refund/  spec.md</span>
+          <span class="tl">  └── <span class="dir">changes/</span><span class="badge">ACTIVE PROPOSAL</span></span>
+          <span class="tl">      └── add-refund/</span>
+          <span class="tl">          ├── proposal.md</span>
+          <span class="tl">          ├── design.md   tasks.md</span>
+          <span class="tl">          └── <span class="tlac">delta.md</span>  ← ADDED · MODIFIED · REMOVED</span>
+        </div>
+      </div>
+      <div data-step="2">
+        <div class="specsnip">
+          <header>spec.md · excerpt</header>
+          <pre><span class="sh">## Requirements</span>
+R1 — <span class="kw">MUST</span> process refunds atomically
+
+<span class="sh">## Scenarios</span>
+<span class="gw">GIVEN</span> a refund request on a $100 order
+<span class="gw">WHEN</span>  the ledger write succeeds
+<span class="gw">THEN</span>  balance reflects $70
+      + immutable audit entry created</pre>
+        </div>
+      </div>
+    </div>
+    <div class="phase-strip" data-step="3">
+      <div class="pbox ph-active" style="--ad:0s"><div class="ph-label">/opsx:propose</div><div class="ph-sub">generate artifacts · review before code</div></div>
+      <span class="ph-arr" style="--ad:.12s">→</span>
+      <div class="pbox" style="--ad:.2s"><div class="ph-label">/opsx:apply</div><div class="ph-sub">implement with harness · iterate freely</div></div>
+      <span class="ph-arr" style="--ad:.32s">→</span>
+      <div class="pbox" style="--ad:.4s"><div class="ph-label">/opsx:archive</div><div class="ph-sub">delta merges into living specs</div></div>
+    </div>
+    <p class="sub" data-step="4">61k GitHub stars · 25+ tools · MIT licensed · no API key. <strong>Fluid, not rigid — no phase gates. Works with any agent, any codebase.</strong></p>
+  </section>
+
   <section class="slide" id="s-war" data-hue="148" data-chlabel="4 · Proof">
     <p class="kicker" data-anim>What actually happened</p>
     <div class="split">
-      <!-- EDIT: replace this spec excerpt with a (sanitized) excerpt of the real spec -->
+      <!-- EDIT: replace this spec excerpt with a sanitized excerpt of your real spec -->
       <div class="speccard" data-anim style="--d:.15s">
         <header>openspec / changes / add-refund-service / spec.md</header>
         <pre><span class="h">## Requirements</span>
@@ -807,14 +1025,19 @@
 <span class="ok">[x]</span> R3 — immutable audit trail
 <span class="ok">[x]</span> R4 — reconciliation job, nightly
 
+<span class="h">## Scenarios (Given / When / Then)</span>
+GIVEN $30 refund on a $100 order
+WHEN  ledger write succeeds
+THEN  balance = $70 + audit entry
+
 <span class="h">## Acceptance</span>
 <span class="ok">9/9</span> scenarios green before merge</pre>
       </div>
       <div class="warlist">
-        <!-- EDIT: these three cards are the heart of the chapter — swap in your real moments -->
-        <div class="war" data-step="1"><b>😲 WHAT SURPRISED US</b><p>The agent handled an edge case we never discussed — because the acceptance criteria implied it. The spec was smarter than the meeting.</p></div>
+        <!-- EDIT: swap in your real moments -->
+        <div class="war" data-step="1"><b>😲 WHAT SURPRISED US</b><p>The agent handled an edge case we never discussed — because the acceptance criteria implied it. <strong>The spec was smarter than the meeting.</strong></p></div>
         <div class="war" data-step="2"><b>💥 WHAT BROKE</b><p>One ambiguous requirement produced confidently wrong code — three times in a row. The bug wasn't in the model. <strong>The bug was in the spec.</strong></p></div>
-        <div class="war" data-step="3"><b>🚫 WHAT WE'D NEVER DO AGAIN</b><p>Leave "obvious" things unwritten. If it's not in the spec, it does not exist.</p></div>
+        <div class="war" data-step="3"><b>🚫 WHAT WE'D NEVER DO AGAIN</b><p>Leave "obvious" things unwritten. If it's not in the spec, <strong>it does not exist.</strong></p></div>
       </div>
     </div>
     <p class="sub" data-step="4">Honest friction is the point — <strong>that's why you can believe the rest of this talk.</strong></p>
@@ -854,10 +1077,100 @@
       </div>
     </div>
     <div class="cards3" data-step="2">
-      <div class="kcard"><h4><span class="dot"></span>RLMs</h4><p>Models trained on the loop itself — long-horizon, tool-using, self-correcting runs.</p></div>
-      <div class="kcard"><h4><span class="dot"></span>Loop engineering</h4><p>Designing the retry: what feedback re-enters, when to stop, what "better" means.</p></div>
-      <div class="kcard"><h4><span class="dot"></span>Ralph loops</h4><p>The same spec, run again and again overnight — brute-force persistence, surprisingly effective.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>RLMs</h4><p>The model recurses over its own context — reading by writing code, not by scrolling.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Ralph loops</h4><p>The same prompt, run in a while-loop until the tests pass. Embarrassingly simple. It ships.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Loop engineering</h4><p>The new discipline: don't write a sharper prompt — design a better loop.</p></div>
     </div>
+  </section>
+
+  <section class="slide dense" id="s-rlm" data-hue="282" data-chlabel="5 · Autonomy">
+    <p class="kicker" data-anim>Frontier 1 · the model recurses</p>
+    <h2 data-anim style="--d:.08s">Recursive Language Models</h2>
+    <svg viewBox="0 0 1000 400" style="width:min(940px,94vw)" data-anim aria-label="RLM: context collapses into a REPL variable, root model spawns recursive sub-calls">
+      <g class="rlm-ctxbar" data-hide-on="1">
+        <rect class="box-acc" x="60" y="48" width="620" height="56" rx="10"/>
+        <text x="370" y="82" text-anchor="middle" class="lbl" style="font-family:var(--mono)">10M+ tokens</text>
+      </g>
+      <g data-step="1">
+        <rect class="box" x="60" y="150" width="240" height="150" rx="14"/>
+        <text x="180" y="184" text-anchor="middle" class="lbl" style="font-size:14px;letter-spacing:.18em;fill:var(--accent)">REPL</text>
+        <text x="180" y="222" text-anchor="middle" class="lbl-s" style="font-family:var(--mono);font-size:15px;fill:var(--ink);font-weight:600">ctx = &lt;10M tokens&gt;</text>
+        <text x="180" y="250" text-anchor="middle" class="lbl-s">a variable. not a prompt.</text>
+        <circle cx="450" cy="225" r="54" class="box-acc"/>
+        <text x="450" y="222" text-anchor="middle" class="lbl">root</text>
+        <text x="450" y="240" text-anchor="middle" class="lbl">LM</text>
+      </g>
+      <g data-step="2">
+        <path class="draw" pathLength="1000" d="M500,200 C570,150 630,120 690,108" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5"/>
+        <path class="draw" style="--d:.1s" pathLength="1000" d="M504,225 C590,225 630,225 690,225" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5"/>
+        <path class="draw" style="--d:.2s" pathLength="1000" d="M500,250 C570,302 630,332 690,344" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5"/>
+        <g class="rlm-child" style="--d:.15s"><circle cx="732" cy="108" r="42" class="box-acc"/><text x="732" y="105" text-anchor="middle" class="lbl" style="font-size:14px">peek</text><text x="732" y="124" text-anchor="middle" class="lbl-s" style="font-size:11px">LM call</text></g>
+        <g class="rlm-child" style="--d:.3s"><circle cx="752" cy="225" r="42" class="box-acc"/><text x="752" y="222" text-anchor="middle" class="lbl" style="font-size:14px">grep</text><text x="752" y="241" text-anchor="middle" class="lbl-s" style="font-size:11px">LM call</text></g>
+        <g class="rlm-child" style="--d:.45s"><circle cx="732" cy="344" r="42" class="box-acc"/><text x="732" y="335" text-anchor="middle" class="lbl" style="font-size:13px">partition</text><text x="732" y="351" text-anchor="middle" class="lbl" style="font-size:13px">+ map</text></g>
+        <path class="draw" style="--d:.6s" pathLength="1000" d="M710,155 C630,270 570,300 512,258" fill="none" stroke="hsl(var(--hue) 85% 62%)" stroke-width="2" stroke-dasharray="6 6"/>
+        <text x="610" y="300" text-anchor="middle" class="lbl-s" style="font-size:13px" fill="hsl(var(--hue) 85% 65%)">↩ synthesize</text>
+      </g>
+    </svg>
+    <div class="stats3" data-step="3">
+      <div class="statcard"><div class="stat-num">+33%</div><p>RLM(GPT-5-mini) beats GPT-5 on 132k-token tasks</p></div>
+      <div class="statcard"><div class="stat-num">100×</div><p>handles inputs two orders of magnitude past the context window</p></div>
+      <div class="statcard"><div class="stat-num">≤ cost</div><p>comparable or cheaper per query</p></div>
+    </div>
+    <p class="sub" data-step="4"><strong>The context window stopped being a wall.</strong> No single call ever reads the whole thing — reading became a program.</p>
+  </section>
+
+  <section class="slide dense" id="s-ralph" data-hue="282" data-chlabel="5 · Autonomy">
+    <p class="kicker" data-anim>Frontier 2 · brute force meets persistence</p>
+    <h2 data-anim style="--d:.08s">The Ralph loop</h2>
+    <div class="ralphwrap">
+      <div class="term" data-anim style="--d:.15s; width:min(560px,88vw)">
+        <div class="term-head"><i></i><i></i><i></i><span>ralph.sh — the whole strategy</span></div>
+        <div class="term-body small">
+          <div class="tl rline" style="--d:.1s">while :; do</div>
+          <div class="tl rline" style="--d:.5s">&nbsp;&nbsp;cat PROMPT.md | claude -p --dangerously-skip-permissions</div>
+          <div class="tl rline" style="--d:.9s">done<span class="car">▊</span></div>
+        </div>
+      </div>
+      <div class="loopcol">
+        <svg viewBox="0 0 420 420" style="width:min(300px,50vw)" data-step="1" aria-label="Ralph loop: prompt to agent to tests to fail and back">
+          <circle class="spinring" cx="210" cy="210" r="150" fill="none" stroke="hsl(var(--hue) 85% 62%)" stroke-width="2.5" stroke-dasharray="10 14" opacity=".8"/>
+          <g><circle cx="210" cy="60" r="44" class="box-acc"/><text x="210" y="55" text-anchor="middle" class="lbl" style="font-size:12.5px">PROMPT.md</text><text x="210" y="71" text-anchor="middle" class="lbl-s" style="font-size:10.5px">fresh, every time</text></g>
+          <g><circle cx="360" cy="210" r="44" class="box-acc"/><text x="360" y="217" text-anchor="middle" class="lbl">agent</text></g>
+          <g><circle cx="210" cy="360" r="44" class="box-acc"/><text x="210" y="367" text-anchor="middle" class="lbl">tests</text></g>
+          <g><circle cx="60" cy="210" r="44" fill="none" stroke="#e2564f" stroke-width="2.5"/><text x="60" y="205" text-anchor="middle" class="lbl" style="fill:#e2564f;font-size:15px">✗ fail</text><text x="60" y="223" text-anchor="middle" class="lbl-s" style="font-size:10px">loop, don't fix</text></g>
+          <path class="draw" pathLength="1000" d="M248,82 C300,112 340,152 356,177" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5"/>
+          <path class="draw" style="--d:.15s" pathLength="1000" d="M347,250 C322,300 272,336 246,349" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5"/>
+          <path class="draw" style="--d:.3s" pathLength="1000" d="M174,349 C120,322 84,272 66,250" fill="none" stroke="#e2564f" stroke-width="2.5"/>
+          <path class="draw" style="--d:.45s" pathLength="1000" d="M74,177 C100,122 150,92 174,77" fill="none" stroke="#e2564f" stroke-width="2.5"/>
+        </svg>
+        <div class="candor" style="max-width:300px" data-step="1">fresh context, every lap — <b>that's the point, not a side effect</b>.</div>
+      </div>
+    </div>
+    <div class="receipts" data-step="2">
+      <div class="receipt"><div class="rnum">$297</div><p>what a $50k-contract MVP cost overnight</p></div>
+      <div class="receipt"><div class="rnum">6 repos</div><p>shipped in one night at a YC hackathon</p></div>
+      <div class="fm-bad ralph-fail"><b>⚠ WHEN IT DERAILS</b><p>Placeholder code, context exhaustion… sometimes <strong>git reset --hard</strong> and go again.</p></div>
+    </div>
+    <p class="sub" data-step="3"><strong>“Deterministically bad in an undeterministic world.”</strong> — Geoffrey Huntley. The loop is dumb. The persistence isn't.</p>
+  </section>
+
+  <section class="slide dense" id="s-loopeng" data-hue="282" data-chlabel="5 · Autonomy">
+    <p class="kicker" data-anim>Frontier 3 · the new discipline</p>
+    <h2 data-anim style="--d:.08s">Loop engineering</h2>
+    <div class="stairwrap" data-anim style="--d:.1s">
+      <div class="stair" style="--d:.1s"><div class="st-era">PROMPT ENGINEERING · 2023</div><div class="st-txt">sharper words</div></div>
+      <div class="stair" style="--d:.28s"><div class="st-era">CONTEXT ENGINEERING · 2025</div><div class="st-txt">sharper input</div></div>
+      <div class="stair" style="--d:.46s"><div class="st-era">HARNESS ENGINEERING · 2026</div><div class="st-txt">sharper cage</div></div>
+      <div class="stair stair-top" style="--d:.64s"><div class="st-era">LOOP ENGINEERING · now</div><div class="st-txt">sharper cycles</div></div>
+    </div>
+    <div class="chips" data-step="1">
+      <span class="chip">⏱ heartbeat — every N minutes</span>
+      <span class="chip">🗓 cron — on a schedule</span>
+      <span class="chip">🪝 hook — on an event (CI fails, PR opens)</span>
+      <span class="chip">🎯 goal — until the condition is met, then stop</span>
+    </div>
+    <div class="widecard" data-step="2"><strong>What you actually engineer:</strong> a checkable termination condition · feedback sensors (tests, types, CI) · recoverable vs fatal failure · escalation to a human · memory between laps.</div>
+    <p class="sub" data-step="3"><strong>“I don't prompt Claude anymore.”</strong> — Boris Cherny, creator of Claude Code. The prompt became an artifact. The loop became the job.</p>
   </section>
 
   <!-- ════════ CHAPTER 6 · OPS + CLOSE ════════ -->
