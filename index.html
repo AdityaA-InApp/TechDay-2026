@@ -158,10 +158,10 @@
   .term-head span{ margin-left:10px; font-family:var(--mono); font-size:12px; color:#a39394 }
   .term-body{
     padding: 20px 24px; font-family: var(--mono);
-    font-size: clamp(12px, 1.55vw, 16px); line-height: 1.85;
+    font-size: clamp(13px, 1.6vw, 17px); line-height: 1.85;
     min-height: 320px; color:#46393a;
   }
-  .term-body.small{ min-height: 150px; font-size: clamp(11px,1.3vw,14px) }
+  .term-body.small{ min-height: 150px; font-size: clamp(12px,1.4vw,15px) }
   .tl .tp{ color: var(--accent) }
   .tl.dim{ color:#a89a9b }
   .tl.ok{ color:#178a4c }
@@ -186,8 +186,8 @@
 
   /* ── SVG shared ───────────────────────────────────────── */
   svg text{ font-family: var(--sans); fill: var(--ink) }
-  svg .lbl{ font-size: 15px; font-weight: 600 }
-  svg .lbl-s{ font-size: 12.5px; fill: var(--mut); font-weight:500 }
+  svg .lbl{ font-size: 18px; font-weight: 600 }
+  svg .lbl-s{ font-size: 14.5px; fill: var(--mut); font-weight:500 }
   svg .box{ fill: #0d1322; stroke: #263248; stroke-width:1.5 }
   svg .box-acc{ fill: hsl(var(--hue) 80% 55% / .14); stroke: hsl(var(--hue) 85% 60%); stroke-width:2 }
   .draw{ stroke-dasharray: 1000; stroke-dashoffset: 1000 }
@@ -212,14 +212,14 @@
     box-shadow: 0 24px 70px -24px rgba(0,0,0,.7);
   }
   .chatw header{
-    padding: 10px 16px; font-family:var(--mono); font-size:12px; color:var(--mut);
+    padding: 10px 16px; font-family:var(--mono); font-size:13px; color:var(--mut);
     border-bottom: 1px solid var(--line); background:#0e1422;
     display:flex; justify-content:space-between;
   }
   .chatw .msgs{ padding: 16px; display:flex; flex-direction:column; gap:10px; min-height: 176px }
   .bub{
     max-width: 85%; padding: 9px 14px; border-radius: 14px;
-    font-size: clamp(12px,1.4vw,14.5px); line-height:1.45;
+    font-size: clamp(13px,1.5vw,15.5px); line-height:1.45;
   }
   .bub.user{ align-self:flex-end; background: hsl(var(--hue) 75% 50% / .28); border: 1px solid hsl(var(--hue) 70% 55% / .4); border-bottom-right-radius: 4px }
   .bub.bot{ align-self:flex-start; background:#141b2b; border:1px solid #222d42; border-bottom-left-radius:4px; color:#c9d4e4 }
@@ -234,7 +234,7 @@
   .notes{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; max-width: 900px }
   .note{
     width: 200px; padding: 16px 15px 18px; text-align:left;
-    font-family: var(--mono); font-size: 12.5px; line-height:1.5; color:#0e0c04;
+    font-family: var(--mono); font-size: 13.5px; line-height:1.5; color:#0e0c04;
     background: linear-gradient(180deg, #ffe98a, #f8d64e);
     border-radius: 3px; box-shadow: 0 14px 30px -10px rgba(0,0,0,.6);
     transform: rotate(var(--r, -2deg));
@@ -261,7 +261,7 @@
   }
   .docset{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-content:flex-start; width:100% }
   .doc{
-    font-family:var(--mono); font-size:11.5px; padding:7px 11px; border-radius:7px;
+    font-family:var(--mono); font-size:13px; padding:7px 11px; border-radius:7px;
     background:#151d30; border:1px solid #2a3a58; color:#b9c6da; white-space:nowrap;
   }
   [data-step].on .doc{ animation: docfly .55s cubic-bezier(.16,1,.3,1) backwards }
@@ -269,7 +269,7 @@
   [data-step].on .doc:nth-child(4){ animation-delay:.24s } [data-step].on .doc:nth-child(5){ animation-delay:.32s }
   [data-step].on .doc:nth-child(6){ animation-delay:.40s } [data-step].on .doc:nth-child(7){ animation-delay:.48s }
   @keyframes docfly{ from{ opacity:0; transform: translate(-120px, -60px) rotate(-9deg) scale(1.2) } }
-  .ctx-meter{ text-align:left; font-family:var(--mono); font-size:clamp(12px,1.5vw,15px); color:var(--mut); display:flex; flex-direction:column; gap:10px }
+  .ctx-meter{ text-align:left; font-family:var(--mono); font-size:clamp(13px,1.6vw,16px); color:var(--mut); display:flex; flex-direction:column; gap:10px }
   .ctx-meter .row{ display:flex; align-items:center; gap:12px }
   .ctx-meter .bar{ width: 170px; height: 9px; border-radius:99px; background:#141b2b; overflow:hidden }
   .ctx-meter .fill{ display:block; height:100%; border-radius:99px; background: var(--accent); transform-origin:left; transform: scaleX(0); transition: transform 1s cubic-bezier(.2,.7,.2,1) .2s }
@@ -286,7 +286,7 @@
   }
   .tablet .glyph{ font-size: 30px; margin-bottom: 12px }
   .tablet h3{ font-size: clamp(15px,1.8vw,19px); letter-spacing:.03em; margin-bottom:8px }
-  .tablet p{ font-size: 12.5px; color: var(--mut); line-height:1.5 }
+  .tablet p{ font-size: 13.5px; color: var(--mut); line-height:1.5 }
   [data-step].on .tablet{ animation: rise .6s cubic-bezier(.16,1,.3,1) backwards }
   [data-step].on .tablet:nth-child(2){ animation-delay:.12s } [data-step].on .tablet:nth-child(3){ animation-delay:.24s }
   [data-step].on .tablet:nth-child(4){ animation-delay:.36s }
@@ -304,7 +304,7 @@
     font-size: clamp(14px, 1.9vw, 20px); font-family: var(--mono);
   }
   .pipe .flow{ font-size: clamp(18px,2.4vw,28px); color: var(--accent); padding: 0 14px; font-weight:700 }
-  .rails{ font-family:var(--mono); font-size: clamp(11px,1.3vw,13px); letter-spacing:.22em; color:var(--mut);
+  .rails{ font-family:var(--mono); font-size: clamp(12px,1.4vw,14px); letter-spacing:.22em; color:var(--mut);
     border-top: 1px dashed #33415c; border-bottom: 1px dashed #33415c; padding: 8px 22px }
   .loopback{ font-family: var(--mono); font-size: clamp(12px,1.4vw,14px); color: var(--accent) }
   .cards3{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center }
@@ -312,9 +312,9 @@
     width: 240px; text-align:left; padding: 18px; border-radius: 14px;
     background: var(--panel); border: 1px solid var(--line);
   }
-  .kcard h4{ font-size: 15px; margin-bottom: 7px; display:flex; align-items:center; gap:8px }
+  .kcard h4{ font-size: 16px; margin-bottom: 7px; display:flex; align-items:center; gap:8px }
   .kcard h4 .dot{ width:8px; height:8px; border-radius:50%; background: var(--accent); display:inline-block }
-  .kcard p{ font-size: 12.5px; color: var(--mut); line-height: 1.55 }
+  .kcard p{ font-size: 13.5px; color: var(--mut); line-height: 1.55 }
 
   /* ── war story (ch.4) ─────────────────────────────────── */
   .split{ display:flex; gap: 30px; align-items:stretch; flex-wrap:wrap; justify-content:center }
@@ -324,9 +324,9 @@
     box-shadow: 0 20px 50px -24px rgba(60,20,22,.25);
   }
   .speccard header{ padding: 10px 16px; border-bottom:1px solid #f0e5e6; background:#f8f2f2;
-    font-family:var(--mono); font-size: 12px; color:#a39394 }
+    font-family:var(--mono); font-size: 13px; color:#a39394 }
   .speccard pre{
-    padding: 18px; font-family: var(--mono); font-size: clamp(11px,1.35vw,13.5px);
+    padding: 18px; font-family: var(--mono); font-size: clamp(12px,1.45vw,14.5px);
     line-height: 1.85; color: #55494a; white-space: pre-wrap;
   }
   .speccard pre .ok{ color:#178a4c } .speccard pre .h{ color: var(--accent); font-weight:700 }
@@ -335,8 +335,8 @@
     padding: 15px 18px; border-radius: 12px; background: var(--panel);
     border: 1px solid var(--line); border-left: 4px solid var(--accent);
   }
-  .war b{ font-family: var(--mono); font-size: 11px; letter-spacing:.24em; color: var(--accent); display:block; margin-bottom:6px }
-  .war p{ font-size: clamp(13px,1.55vw,15.5px); line-height:1.55; color:#cfd9e8 }
+  .war b{ font-family: var(--mono); font-size: 12px; letter-spacing:.24em; color: var(--accent); display:block; margin-bottom:6px }
+  .war p{ font-size: clamp(14px,1.6vw,16px); line-height:1.55; color:#cfd9e8 }
 
   /* ── autonomy loop ────────────────────────────────────── */
   .loopwrap{ display:flex; gap: 40px; align-items:center; flex-wrap:wrap; justify-content:center }
@@ -352,6 +352,14 @@
     font-size: clamp(13px,1.6vw,16px); color:#d7dfec; line-height:1.6;
   }
   .candor b{ color: var(--accent) }
+  .slide.dense{ gap: 1.9vh; padding-bottom: 9vh }
+  .sidecol{ display:flex; flex-direction:column; gap:12px; width:min(380px,46vw); text-align:left }
+  .sidecol .human-card{ width:100% }
+  .sidecol .candor{ padding: 12px 16px; font-size: clamp(12px,1.4vw,14.5px) }
+  .sidecol .kcard{ width:100%; padding: 13px 16px }
+  .mut-note{ font-family: var(--mono); font-size: 12.5px; color: var(--mut) }
+  .spark{ animation: sparkjit .16s steps(2) infinite }
+  @keyframes sparkjit{ 50%{ transform: translate(3px,-2px) } }
 
   /* ── ops dashboard ────────────────────────────────────── */
   .ops{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center }
@@ -359,16 +367,16 @@
     width: 225px; padding: 18px; border-radius: 14px; text-align:left;
     background: var(--panel); border: 1px solid var(--line);
   }
-  .gauge h5{ font-family: var(--mono); font-size: 10.5px; letter-spacing:.24em; color: var(--mut); margin-bottom: 10px }
+  .gauge h5{ font-family: var(--mono); font-size: 11.5px; letter-spacing:.24em; color: var(--mut); margin-bottom: 10px }
   .gauge .big{ font-family: var(--mono); font-size: clamp(20px,2.6vw,28px); font-weight: 800; letter-spacing:-.02em }
   .gauge .unit{ font-size: 12px; color: var(--mut); margin-left: 4px; font-weight:400 }
   .gauge .bar{ margin-top: 12px; height: 8px; border-radius: 99px; background: #141b2b; overflow:hidden }
   .gauge .bar i{ display:block; height:100%; border-radius:99px; background: var(--accent); transform-origin:left; transform: scaleX(0) }
   .slide.active .gauge .bar i{ transition: transform 1.4s cubic-bezier(.2,.7,.2,1) .4s; transform: scaleX(var(--w,.6)) }
-  .gauge .note-s{ margin-top: 9px; font-size: 11.5px; color: var(--mut); line-height:1.45 }
+  .gauge .note-s{ margin-top: 9px; font-size: 12.5px; color: var(--mut); line-height:1.45 }
   .gauge svg{ display:block; margin-top:6px }
   .models{ display:flex; flex-direction:column; gap: 9px; margin-top: 4px }
-  .mrow{ display:flex; align-items:center; gap: 10px; font-family: var(--mono); font-size: 12px }
+  .mrow{ display:flex; align-items:center; gap: 10px; font-family: var(--mono); font-size: 13px }
   .mrow .mbar{ flex:1; height: 7px; border-radius:99px; background:#141b2b; overflow:hidden }
   .mrow .mbar i{ display:block; height:100%; background: var(--accent); border-radius:99px; transform-origin:left; transform:scaleX(0) }
   .slide.active .mrow .mbar i{ transition: transform 1.2s cubic-bezier(.2,.7,.2,1) .5s; transform: scaleX(var(--w)) }
@@ -497,15 +505,15 @@
 
   <section class="slide" id="s-road" data-hue="212" data-chlabel="The Road">
     <p class="kicker" data-anim>The road</p>
-    <svg viewBox="-60 0 1120 310" style="width:min(940px,92vw)" data-anim aria-label="Roadmap of five eras">
+    <svg viewBox="-60 0 1120 310" style="width:min(1180px,94vw)" data-anim aria-label="Roadmap of five eras">
       <path class="draw auto" pathLength="1000" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"
-            fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="3.5" stroke-linecap="round" opacity=".9"/>
-      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">Conversation</text><text x="70" y="290" text-anchor="middle" class="lbl-s">chatbots · prompts · context</text></g>
-      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">Connection</text><text x="240" y="126" text-anchor="middle" class="lbl-s">MCP · RAG · GraphRAG</text></g>
-      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">Discipline</text><text x="430" y="280" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
-      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">Proof</text><text x="600" y="96" text-anchor="middle" class="lbl-s">a real shipped project</text></g>
-      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">RLMs · loop engineering</text></g>
-      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:26px">🏁</text><circle cx="930" cy="90" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">Ops</text></g>
+            fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">Conversation</text><text x="70" y="290" text-anchor="middle" class="lbl-s">chatbots · prompts · context</text></g>
+      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">Connection</text><text x="240" y="126" text-anchor="middle" class="lbl-s">MCP · RAG · GraphRAG</text></g>
+      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">Discipline</text><text x="430" y="280" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
+      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">Proof</text><text x="600" y="96" text-anchor="middle" class="lbl-s">a real shipped project</text></g>
+      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">RLMs · loop engineering</text></g>
+      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:30px">🏁</text><circle cx="930" cy="90" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">Ops</text></g>
     </svg>
     <p class="sub" data-step="1">Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
   </section>
@@ -607,11 +615,11 @@
         <text x="125" y="230" text-anchor="middle" class="lbl-s">wants to do things</text>
       </g>
       <g id="tools">
-        <rect class="box" x="690" y="30"  width="170" height="54" rx="10"/><text x="775" y="63"  text-anchor="middle" class="lbl-s" style="font-size:14px">🗄 Postgres</text>
-        <rect class="box" x="690" y="108" width="170" height="54" rx="10"/><text x="775" y="141" text-anchor="middle" class="lbl-s" style="font-size:14px">📚 Docs / Wiki</text>
-        <rect class="box" x="690" y="186" width="170" height="54" rx="10"/><text x="775" y="219" text-anchor="middle" class="lbl-s" style="font-size:14px">🐙 GitHub</text>
-        <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:14px">🌐 Browser</text>
-        <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:14px">🚀 CI / CD</text>
+        <rect class="box" x="690" y="30"  width="170" height="54" rx="10"/><text x="775" y="63"  text-anchor="middle" class="lbl-s" style="font-size:16px">🗄 Postgres</text>
+        <rect class="box" x="690" y="108" width="170" height="54" rx="10"/><text x="775" y="141" text-anchor="middle" class="lbl-s" style="font-size:16px">📚 Docs / Wiki</text>
+        <rect class="box" x="690" y="186" width="170" height="54" rx="10"/><text x="775" y="219" text-anchor="middle" class="lbl-s" style="font-size:16px">🐙 GitHub</text>
+        <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:16px">🌐 Browser</text>
+        <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:16px">🚀 CI / CD</text>
       </g>
       <g data-hide-on="1" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
         <path d="M210,215 C330,40 480,320 690,57"/>
@@ -646,9 +654,9 @@
         <rect class="box" x="42" y="150" width="120" height="34" rx="7" transform="rotate(-4 102 167)"/>
         <rect class="box" x="46" y="192" width="120" height="34" rx="7" transform="rotate(2 106 209)"/>
         <rect class="box" x="42" y="234" width="120" height="34" rx="7"/>
-        <text x="103" y="256" text-anchor="middle" class="lbl-s" style="font-size:13px">your docs</text>
+        <text x="103" y="256" text-anchor="middle" class="lbl-s" style="font-size:15px">your docs</text>
         <path class="draw auto" pathLength="1000" d="M175,215 C230,215 240,215 290,215" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5" marker-end="none"/>
-        <text x="235" y="200" text-anchor="middle" class="lbl-s" style="font-size:12px">embed</text>
+        <text x="235" y="200" text-anchor="middle" class="lbl-s" style="font-size:14px">embed</text>
       </g>
       <!-- vector space -->
       <g id="vecdots" fill="#3d4f6e">
@@ -664,7 +672,7 @@
       <g data-step="1">
         <circle class="pulse-ring" cx="475" cy="215" r="26" fill="none" stroke="hsl(var(--hue) 90% 62%)" stroke-width="2"/>
         <circle cx="475" cy="215" r="9" fill="hsl(var(--hue) 95% 65%)"/>
-        <text x="475" y="252" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 90% 68%)" style="font-size:12.5px">query</text>
+        <text x="475" y="252" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 90% 68%)" style="font-size:14px">query</text>
         <g stroke="hsl(var(--hue) 90% 62%)" stroke-width="2" fill="none" opacity=".9">
           <path class="draw" pathLength="1000" d="M475,215 L455,180"/><path class="draw" style="--d:.1s" pathLength="1000" d="M475,215 L445,250"/>
           <path class="draw" style="--d:.2s" pathLength="1000" d="M475,215 L470,140"/><path class="draw" style="--d:.3s" pathLength="1000" d="M475,215 L540,220"/>
@@ -672,7 +680,7 @@
         <g fill="hsl(var(--hue) 95% 65%)">
           <circle cx="455" cy="180" r="7"/><circle cx="445" cy="250" r="7"/><circle cx="470" cy="140" r="7"/><circle cx="540" cy="220" r="7"/>
         </g>
-        <text x="480" y="405" text-anchor="middle" class="lbl-s" style="font-size:13px" fill="hsl(var(--hue) 85% 65%)">RAG — fetch what's <tspan font-style="italic">similar</tspan></text>
+        <text x="480" y="405" text-anchor="middle" class="lbl-s" style="font-size:15px" fill="hsl(var(--hue) 85% 65%)">RAG — fetch what's <tspan font-style="italic">similar</tspan></text>
       </g>
       <!-- step 2: GraphRAG edges -->
       <g data-step="2" stroke="hsl(var(--hue) 70% 55%)" stroke-width="1.6" fill="none" opacity=".85">
@@ -683,7 +691,7 @@
         <path class="draw" style="--d:.48s" pathLength="1000" d="M575,300 L540,220"/><path class="draw" style="--d:.54s" pathLength="1000" d="M628,250 L610,170"/>
         <path class="draw" style="--d:.6s" pathLength="1000" d="M350,200 L340,140"/><path class="draw" style="--d:.66s" pathLength="1000" d="M505,90 L430,110"/>
         <path class="draw" style="--d:.72s" pathLength="1000" d="M560,110 L520,130"/>
-        <text x="480" y="60" text-anchor="middle" class="lbl-s" style="font-size:13px" stroke="none" fill="hsl(var(--hue) 85% 65%)">GraphRAG — know how it's <tspan font-style="italic">connected</tspan></text>
+        <text x="480" y="60" text-anchor="middle" class="lbl-s" style="font-size:15px" stroke="none" fill="hsl(var(--hue) 85% 65%)">GraphRAG — know how it's <tspan font-style="italic">connected</tspan></text>
       </g>
     </svg>
     <p class="sub" data-step="3">RAG finds the right page. <strong>GraphRAG knows the plot.</strong> The model got memory that isn't its own.</p>
@@ -713,6 +721,51 @@
       <div class="tablet"><div class="glyph">🔁</div><h3>Repeatability</h3><p>same spec, same harness, same outcome</p></div>
     </div>
     <p class="pivot-line" data-step="2">AI‑native didn't abandon engineering rigor.<br><em>It rediscovered it.</em></p>
+  </section>
+
+  <section class="slide dense" id="s-harness" data-hue="222" data-chlabel="3 · Discipline">
+    <p class="kicker" data-anim>Taming the tiger</p>
+    <h2 data-anim style="--d:.08s">Harness engineering</h2>
+    <div class="loopwrap">
+      <svg viewBox="0 0 460 412" style="width:min(380px,50vw)" data-anim aria-label="A harness of guardrails closing around an agent">
+        <g data-hide-on="1">
+          <g class="spark" stroke="#e2564f" fill="none" stroke-width="2.5" opacity=".8">
+            <path d="M230,200 L302,124 L338,146 L396,74"/>
+            <path d="M230,200 L152,156 L124,184 L58,128"/>
+            <path d="M230,200 L262,288 L226,326 L286,376"/>
+          </g>
+          <text x="360" y="52" fill="#e2564f" class="lbl-s" style="font-size:15px">unpredictable</text>
+        </g>
+        <circle class="pulse-ring" cx="230" cy="200" r="54" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2"/>
+        <circle cx="230" cy="200" r="46" class="box-acc"/>
+        <text x="230" y="207" text-anchor="middle" class="lbl" style="font-size:18px">AGENT</text>
+        <g data-step="1">
+          <g fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="4" stroke-linecap="round">
+            <path class="draw" pathLength="1000" d="M175.1,82.2 A130,130 0 0 1 284.9,82.2"/>
+            <path class="draw" style="--d:.12s" pathLength="1000" d="M304.6,93.5 A130,130 0 0 1 359.5,188.7"/>
+            <path class="draw" style="--d:.24s" pathLength="1000" d="M359.5,211.3 A130,130 0 0 1 304.6,306.5"/>
+            <path class="draw" style="--d:.36s" pathLength="1000" d="M284.9,317.8 A130,130 0 0 1 175.1,317.8"/>
+            <path class="draw" style="--d:.48s" pathLength="1000" d="M155.4,306.5 A130,130 0 0 1 100.5,211.3"/>
+            <path class="draw" style="--d:.6s" pathLength="1000" d="M100.5,188.7 A130,130 0 0 1 155.4,93.5"/>
+          </g>
+          <g>
+            <text x="230" y="30" text-anchor="middle" class="lbl-s" style="font-size:17px">Permissions</text>
+            <text x="378" y="114" text-anchor="middle" class="lbl-s" style="font-size:17px">Sandbox</text>
+            <text x="380" y="292" text-anchor="middle" class="lbl-s" style="font-size:17px">Tests</text>
+            <text x="230" y="398" text-anchor="middle" class="lbl-s" style="font-size:17px">Review gates</text>
+            <text x="82" y="292" text-anchor="middle" class="lbl-s" style="font-size:17px">Budgets</text>
+            <text x="80" y="114" text-anchor="middle" class="lbl-s" style="font-size:17px">Telemetry</text>
+          </g>
+        </g>
+      </svg>
+      <div class="sidecol" data-step="2">
+        <div class="kcard"><h4><span class="dot"></span>Claude Code</h4><p>Hooks, permission modes, skills, CLAUDE.md — the harness is a first-class product surface.</p></div>
+        <div class="kcard"><h4><span class="dot"></span>OpenAI Codex</h4><p>Sandboxed cloud runs per task — nothing lands without a reviewable PR.</p></div>
+        <div class="kcard"><h4><span class="dot"></span>AWS Kiro</h4><p>Spec-first IDE — requirements and agent hooks live where the code does.</p></div>
+        <p class="mut-note">+ Cursor · Copilot · Gemini CLI — different cockpits, same instinct: build the cage.</p>
+      </div>
+    </div>
+    <p class="sub" data-step="3"><strong>The model is the engine. The harness is the vehicle.</strong> We engineer the vehicle.</p>
   </section>
 
   <section class="slide" id="s-sdd" data-hue="222" data-chlabel="3 · Discipline">
@@ -779,22 +832,25 @@
     </div>
   </section>
 
-  <section class="slide" id="s-loop" data-hue="282" data-chlabel="5 · Autonomy">
+  <section class="slide dense" id="s-loop" data-hue="282" data-chlabel="5 · Autonomy">
     <p class="kicker" data-anim>The frontier</p>
-    <h2 data-anim style="--d:.08s">What if the loop closes itself?</h2>
+    <h2 data-anim style="--d:.08s; font-size:clamp(26px,4.2vw,54px)">What if the loop closes itself?</h2>
     <div class="loopwrap">
-      <svg viewBox="0 0 460 460" style="width:min(360px,60vw)" data-anim aria-label="Self-closing agent loop">
+      <svg viewBox="0 0 460 460" style="width:min(300px,50vw)" data-anim aria-label="Self-closing agent loop">
         <circle class="spinring" cx="230" cy="230" r="150" fill="none" stroke="hsl(var(--hue) 85% 62%)" stroke-width="3" stroke-dasharray="12 16" opacity=".9"/>
-        <g class="pop" style="--d:.2s"><circle cx="230" cy="80"  r="40" class="box-acc"/><text x="230" y="86"  text-anchor="middle" class="lbl">Plan</text></g>
-        <g class="pop" style="--d:.35s"><circle cx="380" cy="230" r="40" class="box-acc"/><text x="380" y="236" text-anchor="middle" class="lbl">Build</text></g>
-        <g class="pop" style="--d:.5s"><circle cx="230" cy="380" r="40" class="box-acc"/><text x="230" y="386" text-anchor="middle" class="lbl">Verify</text></g>
-        <g class="pop" style="--d:.65s"><circle cx="80"  cy="230" r="40" class="box-acc"/><text x="80"  y="236" text-anchor="middle" class="lbl">Learn</text></g>
-        <text x="230" y="222" text-anchor="middle" class="lbl-s">the loop runs</text>
-        <text x="230" y="244" text-anchor="middle" class="lbl-s">until the spec is met</text>
+        <g class="pop" style="--d:.2s"><circle cx="230" cy="80"  r="40" class="box-acc"/><text x="230" y="87"  text-anchor="middle" class="lbl" style="font-size:21px">Plan</text></g>
+        <g class="pop" style="--d:.35s"><circle cx="380" cy="230" r="40" class="box-acc"/><text x="380" y="237" text-anchor="middle" class="lbl" style="font-size:21px">Build</text></g>
+        <g class="pop" style="--d:.5s"><circle cx="230" cy="380" r="40" class="box-acc"/><text x="230" y="387" text-anchor="middle" class="lbl" style="font-size:21px">Verify</text></g>
+        <g class="pop" style="--d:.65s"><circle cx="80"  cy="230" r="40" class="box-acc"/><text x="80"  y="237" text-anchor="middle" class="lbl" style="font-size:21px">Learn</text></g>
+        <text x="230" y="220" text-anchor="middle" class="lbl-s" style="font-size:17px">the loop runs</text>
+        <text x="230" y="246" text-anchor="middle" class="lbl-s" style="font-size:17px">until the spec is met</text>
       </svg>
-      <div class="human-card float" data-step="1">
-        <div class="emoji">🧑‍💻☕</div>
-        <p><strong>The human steps outside the loop</strong> — setting direction and judging outcomes, not driving keystrokes.</p>
+      <div class="sidecol">
+        <div class="human-card float" data-step="1">
+          <div class="emoji">🧑‍💻☕</div>
+          <p><strong>The human steps outside the loop</strong> — setting direction and judging outcomes, not driving keystrokes.</p>
+        </div>
+        <div class="candor" data-step="3"><b>Full honesty:</b> we are exploring this era, not mastering it. That candor is exactly why you can trust chapters 1–4.</div>
       </div>
     </div>
     <div class="cards3" data-step="2">
@@ -802,7 +858,6 @@
       <div class="kcard"><h4><span class="dot"></span>Loop engineering</h4><p>Designing the retry: what feedback re-enters, when to stop, what "better" means.</p></div>
       <div class="kcard"><h4><span class="dot"></span>Ralph loops</h4><p>The same spec, run again and again overnight — brute-force persistence, surprisingly effective.</p></div>
     </div>
-    <div class="candor" data-step="3"><b>Full honesty:</b> we are exploring this era, not mastering it. That candor is exactly why you can trust chapters 1–4.</div>
   </section>
 
   <!-- ════════ CHAPTER 6 · OPS + CLOSE ════════ -->
