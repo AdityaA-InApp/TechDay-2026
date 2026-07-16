@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Road to Autonomy — TechDay</title>
+<!--
+  ══════════════════════════════════════════════════════════════════
+  HOW TO PRESENT
+    → / Space / click ......... next step or slide
+    ← ......................... previous
+    0–6 ....................... jump to chapter
+    F ......................... fullscreen
+    ? ......................... help overlay
+
+  WHERE TO EDIT YOUR CONTENT — search for "EDIT:" comments below.
+    1. Cold-open terminal script  (in the <script> at the bottom, coldScript)
+    2. Chapter 4 war story        (slide id="s-war")
+    3. Team name on closing slide (slide id="s-close")
+  ══════════════════════════════════════════════════════════════════
+-->
+<style>
+  :root{
+    --hue: 212;
+    --bg: #06080e;
+    --ink: #eef2f8;
+    --mut: #93a1b5;
+    --panel: #0c111b;
+    --line: #1b2536;
+    --accent: hsl(var(--hue) 95% 62%);
+    --accent-dim: hsl(var(--hue) 70% 50%);
+    --accent-soft: hsl(var(--hue) 90% 60% / .13);
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0 }
+  html,body{ height:100% }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    user-select: none;
+  }
+  #bg{ position:fixed; inset:0; z-index:0; }
+  /* soft radial glow that follows the era colour */
+  #glow{
+    position:fixed; inset:-20%; z-index:0; pointer-events:none;
+    background: radial-gradient(ellipse 60% 45% at 50% 110%, hsl(var(--hue) 80% 50% / .16), transparent 65%);
+    transition: background 1.2s ease;
+  }
+
+  /* ── deck ─────────────────────────────────────────────── */
+  #deck{ position:fixed; inset:0; z-index:1 }
+  .slide{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: 3.2vh;
+    padding: 7vh 6vw 11vh;
+    text-align:center;
+    opacity:0; visibility:hidden;
+    transform: translateY(34px) scale(.985);
+    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), visibility 0s .55s;
+  }
+  .slide.active{
+    opacity:1; visibility:visible; transform:none; z-index:2;
+    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), visibility 0s;
+  }
+
+  /* staggered entrances */
+  [data-anim]{
+    opacity:0; transform: translateY(26px);
+    transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);
+    transition-delay: var(--d, 0s);
+  }
+  .slide.active [data-anim]{ opacity:1; transform:none }
+
+  /* presenter steps (revealed on →) */
+  [data-step]{
+    opacity:0; transform: translateY(16px);
+    transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+  }
+  [data-step].on{ opacity:1; transform:none }
+  .hidden{ opacity:0 !important; transition: opacity .6s ease }
+
+  /* ── typography ───────────────────────────────────────── */
+  .kicker{
+    font-family: var(--mono); font-size: clamp(11px,1.2vw,14px);
+    letter-spacing:.32em; text-transform:uppercase; color: var(--accent);
+  }
+  h1{ font-size: clamp(38px, 6.4vw, 88px); line-height:1.04; letter-spacing:-.025em; font-weight:800; max-width: 18ch }
+  h2{ font-size: clamp(32px, 5.4vw, 72px); line-height:1.05; letter-spacing:-.02em;  font-weight:800; max-width: 20ch }
+  .sub{ font-size: clamp(15px, 1.8vw, 22px); color: var(--mut); max-width: 62ch; line-height:1.55 }
+  .sub strong{ color: var(--ink); font-weight:600 }
+  .accent{ color: var(--accent) }
+
+  .ghost-num{
+    position:absolute; right: 4vw; top: 50%; transform: translateY(-52%);
+    font-size: 46vh; font-weight:800; letter-spacing:-.05em;
+    color: hsl(var(--hue) 80% 60% / .07);
+    pointer-events:none; line-height:1;
+  }
+  .chips{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center }
+  .chip{
+    font-family: var(--mono); font-size: clamp(11px,1.3vw,14px);
+    padding: 8px 16px; border-radius: 999px;
+    border: 1px solid hsl(var(--hue) 70% 55% / .45);
+    background: var(--accent-soft); color: var(--ink);
+  }
+  .chip .arr{ color: var(--accent); margin: 0 2px }
+
+  /* ── the wall motif ───────────────────────────────────── */
+  .wall{
+    position:relative;
+    display:inline-block;
+    padding: 18px 30px 16px;
+    border: 2px solid hsl(var(--hue) 85% 58% / .9);
+    border-radius: 6px;
+    background:
+      repeating-linear-gradient(-45deg,
+        hsl(var(--hue) 80% 55% / .10) 0 14px, transparent 14px 28px),
+      #0d1119;
+    transform: rotate(-1.4deg);
+    box-shadow: 0 18px 60px -18px hsl(var(--hue) 90% 55% / .35);
+  }
+  .wall .wall-tag{
+    position:absolute; top:-13px; left: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing:.28em;
+    background: hsl(var(--hue) 85% 58%); color: #0a0d13;
+    padding: 4px 10px; border-radius: 4px; font-weight:700;
+  }
+  .wall p{ font-size: clamp(18px, 2.6vw, 30px); font-weight:700; letter-spacing:-.01em }
+  .wall small{ display:block; margin-top:6px; color: var(--mut); font-size: clamp(12px,1.4vw,15px); font-weight:400 }
+  [data-step].on.wall{ animation: slam .55s cubic-bezier(.16,1,.3,1), shake .35s .45s }
+  @keyframes slam{ from{ transform: rotate(-1.4deg) scale(1.7); opacity:0 } to{ transform: rotate(-1.4deg) scale(1); opacity:1 } }
+  @keyframes shake{
+    20%{ transform: rotate(-1.4deg) translateX(-5px) } 40%{ transform: rotate(-1.4deg) translateX(4px) }
+    60%{ transform: rotate(-1.4deg) translateX(-3px) } 80%{ transform: rotate(-1.4deg) translateX(2px) }
+  }
+
+  /* ── terminal ─────────────────────────────────────────── */
+  .term{
+    width: min(880px, 90vw);
+    background: #fffdfd;
+    border: 1px solid #eadedf;
+    border-radius: 14px;
+    box-shadow: 0 26px 60px -24px rgba(60,20,22,.28), 0 0 0 1px rgba(0,0,0,.03);
+    text-align:left; overflow:hidden;
+  }
+  .term-head{
+    display:flex; align-items:center; gap:8px;
+    padding: 12px 16px; border-bottom: 1px solid #f0e5e6;
+    background: #f8f2f2;
+  }
+  .term-head i{ width:12px; height:12px; border-radius:50%; display:block }
+  .term-head i:nth-child(1){ background:#ff5f57 } .term-head i:nth-child(2){ background:#febc2e } .term-head i:nth-child(3){ background:#28c840 }
+  .term-head span{ margin-left:10px; font-family:var(--mono); font-size:12px; color:#a39394 }
+  .term-body{
+    padding: 20px 24px; font-family: var(--mono);
+    font-size: clamp(12px, 1.55vw, 16px); line-height: 1.85;
+    min-height: 320px; color:#46393a;
+  }
+  .term-body.small{ min-height: 150px; font-size: clamp(11px,1.3vw,14px) }
+  .tl .tp{ color: var(--accent) }
+  .tl.dim{ color:#a89a9b }
+  .tl.ok{ color:#178a4c }
+  .tl.acc{ color: var(--accent); font-weight:700 }
+  .typing::after{ content:'▊'; color: var(--accent); animation: blink .8s steps(1) infinite }
+  @keyframes blink{ 50%{ opacity:0 } }
+  .live-dot::before{ content:'●'; color:#ff4d5e; margin-right:10px; animation: blink 1.2s steps(1) infinite }
+
+  /* ── rewind ───────────────────────────────────────────── */
+  .rew-marks{ font-family:var(--mono); font-size: clamp(16px,2.4vw,26px); letter-spacing:.4em; color:var(--accent); animation: blink 1s steps(1) infinite }
+  #yr{
+    font-family: var(--mono); font-weight:800;
+    font-size: clamp(90px, 20vw, 260px); line-height:1; letter-spacing:-.04em;
+    text-shadow: 0 0 70px hsl(var(--hue) 90% 60% / .35);
+  }
+  #yr.spin{ filter: blur(1.5px); }
+  .scanlines{ position:relative }
+  .scanlines::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.22) 3px 4px);
+  }
+
+  /* ── SVG shared ───────────────────────────────────────── */
+  svg text{ font-family: var(--sans); fill: var(--ink) }
+  svg .lbl{ font-size: 15px; font-weight: 600 }
+  svg .lbl-s{ font-size: 12.5px; fill: var(--mut); font-weight:500 }
+  svg .box{ fill: #0d1322; stroke: #263248; stroke-width:1.5 }
+  svg .box-acc{ fill: hsl(var(--hue) 80% 55% / .14); stroke: hsl(var(--hue) 85% 60%); stroke-width:2 }
+  .draw{ stroke-dasharray: 1000; stroke-dashoffset: 1000 }
+  .slide.active .draw.auto,
+  [data-step].on .draw{ animation: dash 1.3s cubic-bezier(.4,0,.2,1) forwards; animation-delay: var(--d,0s) }
+  @keyframes dash{ to{ stroke-dashoffset: 0 } }
+  .pop{ opacity:0; transform-box: fill-box; transform-origin:center; }
+  .slide.active .pop{ animation: popin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  @keyframes popin{ from{ opacity:0; transform:scale(.3) } to{ opacity:1; transform:scale(1) } }
+  .float{ animation: floaty 5s ease-in-out infinite }
+  @keyframes floaty{ 50%{ transform: translateY(-9px) } }
+  .spinring{ transform-box: fill-box; transform-origin: center; animation: spin 14s linear infinite }
+  @keyframes spin{ to{ transform: rotate(360deg) } }
+  .pulse-ring{ transform-box:fill-box; transform-origin:center; animation: pulse 2s ease-out infinite }
+  @keyframes pulse{ from{ transform:scale(.4); opacity:.9 } to{ transform:scale(1.9); opacity:0 } }
+
+  /* ── chat windows (ch.1) ──────────────────────────────── */
+  .duo{ display:flex; gap: 26px; flex-wrap:wrap; justify-content:center }
+  .chatw{
+    width: min(380px, 44vw); text-align:left;
+    background: var(--panel); border:1px solid var(--line); border-radius: 14px; overflow:hidden;
+    box-shadow: 0 24px 70px -24px rgba(0,0,0,.7);
+  }
+  .chatw header{
+    padding: 10px 16px; font-family:var(--mono); font-size:12px; color:var(--mut);
+    border-bottom: 1px solid var(--line); background:#0e1422;
+    display:flex; justify-content:space-between;
+  }
+  .chatw .msgs{ padding: 16px; display:flex; flex-direction:column; gap:10px; min-height: 176px }
+  .bub{
+    max-width: 85%; padding: 9px 14px; border-radius: 14px;
+    font-size: clamp(12px,1.4vw,14.5px); line-height:1.45;
+  }
+  .bub.user{ align-self:flex-end; background: hsl(var(--hue) 75% 50% / .28); border: 1px solid hsl(var(--hue) 70% 55% / .4); border-bottom-right-radius: 4px }
+  .bub.bot{ align-self:flex-start; background:#141b2b; border:1px solid #222d42; border-bottom-left-radius:4px; color:#c9d4e4 }
+  .glitch{ animation: glitch 2.4s steps(2) infinite }
+  @keyframes glitch{
+    0%,92%{ text-shadow:none; transform:none }
+    93%{ text-shadow: 2px 0 #ff3d5e, -2px 0 #2dd4ff; transform: translateX(1px) }
+    96%{ text-shadow: -2px 0 #ff3d5e, 2px 0 #2dd4ff; transform: translateX(-1px) }
+  }
+
+  /* ── sticky notes (prompt engineering) ────────────────── */
+  .notes{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; max-width: 900px }
+  .note{
+    width: 200px; padding: 16px 15px 18px; text-align:left;
+    font-family: var(--mono); font-size: 12.5px; line-height:1.5; color:#0e0c04;
+    background: linear-gradient(180deg, #ffe98a, #f8d64e);
+    border-radius: 3px; box-shadow: 0 14px 30px -10px rgba(0,0,0,.6);
+    transform: rotate(var(--r, -2deg));
+  }
+  .note b{ display:block; margin-bottom:5px; font-size:10.5px; letter-spacing:.14em; opacity:.65 }
+  [data-step].on.note{ animation: notedrop .5s cubic-bezier(.16,1,.3,1) }
+  @keyframes notedrop{ from{ transform: rotate(var(--r)) translateY(-70px) scale(1.15); opacity:0 } }
+  .filebadge{
+    font-family: var(--mono); font-size: clamp(12px,1.5vw,15px);
+    padding: 9px 18px; border-radius: 8px; background:#131a29; border:1px dashed #33415c; color: var(--mut);
+  }
+  .filebadge em{ color: var(--accent); font-style:normal; font-weight:700 }
+
+  /* ── context window (ch.1c) ───────────────────────────── */
+  .ctxwrap{ display:flex; align-items:center; gap: 34px; flex-wrap:wrap; justify-content:center }
+  .ctxbox{
+    position:relative; width: min(340px, 42vw); min-height: 250px;
+    border: 2px dashed hsl(var(--hue) 70% 60% / .7); border-radius: 16px;
+    padding: 40px 14px 14px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start; justify-content:center;
+  }
+  .ctxbox::before{
+    content:'CONTEXT WINDOW'; position:absolute; top:12px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.3em; color:var(--accent);
+  }
+  .docset{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; align-content:flex-start; width:100% }
+  .doc{
+    font-family:var(--mono); font-size:11.5px; padding:7px 11px; border-radius:7px;
+    background:#151d30; border:1px solid #2a3a58; color:#b9c6da; white-space:nowrap;
+  }
+  [data-step].on .doc{ animation: docfly .55s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .doc:nth-child(2){ animation-delay:.08s } [data-step].on .doc:nth-child(3){ animation-delay:.16s }
+  [data-step].on .doc:nth-child(4){ animation-delay:.24s } [data-step].on .doc:nth-child(5){ animation-delay:.32s }
+  [data-step].on .doc:nth-child(6){ animation-delay:.40s } [data-step].on .doc:nth-child(7){ animation-delay:.48s }
+  @keyframes docfly{ from{ opacity:0; transform: translate(-120px, -60px) rotate(-9deg) scale(1.2) } }
+  .ctx-meter{ text-align:left; font-family:var(--mono); font-size:clamp(12px,1.5vw,15px); color:var(--mut); display:flex; flex-direction:column; gap:10px }
+  .ctx-meter .row{ display:flex; align-items:center; gap:12px }
+  .ctx-meter .bar{ width: 170px; height: 9px; border-radius:99px; background:#141b2b; overflow:hidden }
+  .ctx-meter .fill{ display:block; height:100%; border-radius:99px; background: var(--accent); transform-origin:left; transform: scaleX(0); transition: transform 1s cubic-bezier(.2,.7,.2,1) .2s }
+  [data-step].on .fill{ transform: scaleX(var(--w,1)) }
+  .overflow-x{ color:#ff5d6e; font-weight:700 }
+
+  /* ── stone tablets (discipline) ───────────────────────── */
+  .tablets{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center }
+  .tablet{
+    width: 195px; padding: 30px 14px 26px; border-radius: 12px 12px 6px 6px;
+    background: linear-gradient(180deg, #18202f, #0e1420);
+    border: 1px solid #2c3a52;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 22px 50px -18px rgba(0,0,0,.7);
+  }
+  .tablet .glyph{ font-size: 30px; margin-bottom: 12px }
+  .tablet h3{ font-size: clamp(15px,1.8vw,19px); letter-spacing:.03em; margin-bottom:8px }
+  .tablet p{ font-size: 12.5px; color: var(--mut); line-height:1.5 }
+  [data-step].on .tablet{ animation: rise .6s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .tablet:nth-child(2){ animation-delay:.12s } [data-step].on .tablet:nth-child(3){ animation-delay:.24s }
+  [data-step].on .tablet:nth-child(4){ animation-delay:.36s }
+  @keyframes rise{ from{ opacity:0; transform: translateY(70px) } }
+  .pivot-line{
+    font-size: clamp(22px, 3.4vw, 40px); font-weight:800; letter-spacing:-.015em; max-width: 24ch; line-height:1.25;
+  }
+  .pivot-line em{ font-style: normal; color: var(--accent) }
+
+  /* ── pipeline (SDD) ───────────────────────────────────── */
+  .pipe{ display:flex; align-items:center; gap: 0; flex-wrap:wrap; justify-content:center }
+  .stage{
+    padding: 18px 26px; border-radius: 12px; border: 2px solid hsl(var(--hue) 75% 58% / .65);
+    background: var(--accent-soft); font-weight: 800; letter-spacing:.06em;
+    font-size: clamp(14px, 1.9vw, 20px); font-family: var(--mono);
+  }
+  .pipe .flow{ font-size: clamp(18px,2.4vw,28px); color: var(--accent); padding: 0 14px; font-weight:700 }
+  .rails{ font-family:var(--mono); font-size: clamp(11px,1.3vw,13px); letter-spacing:.22em; color:var(--mut);
+    border-top: 1px dashed #33415c; border-bottom: 1px dashed #33415c; padding: 8px 22px }
+  .loopback{ font-family: var(--mono); font-size: clamp(12px,1.4vw,14px); color: var(--accent) }
+  .cards3{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center }
+  .kcard{
+    width: 240px; text-align:left; padding: 18px; border-radius: 14px;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  .kcard h4{ font-size: 15px; margin-bottom: 7px; display:flex; align-items:center; gap:8px }
+  .kcard h4 .dot{ width:8px; height:8px; border-radius:50%; background: var(--accent); display:inline-block }
+  .kcard p{ font-size: 12.5px; color: var(--mut); line-height: 1.55 }
+
+  /* ── war story (ch.4) ─────────────────────────────────── */
+  .split{ display:flex; gap: 30px; align-items:stretch; flex-wrap:wrap; justify-content:center }
+  .speccard{
+    width: min(400px, 44vw); text-align:left; border-radius: 14px; overflow:hidden;
+    background: #fffdfd; border: 1px solid #eadedf;
+    box-shadow: 0 20px 50px -24px rgba(60,20,22,.25);
+  }
+  .speccard header{ padding: 10px 16px; border-bottom:1px solid #f0e5e6; background:#f8f2f2;
+    font-family:var(--mono); font-size: 12px; color:#a39394 }
+  .speccard pre{
+    padding: 18px; font-family: var(--mono); font-size: clamp(11px,1.35vw,13.5px);
+    line-height: 1.85; color: #55494a; white-space: pre-wrap;
+  }
+  .speccard pre .ok{ color:#178a4c } .speccard pre .h{ color: var(--accent); font-weight:700 }
+  .warlist{ width: min(430px, 46vw); display:flex; flex-direction:column; gap: 14px; text-align:left }
+  .war{
+    padding: 15px 18px; border-radius: 12px; background: var(--panel);
+    border: 1px solid var(--line); border-left: 4px solid var(--accent);
+  }
+  .war b{ font-family: var(--mono); font-size: 11px; letter-spacing:.24em; color: var(--accent); display:block; margin-bottom:6px }
+  .war p{ font-size: clamp(13px,1.55vw,15.5px); line-height:1.55; color:#cfd9e8 }
+
+  /* ── autonomy loop ────────────────────────────────────── */
+  .loopwrap{ display:flex; gap: 40px; align-items:center; flex-wrap:wrap; justify-content:center }
+  .human-card{
+    width: 230px; padding: 20px; border-radius: 14px; background: var(--panel); border:1px solid var(--line);
+  }
+  .human-card .emoji{ font-size: 42px }
+  .human-card p{ font-size: 13px; color: var(--mut); margin-top: 10px; line-height:1.55 }
+  .human-card p strong{ color: var(--ink) }
+  .candor{
+    max-width: 640px; padding: 16px 24px; border-radius: 12px;
+    border: 1px dashed hsl(var(--hue) 70% 60% / .6); background: var(--accent-soft);
+    font-size: clamp(13px,1.6vw,16px); color:#d7dfec; line-height:1.6;
+  }
+  .candor b{ color: var(--accent) }
+
+  /* ── ops dashboard ────────────────────────────────────── */
+  .ops{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center }
+  .gauge{
+    width: 225px; padding: 18px; border-radius: 14px; text-align:left;
+    background: var(--panel); border: 1px solid var(--line);
+  }
+  .gauge h5{ font-family: var(--mono); font-size: 10.5px; letter-spacing:.24em; color: var(--mut); margin-bottom: 10px }
+  .gauge .big{ font-family: var(--mono); font-size: clamp(20px,2.6vw,28px); font-weight: 800; letter-spacing:-.02em }
+  .gauge .unit{ font-size: 12px; color: var(--mut); margin-left: 4px; font-weight:400 }
+  .gauge .bar{ margin-top: 12px; height: 8px; border-radius: 99px; background: #141b2b; overflow:hidden }
+  .gauge .bar i{ display:block; height:100%; border-radius:99px; background: var(--accent); transform-origin:left; transform: scaleX(0) }
+  .slide.active .gauge .bar i{ transition: transform 1.4s cubic-bezier(.2,.7,.2,1) .4s; transform: scaleX(var(--w,.6)) }
+  .gauge .note-s{ margin-top: 9px; font-size: 11.5px; color: var(--mut); line-height:1.45 }
+  .gauge svg{ display:block; margin-top:6px }
+  .models{ display:flex; flex-direction:column; gap: 9px; margin-top: 4px }
+  .mrow{ display:flex; align-items:center; gap: 10px; font-family: var(--mono); font-size: 12px }
+  .mrow .mbar{ flex:1; height: 7px; border-radius:99px; background:#141b2b; overflow:hidden }
+  .mrow .mbar i{ display:block; height:100%; background: var(--accent); border-radius:99px; transform-origin:left; transform:scaleX(0) }
+  .slide.active .mrow .mbar i{ transition: transform 1.2s cubic-bezier(.2,.7,.2,1) .5s; transform: scaleX(var(--w)) }
+  .mrow .pct{ width: 34px; text-align:right; color: var(--mut) }
+
+  /* ── close ────────────────────────────────────────────── */
+  .thanks{ font-size: clamp(44px, 8vw, 110px); font-weight: 800; letter-spacing: -.03em;
+    background: linear-gradient(92deg, var(--ink), hsl(var(--hue) 90% 70%));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent }
+  .teamline{ font-family: var(--mono); font-size: clamp(13px,1.6vw,16px); color: var(--mut); letter-spacing:.12em }
+
+  /* ── HUD / chrome ─────────────────────────────────────── */
+  #progbar{ position:fixed; top:0; left:0; height:3px; z-index:10; background: var(--accent); width:0%;
+    transition: width .45s cubic-bezier(.2,.7,.2,1); box-shadow: 0 0 12px hsl(var(--hue) 90% 60% / .8) }
+  #hud{
+    position:fixed; left:0; right:0; bottom:0; z-index:10;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 14px 22px; pointer-events:none;
+    font-family: var(--mono); font-size: 11.5px; color: #55637a; letter-spacing:.14em;
+  }
+  #hud .rail{ display:flex; gap: 9px; pointer-events:auto }
+  #hud .rail b{
+    width: 9px; height: 9px; border-radius: 50%; background: #232e44; cursor: pointer;
+    transition: background .3s, transform .3s; display:block;
+  }
+  #hud .rail b:hover{ transform: scale(1.5) }
+  #hud .rail b.here{ background: var(--accent); box-shadow: 0 0 10px hsl(var(--hue) 90% 60% / .8) }
+  #hud .rail b.done{ background: hsl(var(--hue) 60% 45% / .75) }
+  #chlabel{ min-width: 200px; text-transform: uppercase }
+  #counter{ min-width: 200px; text-align: right }
+
+  #help{
+    position:fixed; inset:0; z-index:20; display:none; align-items:center; justify-content:center;
+    background: rgba(4,6,10,.86); backdrop-filter: blur(6px);
+  }
+  #help.open{ display:flex }
+  #help .card{
+    background: var(--panel); border:1px solid var(--line); border-radius: 16px; padding: 30px 38px;
+    font-family: var(--mono); font-size: 14px; line-height: 2.2; color: var(--mut);
+  }
+  #help kbd{
+    display:inline-block; min-width: 30px; text-align:center; padding: 2px 8px; margin-right: 12px;
+    border:1px solid #33415c; border-bottom-width:3px; border-radius:6px; background:#131a29; color: var(--ink);
+  }
+
+  /* ── brand logo ───────────────────────────────────────── */
+  #brand{ position:fixed; top:18px; left:22px; z-index:15; display:flex; align-items:center }
+  #brand img{ height:42px; display:block }
+
+  /* ── light theme · InApp white + red (#AB1E23) ────────── */
+  body.light{
+    --hue: 358;
+    --bg:#FFFFFF; --ink:#26191a; --mut:#83706f;
+    --panel:#fdfafa; --line:#eadedf;
+    --accent:#AB1E23; --accent-dim:#8a181c;
+    --accent-soft: rgba(171,30,35,.07);
+  }
+  body.light #glow{ background: radial-gradient(ellipse 60% 45% at 50% 110%, rgba(171,30,35,.10), transparent 65%) }
+  body.light .chip{ border-color: rgba(171,30,35,.4) }
+  body.light .wall{
+    border-color: var(--accent);
+    background: repeating-linear-gradient(-45deg, rgba(171,30,35,.07) 0 14px, transparent 14px 28px), #fff;
+    box-shadow: 0 18px 50px -18px rgba(171,30,35,.35);
+  }
+  body.light .wall .wall-tag{ background: var(--accent); color:#fff }
+  body.light #yr{ text-shadow: 0 0 60px rgba(171,30,35,.28) }
+  body.light .scanlines::after{ background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,.05) 3px 4px) }
+  body.light svg .box{ fill:#fdfbfb; stroke:#e4d8d9 }
+  body.light svg .box-acc{ fill: rgba(171,30,35,.07); stroke: var(--accent) }
+  body.light #vecdots{ fill:#d3c4c5 }
+  body.light .chatw{ box-shadow: 0 20px 50px -24px rgba(90,40,42,.35) }
+  body.light .chatw header{ background:#f7f1f1; border-color:var(--line) }
+  body.light .bub.bot{ background:#f5f0f0; border-color:#e6dadb; color:#463a3b }
+  body.light .bub.user{ background: rgba(171,30,35,.10); border-color: rgba(171,30,35,.3) }
+  body.light .filebadge{ background:#faf5f5; border-color:#dcc9ca }
+  body.light .doc{ background:#faf6f6; border-color:#e3d5d6; color:#5d4f50 }
+  body.light .ctx-meter .bar{ background:#f2eaea }
+  body.light .overflow-x{ color:#c2242a }
+  body.light .tablet{ background: linear-gradient(180deg,#fffdfd,#f8f2f2); border-color:#e7dbdc; box-shadow: inset 0 1px 0 #fff, 0 20px 44px -22px rgba(90,40,42,.3) }
+  body.light .stage{ border-color: rgba(171,30,35,.6) }
+  body.light .rails{ border-color:#e3d6d7 }
+  body.light .war p{ color:#4c3f40 }
+  body.light .candor{ color:#4c3f40 }
+  body.light .gauge .bar, body.light .mrow .mbar{ background:#f2eaea }
+  body.light .thanks{ background: linear-gradient(92deg, var(--ink), var(--accent)); -webkit-background-clip:text; background-clip:text }
+  body.light #hud{ color:#a08f90 }
+  body.light #hud .rail b{ background:#e8dcdd }
+  body.light #hud .rail b.here{ background: var(--accent); box-shadow: 0 0 10px rgba(171,30,35,.7) }
+  body.light #hud .rail b.done{ background: rgba(171,30,35,.45) }
+  body.light #help{ background: rgba(255,255,255,.9) }
+  body.light #help kbd{ background:#f7f1f1; border-color:#ddd0d1; color:var(--ink) }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration: .01s !important; transition-duration: .01s !important }
+  }
+</style>
+</head>
+<body class="light">
+
+<canvas id="bg"></canvas>
+<div id="glow"></div>
+<div id="progbar"></div>
+<div id="brand"><img src="InApp-Logo-RGB.png" alt="InApp"></div>
+
+<main id="deck">
+
+  <!-- ════════ CHAPTER 0 · COLD OPEN ════════ -->
+  <section class="slide" id="s-cold" data-hue="212" data-chlabel="Cold Open">
+    <p class="kicker live-dot" data-anim>Live from production</p>
+    <!-- EDIT: swap this terminal script for the real thing your team shipped.
+         The lines live in `coldScript` inside the <script> tag at the bottom. -->
+    <div class="term" data-anim style="--d:.15s">
+      <div class="term-head"><i></i><i></i><i></i><span>agent-loop — 80×24</span></div>
+      <div class="term-body" id="cold-term"></div>
+    </div>
+    <p class="sub" data-step="1"><strong>Built end-to-end by an autonomous agent loop.</strong> Spec in, service out.</p>
+    <p class="sub" data-step="2">Wall-clock: <strong class="accent">31 hours</strong>. Human keystrokes: <strong class="accent">zero</strong>.</p>
+  </section>
+
+  <section class="slide" id="s-rewind" data-hue="212" data-chlabel="Cold Open">
+    <p class="rew-marks" data-anim>◀◀ REW</p>
+    <div id="yr" class="scanlines" data-anim style="--d:.1s">2026</div>
+    <h2 data-step="1" style="max-width:24ch">Two years ago, this would have taken us <span class="accent">six weeks</span>.</h2>
+    <p class="sub" data-step="2">Here's how we got here. <strong>No agenda slide — just the road.</strong></p>
+  </section>
+
+  <section class="slide" id="s-road" data-hue="212" data-chlabel="The Road">
+    <p class="kicker" data-anim>The road</p>
+    <svg viewBox="-60 0 1120 310" style="width:min(940px,92vw)" data-anim aria-label="Roadmap of five eras">
+      <path class="draw auto" pathLength="1000" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"
+            fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="3.5" stroke-linecap="round" opacity=".9"/>
+      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">Conversation</text><text x="70" y="290" text-anchor="middle" class="lbl-s">chatbots · prompts · context</text></g>
+      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">Connection</text><text x="240" y="126" text-anchor="middle" class="lbl-s">MCP · RAG · GraphRAG</text></g>
+      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">Discipline</text><text x="430" y="280" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
+      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">Proof</text><text x="600" y="96" text-anchor="middle" class="lbl-s">a real shipped project</text></g>
+      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">RLMs · loop engineering</text></g>
+      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:26px">🏁</text><circle cx="930" cy="90" r="10" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">Ops</text></g>
+    </svg>
+    <p class="sub" data-step="1">Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
+  </section>
+
+  <!-- ════════ CHAPTER 1 · CONVERSATION ════════ -->
+  <section class="slide" id="s-ch1" data-hue="36" data-chlabel="1 · Conversation">
+    <div class="ghost-num">01</div>
+    <p class="kicker" data-anim>Chapter one · the nostalgic bit</p>
+    <h1 data-anim style="--d:.12s">The Conversation Era</h1>
+    <div class="chips" data-anim style="--d:.28s">
+      <span class="chip">chatbots <span class="arr">→</span> prompt engineering <span class="arr">→</span> context engineering</span>
+    </div>
+    <p class="sub" data-anim style="--d:.4s">We were so young. We thought talking to it was the whole job.</p>
+  </section>
+
+  <section class="slide" id="s-chatbots" data-hue="36" data-chlabel="1 · Conversation">
+    <p class="kicker" data-anim>Our first chatbots</p>
+    <div class="duo">
+      <div class="chatw" data-anim style="--d:.1s">
+        <header><span>support-bot v0.1</span><span>Mon 09:14</span></header>
+        <div class="msgs">
+          <div class="bub user">Summarize this incident report.</div>
+          <div class="bub bot">Root cause: connection pool exhaustion after the 2 a.m. deploy. Impact: 40 min of degraded checkout. Fix: pool limits + rollback.</div>
+        </div>
+      </div>
+      <div class="chatw" data-step="1">
+        <header><span>support-bot v0.1</span><span>Tue 09:14 — same prompt</span></header>
+        <div class="msgs">
+          <div class="bub user">Summarize this incident report.</div>
+          <div class="bub bot glitch">Certainly! An incident is an unplanned interruption. Would you like me to write a poem about uptime? ☀️</div>
+        </div>
+      </div>
+    </div>
+    <div class="wall" data-step="2">
+      <span class="wall-tag">⚠ THE WALL</span>
+      <p>Fragile prompts. Inconsistent outputs.</p>
+      <small>Same prompt · same model · different day · different answer</small>
+    </div>
+  </section>
+
+  <section class="slide" id="s-prompteng" data-hue="36" data-chlabel="1 · Conversation">
+    <p class="kicker" data-anim>The fix, allegedly</p>
+    <h2 data-anim style="--d:.1s">Prompt engineering</h2>
+    <div class="notes">
+      <div class="note" data-step="1" style="--r:-3deg"><b>HACK #1</b>"You are a world-class senior expert with 20 years of experience…"</div>
+      <div class="note" data-step="1" style="--r:2deg"><b>HACK #2</b>"Think step by step. Take a deep breath."</div>
+      <div class="note" data-step="2" style="--r:-1.5deg"><b>HACK #3</b>"Return ONLY valid JSON. ONLY. JSON."</div>
+      <div class="note" data-step="2" style="--r:3deg"><b>HACK #4</b>"IMPORTANT!!! (written three times, in caps)"</div>
+      <div class="note" data-step="3" style="--r:-2.5deg"><b>HACK #5</b>"I will tip you $200 💸"</div>
+    </div>
+    <div class="filebadge" data-step="3">saved as <em>prompt_final_FINAL_v37.txt</em> — we are not proud of this</div>
+    <div class="wall" data-step="4">
+      <span class="wall-tag">⚠ THE WALL</span>
+      <p>The model still didn't know <span class="accent">our</span> stuff.</p>
+      <small>internal APIs · runbooks · tribal knowledge · that one cursed Confluence page</small>
+    </div>
+  </section>
+
+  <section class="slide" id="s-ctx" data-hue="36" data-chlabel="1 · Conversation">
+    <p class="kicker" data-anim>So we fed it our world</p>
+    <h2 data-anim style="--d:.1s">Context engineering</h2>
+    <div class="ctxwrap">
+      <div class="ctxbox" data-anim style="--d:.2s">
+        <span class="docset" data-step="1">
+          <span class="doc">📄 api-docs.md</span><span class="doc">📕 runbook.md</span><span class="doc">🗄 schema.sql</span>
+          <span class="doc">🎫 JIRA-4821</span><span class="doc">📚 confluence dump</span><span class="doc">📄 README (lies)</span>
+          <span class="doc">💬 slack thread, 212 msgs</span>
+        </span>
+      </div>
+      <div class="ctx-meter" data-step="2">
+        <div class="row"><span>4k tokens</span><span class="bar"><i class="fill" style="--w:.12"></i></span><span>2023</span></div>
+        <div class="row"><span>32k tokens</span><span class="bar"><i class="fill" style="--w:.4"></i></span><span>2024</span></div>
+        <div class="row"><span>200k tokens</span><span class="bar"><i class="fill" style="--w:1"></i></span><span class="overflow-x">still not enough</span></div>
+      </div>
+    </div>
+    <div class="wall" data-step="3">
+      <span class="wall-tag">⚠ THE WALL</span>
+      <p>Stuffing context by hand doesn't scale.</p>
+      <small>the model needed to reach out and get things itself</small>
+    </div>
+  </section>
+
+  <!-- ════════ CHAPTER 2 · CONNECTION ════════ -->
+  <section class="slide" id="s-ch2" data-hue="186" data-chlabel="2 · Connection">
+    <div class="ghost-num">02</div>
+    <p class="kicker" data-anim>Chapter two</p>
+    <h1 data-anim style="--d:.12s">The Connection Era</h1>
+    <div class="chips" data-anim style="--d:.28s"><span class="chip">MCP</span><span class="chip">RAG</span><span class="chip">GraphRAG</span></div>
+    <p class="sub" data-anim style="--d:.42s">The model stopped being <strong>a brain in a jar</strong> — it grew <strong>hands</strong> and got <strong>a library card</strong>.</p>
+  </section>
+
+  <section class="slide" id="s-mcp" data-hue="186" data-chlabel="2 · Connection">
+    <p class="kicker" data-anim>Hands</p>
+    <h2 data-anim style="--d:.08s">MCP — the USB‑C moment</h2>
+    <svg viewBox="0 0 900 430" style="width:min(820px,90vw)" data-anim aria-label="MCP replaces bespoke integrations">
+      <g>
+        <rect class="box-acc" x="40" y="165" width="170" height="100" rx="14"/>
+        <text x="125" y="207" text-anchor="middle" class="lbl">AGENT</text>
+        <text x="125" y="230" text-anchor="middle" class="lbl-s">wants to do things</text>
+      </g>
+      <g id="tools">
+        <rect class="box" x="690" y="30"  width="170" height="54" rx="10"/><text x="775" y="63"  text-anchor="middle" class="lbl-s" style="font-size:14px">🗄 Postgres</text>
+        <rect class="box" x="690" y="108" width="170" height="54" rx="10"/><text x="775" y="141" text-anchor="middle" class="lbl-s" style="font-size:14px">📚 Docs / Wiki</text>
+        <rect class="box" x="690" y="186" width="170" height="54" rx="10"/><text x="775" y="219" text-anchor="middle" class="lbl-s" style="font-size:14px">🐙 GitHub</text>
+        <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:14px">🌐 Browser</text>
+        <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:14px">🚀 CI / CD</text>
+      </g>
+      <g data-hide-on="1" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
+        <path d="M210,215 C330,40 480,320 690,57"/>
+        <path d="M210,215 C400,380 420,20 690,135"/>
+        <path d="M210,215 C300,140 560,300 690,213"/>
+        <path d="M210,215 C450,100 380,420 690,291"/>
+        <path d="M210,215 C260,330 600,180 690,369"/>
+        <text x="450" y="415" text-anchor="middle" class="lbl-s" stroke="none" fill="#e2564f" style="font-size:13px">every tool × every agent = a custom adapter. N × M pain.</text>
+      </g>
+      <g data-step="1">
+        <path class="draw" pathLength="1000" d="M210,215 L415,215" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="3.5"/>
+        <rect class="box-acc" x="415" y="185" width="90" height="60" rx="10"/>
+        <text x="460" y="221" text-anchor="middle" class="lbl" style="font-weight:800">MCP</text>
+        <g fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2.5">
+          <path class="draw" style="--d:.15s" pathLength="1000" d="M505,215 C590,215 610,57 690,57"/>
+          <path class="draw" style="--d:.25s" pathLength="1000" d="M505,215 C590,215 610,135 690,135"/>
+          <path class="draw" style="--d:.35s" pathLength="1000" d="M505,215 C590,215 612,213 690,213"/>
+          <path class="draw" style="--d:.45s" pathLength="1000" d="M505,215 C590,215 610,291 690,291"/>
+          <path class="draw" style="--d:.55s" pathLength="1000" d="M505,215 C590,215 610,369 690,369"/>
+        </g>
+        <text x="450" y="415" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 85% 65%)" style="font-size:13px">one port, one protocol. N + M. plug anything in.</text>
+      </g>
+    </svg>
+    <p class="sub" data-step="2">The USB port moment: <strong>stop hand-wiring integrations — standardize the plug.</strong></p>
+  </section>
+
+  <section class="slide" id="s-rag" data-hue="186" data-chlabel="2 · Connection">
+    <p class="kicker" data-anim>A library card — then a librarian</p>
+    <h2 data-anim style="--d:.08s">RAG &amp; GraphRAG</h2>
+    <svg viewBox="0 0 900 430" style="width:min(820px,88vw)" data-anim aria-label="RAG retrieval and GraphRAG knowledge graph">
+      <g>
+        <rect class="box" x="42" y="150" width="120" height="34" rx="7" transform="rotate(-4 102 167)"/>
+        <rect class="box" x="46" y="192" width="120" height="34" rx="7" transform="rotate(2 106 209)"/>
+        <rect class="box" x="42" y="234" width="120" height="34" rx="7"/>
+        <text x="103" y="256" text-anchor="middle" class="lbl-s" style="font-size:13px">your docs</text>
+        <path class="draw auto" pathLength="1000" d="M175,215 C230,215 240,215 290,215" fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="2.5" marker-end="none"/>
+        <text x="235" y="200" text-anchor="middle" class="lbl-s" style="font-size:12px">embed</text>
+      </g>
+      <!-- vector space -->
+      <g id="vecdots" fill="#3d4f6e">
+        <circle cx="340" cy="140" r="6"/><circle cx="390" cy="240" r="6"/><circle cx="360" cy="300" r="6"/>
+        <circle cx="430" cy="110" r="6"/><circle cx="455" cy="180" r="6"/><circle cx="480" cy="290" r="6"/>
+        <circle cx="520" cy="130" r="6"/><circle cx="540" cy="220" r="6"/><circle cx="575" cy="300" r="6"/>
+        <circle cx="610" cy="170" r="6"/><circle cx="628" cy="250" r="6"/><circle cx="350" cy="200" r="6"/>
+        <circle cx="415" cy="330" r="6"/><circle cx="505" cy="90" r="6"/><circle cx="560" cy="110" r="6"/>
+        <circle cx="600" cy="320" r="6"/><circle cx="330" cy="260" r="6"/><circle cx="445" cy="250" r="6"/>
+        <circle cx="585" cy="200" r="6"/><circle cx="525" cy="330" r="6"/><circle cx="470" cy="140" r="6"/><circle cx="635" cy="120" r="6"/>
+      </g>
+      <!-- step 1: RAG query -->
+      <g data-step="1">
+        <circle class="pulse-ring" cx="475" cy="215" r="26" fill="none" stroke="hsl(var(--hue) 90% 62%)" stroke-width="2"/>
+        <circle cx="475" cy="215" r="9" fill="hsl(var(--hue) 95% 65%)"/>
+        <text x="475" y="252" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 90% 68%)" style="font-size:12.5px">query</text>
+        <g stroke="hsl(var(--hue) 90% 62%)" stroke-width="2" fill="none" opacity=".9">
+          <path class="draw" pathLength="1000" d="M475,215 L455,180"/><path class="draw" style="--d:.1s" pathLength="1000" d="M475,215 L445,250"/>
+          <path class="draw" style="--d:.2s" pathLength="1000" d="M475,215 L470,140"/><path class="draw" style="--d:.3s" pathLength="1000" d="M475,215 L540,220"/>
+        </g>
+        <g fill="hsl(var(--hue) 95% 65%)">
+          <circle cx="455" cy="180" r="7"/><circle cx="445" cy="250" r="7"/><circle cx="470" cy="140" r="7"/><circle cx="540" cy="220" r="7"/>
+        </g>
+        <text x="480" y="405" text-anchor="middle" class="lbl-s" style="font-size:13px" fill="hsl(var(--hue) 85% 65%)">RAG — fetch what's <tspan font-style="italic">similar</tspan></text>
+      </g>
+      <!-- step 2: GraphRAG edges -->
+      <g data-step="2" stroke="hsl(var(--hue) 70% 55%)" stroke-width="1.6" fill="none" opacity=".85">
+        <path class="draw" pathLength="1000" d="M340,140 L430,110"/><path class="draw" style="--d:.06s" pathLength="1000" d="M430,110 L455,180"/>
+        <path class="draw" style="--d:.12s" pathLength="1000" d="M455,180 L520,130"/><path class="draw" style="--d:.18s" pathLength="1000" d="M520,130 L540,220"/>
+        <path class="draw" style="--d:.24s" pathLength="1000" d="M540,220 L610,170"/><path class="draw" style="--d:.3s" pathLength="1000" d="M390,240 L455,180"/>
+        <path class="draw" style="--d:.36s" pathLength="1000" d="M390,240 L360,300"/><path class="draw" style="--d:.42s" pathLength="1000" d="M480,290 L445,250"/>
+        <path class="draw" style="--d:.48s" pathLength="1000" d="M575,300 L540,220"/><path class="draw" style="--d:.54s" pathLength="1000" d="M628,250 L610,170"/>
+        <path class="draw" style="--d:.6s" pathLength="1000" d="M350,200 L340,140"/><path class="draw" style="--d:.66s" pathLength="1000" d="M505,90 L430,110"/>
+        <path class="draw" style="--d:.72s" pathLength="1000" d="M560,110 L520,130"/>
+        <text x="480" y="60" text-anchor="middle" class="lbl-s" style="font-size:13px" stroke="none" fill="hsl(var(--hue) 85% 65%)">GraphRAG — know how it's <tspan font-style="italic">connected</tspan></text>
+      </g>
+    </svg>
+    <p class="sub" data-step="3">RAG finds the right page. <strong>GraphRAG knows the plot.</strong> The model got memory that isn't its own.</p>
+  </section>
+
+  <!-- ════════ CHAPTER 3 · DISCIPLINE ════════ -->
+  <section class="slide" id="s-ch3" data-hue="222" data-chlabel="3 · Discipline">
+    <div class="ghost-num">03</div>
+    <p class="kicker" data-anim>Chapter three</p>
+    <h1 data-anim style="--d:.12s">The Discipline Era</h1>
+    <div class="chips" data-anim style="--d:.28s">
+      <span class="chip">harness engineering</span><span class="chip">OpenSpec</span><span class="chip">agent skills</span><span class="chip">spec‑driven development</span>
+    </div>
+    <div class="wall" data-anim style="--d:.48s">
+      <span class="wall-tag">⚠ THE WALL BEHIND US</span>
+      <p>Powerful, connected agents… doing unpredictable things.</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s-virtues" data-hue="222" data-chlabel="3 · Discipline">
+    <p class="kicker" data-anim>The pivot</p>
+    <h2 data-anim style="--d:.1s">The old virtues came back.</h2>
+    <div class="tablets" data-step="1">
+      <div class="tablet"><div class="glyph">📜</div><h3>Specifications</h3><p>say what "done" means before anything runs</p></div>
+      <div class="tablet"><div class="glyph">🤝</div><h3>Contracts</h3><p>typed interfaces between human intent and agent action</p></div>
+      <div class="tablet"><div class="glyph">🛡</div><h3>Guardrails</h3><p>permissions, sandboxes, review gates — by design</p></div>
+      <div class="tablet"><div class="glyph">🔁</div><h3>Repeatability</h3><p>same spec, same harness, same outcome</p></div>
+    </div>
+    <p class="pivot-line" data-step="2">AI‑native didn't abandon engineering rigor.<br><em>It rediscovered it.</em></p>
+  </section>
+
+  <section class="slide" id="s-sdd" data-hue="222" data-chlabel="3 · Discipline">
+    <p class="kicker" data-anim>How it works now</p>
+    <h2 data-anim style="--d:.08s">Spec‑driven development</h2>
+    <div class="rails" data-anim style="--d:.2s">HARNESS · permissions · sandbox · tests · CI gates · review</div>
+    <div class="pipe" data-anim style="--d:.3s">
+      <span class="stage">SPEC</span><span class="flow">→</span>
+      <span class="stage">PLAN</span><span class="flow">→</span>
+      <span class="stage">BUILD</span><span class="flow">→</span>
+      <span class="stage">VERIFY</span>
+    </div>
+    <p class="loopback" data-anim style="--d:.4s">↺ diff against the spec · revise · go again</p>
+    <div class="cards3" data-step="1">
+      <div class="kcard"><h4><span class="dot"></span>OpenSpec</h4><p>The spec is the source of truth — requirements and acceptance criteria live in the repo, versioned like code.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Agent skills</h4><p>Reusable playbooks that teach the agent <em>your</em> way of doing things — once, not per-prompt.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Harness engineering</h4><p>The cage comes before the tiger: what the agent may touch, run, and merge is engineered, not hoped.</p></div>
+    </div>
+    <p class="sub" data-step="2"><strong>The spec became the interface to the agent.</strong> Skeptical architects: this chapter is for you.</p>
+  </section>
+
+  <!-- ════════ CHAPTER 4 · PROOF ════════ -->
+  <section class="slide" id="s-ch4" data-hue="148" data-chlabel="4 · Proof">
+    <div class="ghost-num">04</div>
+    <p class="kicker" data-anim>Chapter four · receipts</p>
+    <h1 data-anim style="--d:.12s">Theertha's project</h1>
+    <p class="sub" data-anim style="--d:.3s">A real OpenSpec build. <strong>A war story, not a demo.</strong> We're not describing a theory — here's a thing we shipped.</p>
+  </section>
+
+  <section class="slide" id="s-war" data-hue="148" data-chlabel="4 · Proof">
+    <p class="kicker" data-anim>What actually happened</p>
+    <div class="split">
+      <!-- EDIT: replace this spec excerpt with a (sanitized) excerpt of the real spec -->
+      <div class="speccard" data-anim style="--d:.15s">
+        <header>openspec / changes / add-refund-service / spec.md</header>
+        <pre><span class="h">## Requirements</span>
+<span class="ok">[x]</span> R1 — idempotent refund API
+<span class="ok">[x]</span> R2 — partial refunds, ledger-safe
+<span class="ok">[x]</span> R3 — immutable audit trail
+<span class="ok">[x]</span> R4 — reconciliation job, nightly
+
+<span class="h">## Acceptance</span>
+<span class="ok">9/9</span> scenarios green before merge</pre>
+      </div>
+      <div class="warlist">
+        <!-- EDIT: these three cards are the heart of the chapter — swap in your real moments -->
+        <div class="war" data-step="1"><b>😲 WHAT SURPRISED US</b><p>The agent handled an edge case we never discussed — because the acceptance criteria implied it. The spec was smarter than the meeting.</p></div>
+        <div class="war" data-step="2"><b>💥 WHAT BROKE</b><p>One ambiguous requirement produced confidently wrong code — three times in a row. The bug wasn't in the model. <strong>The bug was in the spec.</strong></p></div>
+        <div class="war" data-step="3"><b>🚫 WHAT WE'D NEVER DO AGAIN</b><p>Leave "obvious" things unwritten. If it's not in the spec, it does not exist.</p></div>
+      </div>
+    </div>
+    <p class="sub" data-step="4">Honest friction is the point — <strong>that's why you can believe the rest of this talk.</strong></p>
+  </section>
+
+  <!-- ════════ CHAPTER 5 · AUTONOMY ════════ -->
+  <section class="slide" id="s-ch5" data-hue="282" data-chlabel="5 · Autonomy">
+    <div class="ghost-num">05</div>
+    <p class="kicker" data-anim>Chapter five · the horizon</p>
+    <h1 data-anim style="--d:.12s">The Autonomy Era</h1>
+    <div class="chips" data-anim style="--d:.28s"><span class="chip">RLMs</span><span class="chip">loop engineering</span><span class="chip">Ralph loops</span></div>
+    <div class="wall" data-anim style="--d:.46s">
+      <span class="wall-tag">⚠ THE WALL</span>
+      <p>Even with specs — a human still drives every step.</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s-loop" data-hue="282" data-chlabel="5 · Autonomy">
+    <p class="kicker" data-anim>The frontier</p>
+    <h2 data-anim style="--d:.08s">What if the loop closes itself?</h2>
+    <div class="loopwrap">
+      <svg viewBox="0 0 460 460" style="width:min(360px,60vw)" data-anim aria-label="Self-closing agent loop">
+        <circle class="spinring" cx="230" cy="230" r="150" fill="none" stroke="hsl(var(--hue) 85% 62%)" stroke-width="3" stroke-dasharray="12 16" opacity=".9"/>
+        <g class="pop" style="--d:.2s"><circle cx="230" cy="80"  r="40" class="box-acc"/><text x="230" y="86"  text-anchor="middle" class="lbl">Plan</text></g>
+        <g class="pop" style="--d:.35s"><circle cx="380" cy="230" r="40" class="box-acc"/><text x="380" y="236" text-anchor="middle" class="lbl">Build</text></g>
+        <g class="pop" style="--d:.5s"><circle cx="230" cy="380" r="40" class="box-acc"/><text x="230" y="386" text-anchor="middle" class="lbl">Verify</text></g>
+        <g class="pop" style="--d:.65s"><circle cx="80"  cy="230" r="40" class="box-acc"/><text x="80"  y="236" text-anchor="middle" class="lbl">Learn</text></g>
+        <text x="230" y="222" text-anchor="middle" class="lbl-s">the loop runs</text>
+        <text x="230" y="244" text-anchor="middle" class="lbl-s">until the spec is met</text>
+      </svg>
+      <div class="human-card float" data-step="1">
+        <div class="emoji">🧑‍💻☕</div>
+        <p><strong>The human steps outside the loop</strong> — setting direction and judging outcomes, not driving keystrokes.</p>
+      </div>
+    </div>
+    <div class="cards3" data-step="2">
+      <div class="kcard"><h4><span class="dot"></span>RLMs</h4><p>Models trained on the loop itself — long-horizon, tool-using, self-correcting runs.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Loop engineering</h4><p>Designing the retry: what feedback re-enters, when to stop, what "better" means.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Ralph loops</h4><p>The same spec, run again and again overnight — brute-force persistence, surprisingly effective.</p></div>
+    </div>
+    <div class="candor" data-step="3"><b>Full honesty:</b> we are exploring this era, not mastering it. That candor is exactly why you can trust chapters 1–4.</div>
+  </section>
+
+  <!-- ════════ CHAPTER 6 · OPS + CLOSE ════════ -->
+  <section class="slide" id="s-ops" data-hue="205" data-chlabel="6 · The Grown-Up Slide">
+    <p class="kicker" data-anim>The grown‑up slide</p>
+    <h2 data-anim style="--d:.08s">The price of admission</h2>
+    <div class="ops" data-anim style="--d:.22s">
+      <div class="gauge">
+        <h5>TOKENS · TODAY</h5>
+        <div class="big"><span class="count" data-to="48210334">0</span></div>
+        <div class="bar"><i style="--w:.62"></i></div>
+        <div class="note-s">62% of daily budget — alerts at 80%</div>
+      </div>
+      <div class="gauge">
+        <h5>COST · PER SHIPPED PR</h5>
+        <div class="big">$<span class="count" data-to="23">0</span><span class="unit">avg</span></div>
+        <div class="bar"><i style="--w:.31"></i></div>
+        <div class="note-s">vs. blended eng-hour cost: you do the math</div>
+      </div>
+      <div class="gauge">
+        <h5>OBSERVABILITY</h5>
+        <svg viewBox="0 0 190 56" style="width:100%">
+          <polyline class="draw auto" pathLength="1000" points="4,44 22,38 40,41 58,30 76,34 94,22 112,26 130,15 148,20 166,9 186,12"
+            fill="none" stroke="hsl(var(--hue) 90% 62%)" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <div class="note-s">every loop traced: prompts, tools, diffs, verdicts</div>
+      </div>
+      <div class="gauge">
+        <h5>MODEL MIX</h5>
+        <div class="models">
+          <div class="mrow"><span>haiku</span><span class="mbar"><i style="--w:.7"></i></span><span class="pct">70%</span></div>
+          <div class="mrow"><span>sonnet</span><span class="mbar"><i style="--w:.25"></i></span><span class="pct">25%</span></div>
+          <div class="mrow"><span>opus</span><span class="mbar"><i style="--w:.05"></i></span><span class="pct">5%</span></div>
+        </div>
+        <div class="note-s">right-size the brain to the task</div>
+      </div>
+    </div>
+    <p class="sub" data-step="1"><strong>Autonomy is only responsible when you can observe it — and afford it.</strong></p>
+  </section>
+
+  <section class="slide" id="s-close" data-hue="212" data-chlabel="Close">
+    <div class="term" data-anim style="width:min(640px,84vw)">
+      <div class="term-head"><i></i><i></i><i></i><span>agent-loop — that thing from slide one</span></div>
+      <div class="term-body small">
+        <div class="tl ok">verify — acceptance scenarios 9/9 ✓</div>
+        <div class="tl ok">PR #482 opened → merged → deployed ✓</div>
+        <div class="tl acc">● loop complete — 31h wall-clock · 0 human keystrokes</div>
+      </div>
+    </div>
+    <h2 data-step="1">Remember this?</h2>
+    <p class="sub" data-step="2" style="font-size:clamp(17px,2.2vw,24px)">Now you know <strong class="accent">everything underneath it</strong> — five eras, four walls, one road.</p>
+    <div class="thanks" data-step="3">Thank you.</div>
+    <!-- EDIT: your team name goes here -->
+    <p class="teamline" data-step="3">— YOUR TEAM NAME · TechDay 2026</p>
+  </section>
+
+</main>
+
+<div id="hud">
+  <span id="chlabel">Cold Open</span>
+  <span class="rail" id="rail"></span>
+  <span id="counter">1 / 19 · press ?</span>
+</div>
+
+<div id="help">
+  <div class="card">
+    <div><kbd>→</kbd><kbd>Space</kbd> next step / slide</div>
+    <div><kbd>←</kbd> previous</div>
+    <div><kbd>0</kbd>–<kbd>6</kbd> jump to chapter</div>
+    <div><kbd>F</kbd> fullscreen</div>
+    <div><kbd>?</kbd> close this</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var root = document.documentElement;
+  var cur = -1, actToken = null;
+
+  /* ── chapter rail ─────────────────────────────────────── */
+  var chapterStarts = [];
+  slides.forEach(function(s, i){
+    var lbl = s.dataset.chlabel;
+    if(!chapterStarts.length || chapterStarts[chapterStarts.length-1].label !== lbl){
+      chapterStarts.push({ label: lbl, index: i });
+    }
+  });
+  var rail = document.getElementById('rail');
+  chapterStarts.forEach(function(c){
+    var b = document.createElement('b');
+    b.title = c.label;
+    b.addEventListener('click', function(e){ e.stopPropagation(); activate(c.index, 1); });
+    rail.appendChild(b);
+  });
+
+  /* ── steps ────────────────────────────────────────────── */
+  function stepsIn(s){ return Array.prototype.slice.call(s.querySelectorAll('[data-step]')); }
+  function syncHides(s){
+    var on = stepsIn(s).filter(function(e){ return e.classList.contains('on'); })
+                       .map(function(e){ return +e.dataset.step; });
+    var max = on.length ? Math.max.apply(null, on) : 0;
+    Array.prototype.forEach.call(s.querySelectorAll('[data-hide-on]'), function(e){
+      e.classList.toggle('hidden', +e.dataset.hideOn <= max);
+    });
+  }
+  function resetSteps(s){ stepsIn(s).forEach(function(e){ e.classList.remove('on'); }); syncHides(s); }
+  function revealAll(s){ stepsIn(s).forEach(function(e){ e.classList.add('on'); }); syncHides(s); }
+
+  /* ── activation ───────────────────────────────────────── */
+  function activate(i, dir){
+    if(i === cur || i < 0 || i >= slides.length) return;
+    if(cur >= 0){ var old = slides[cur]; old.classList.remove('active'); resetSteps(old); }
+    cur = i;
+    var s = slides[cur];
+    s.classList.add('active');
+    if(dir < 0) revealAll(s); else resetSteps(s);
+    hueTarget = +s.dataset.hue || 212;
+    if(actToken) actToken.cancelled = true;
+    actToken = { cancelled: false };
+    var fn = inits[s.id];
+    if(fn) setTimeout(function(){ if(!actToken.cancelled) fn(s, actToken); }, RM ? 0 : 250);
+    updateHud();
+  }
+  function next(){
+    var s = slides[cur];
+    var pending = stepsIn(s).filter(function(e){ return !e.classList.contains('on'); });
+    if(pending.length){
+      var v = Math.min.apply(null, pending.map(function(e){ return +e.dataset.step; }));
+      pending.forEach(function(e){ if(+e.dataset.step === v) e.classList.add('on'); });
+      syncHides(s); updateHud(); return;
+    }
+    activate(cur + 1, 1);
+  }
+  function prev(){
+    var s = slides[cur];
+    var on = stepsIn(s).filter(function(e){ return e.classList.contains('on'); });
+    if(on.length){
+      var v = Math.max.apply(null, on.map(function(e){ return +e.dataset.step; }));
+      on.forEach(function(e){ if(+e.dataset.step === v) e.classList.remove('on'); });
+      syncHides(s); updateHud(); return;
+    }
+    activate(cur - 1, -1);
+  }
+  function updateHud(){
+    document.getElementById('progbar').style.width = (cur / (slides.length - 1) * 100) + '%';
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + slides.length + ' · press ?';
+    var lbl = slides[cur].dataset.chlabel;
+    document.getElementById('chlabel').textContent = lbl;
+    var dots = rail.children;
+    for(var d = 0; d < dots.length; d++){
+      var start = chapterStarts[d].index;
+      var end = (d + 1 < chapterStarts.length) ? chapterStarts[d+1].index : slides.length;
+      dots[d].className = (cur >= start && cur < end) ? 'here' : (cur >= end ? 'done' : '');
+    }
+  }
+
+  /* ── hue drift (era colour) ───────────────────────────── */
+  var hueCur = 212, hueTarget = 212;
+  (function hueLoop(){
+    hueCur += (hueTarget - hueCur) * 0.07;
+    root.style.setProperty('--hue', hueCur.toFixed(1));
+    requestAnimationFrame(hueLoop);
+  })();
+
+  /* ── background particles ─────────────────────────────── */
+  var cv = document.getElementById('bg'), cx = cv.getContext('2d'), P = [];
+  function sizeCanvas(){ cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+  sizeCanvas(); addEventListener('resize', sizeCanvas);
+  for(var p = 0; p < 70; p++){
+    P.push({ x: Math.random(), y: Math.random(), r: Math.random() * 1.8 + .6,
+             vx: (Math.random() - .5) * .00022, vy: -(Math.random() * .00034 + .00008) });
+  }
+  function drawBg(){
+    var W = cv.width, H = cv.height;
+    cx.clearRect(0, 0, W, H);
+    if(!RM){
+      for(var i = 0; i < P.length; i++){
+        var a = P[i];
+        a.x += a.vx; a.y += a.vy;
+        if(a.y < -0.02){ a.y = 1.02; a.x = Math.random(); }
+        if(a.x < -0.02) a.x = 1.02; if(a.x > 1.02) a.x = -0.02;
+      }
+      cx.lineWidth = 1;
+      for(var i2 = 0; i2 < P.length; i2++){
+        for(var j = i2 + 1; j < P.length; j++){
+          var dx = (P[i2].x - P[j].x) * W, dy = (P[i2].y - P[j].y) * H;
+          var dd = dx * dx + dy * dy, lim = 130 * devicePixelRatio; lim *= lim;
+          if(dd < lim){
+            cx.strokeStyle = 'rgba(171,30,35,' + (0.07 * (1 - dd / lim)) + ')';
+            cx.beginPath(); cx.moveTo(P[i2].x * W, P[i2].y * H); cx.lineTo(P[j].x * W, P[j].y * H); cx.stroke();
+          }
+        }
+      }
+      for(var k = 0; k < P.length; k++){
+        var b = P[k];
+        cx.fillStyle = 'rgba(171,30,35,.32)';
+        cx.beginPath(); cx.arc(b.x * W, b.y * H, b.r * devicePixelRatio, 0, 7); cx.fill();
+      }
+    }
+    requestAnimationFrame(drawBg);
+  }
+  drawBg();
+
+  /* ── terminal typing engine ───────────────────────────── */
+  function typeText(span, text, token, done){
+    if(RM){ span.textContent = text; done(); return; }
+    var i = 0;
+    span.classList.add('typing');
+    (function tick(){
+      if(token.cancelled) return;
+      span.textContent = text.slice(0, ++i);
+      if(i < text.length) setTimeout(tick, 10 + Math.random() * 22);
+      else { span.classList.remove('typing'); done(); }
+    })();
+  }
+  function runTerminal(el, script, token){
+    el.innerHTML = '';
+    var i = 0;
+    (function nextLine(){
+      if(token.cancelled) return;
+      if(i >= script.length) return;
+      var L = script[i++];
+      var div = document.createElement('div');
+      div.className = 'tl ' + (L.cls || '');
+      el.appendChild(div);
+      if(L.cmd){
+        var tp = document.createElement('span'); tp.className = 'tp'; tp.textContent = '$ ';
+        div.appendChild(tp);
+        var sp = document.createElement('span'); div.appendChild(sp);
+        typeText(sp, L.text, token, function(){ setTimeout(nextLine, RM ? 0 : (L.pause || 380)); });
+      } else {
+        div.textContent = L.text;
+        setTimeout(nextLine, RM ? 0 : (L.pause || 300));
+      }
+    })();
+  }
+
+  /* EDIT: the cold-open story — swap these lines for what YOUR team actually shipped */
+  var coldScript = [
+    { cmd: true, text: 'agent run --loop --spec specs/refund-service.md', pause: 500 },
+    { text: '▸ reading spec … 14 requirements · 9 acceptance scenarios', cls: 'dim' },
+    { text: '▸ iteration 1 — plan → build → test ……… 11 failing' },
+    { text: '▸ iteration 2 — fix: idempotency keys ……… 6 failing' },
+    { text: '▸ iteration 3 — fix: race in ledger sync …… 2 failing' },
+    { text: '▸ iteration 4 — fix: rounding on partials … 0 failing ✓', cls: 'ok' },
+    { text: '▸ verify — acceptance scenarios 9/9 ✓', cls: 'ok', pause: 420 },
+    { text: '▸ PR #482 opened → reviewed → merged → deployed ✓', cls: 'ok', pause: 500 },
+    { text: '● loop complete — 31h wall-clock · 0 human keystrokes', cls: 'acc' }
+  ];
+
+  /* ── per-slide activations ────────────────────────────── */
+  var inits = {
+    's-cold': function(s, token){
+      runTerminal(document.getElementById('cold-term'), coldScript, token);
+    },
+    's-rewind': function(s, token){
+      var el = document.getElementById('yr');
+      if(RM){ el.textContent = '2024'; return; }
+      el.classList.add('spin');
+      var t0 = performance.now(), DUR = 2100;
+      (function tick(now){
+        if(token.cancelled) return;
+        var t = Math.min(1, (now - t0) / DUR);
+        var e = 1 - Math.pow(1 - t, 3);
+        var y = 2026 - e * 2;
+        el.textContent = Math.ceil(y);
+        if(t < 1) requestAnimationFrame(tick);
+        else { el.textContent = '2024'; el.classList.remove('spin'); }
+      })(t0);
+    },
+    's-ops': function(s, token){
+      Array.prototype.forEach.call(s.querySelectorAll('.count'), function(el){
+        var to = +el.dataset.to, t0 = performance.now(), DUR = RM ? 1 : 1500;
+        (function tick(now){
+          if(token.cancelled) return;
+          var t = Math.min(1, (now - t0) / DUR);
+          var e = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(to * e).toLocaleString('en-US');
+          if(t < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    }
+  };
+
+  /* ── input ────────────────────────────────────────────── */
+  addEventListener('keydown', function(e){
+    if(e.key === '?' || e.key === 'h'){ document.getElementById('help').classList.toggle('open'); return; }
+    if(document.getElementById('help').classList.contains('open')){
+      document.getElementById('help').classList.remove('open'); return;
+    }
+    if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); next(); }
+    else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if(e.key === 'Home'){ activate(0, 1); }
+    else if(e.key === 'End'){ activate(slides.length - 1, -1); }
+    else if(e.key === 'f' || e.key === 'F'){
+      if(document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+    else if(/^[0-6]$/.test(e.key)){
+      var map = { 0:'Cold Open', 1:'1 · Conversation', 2:'2 · Connection', 3:'3 · Discipline', 4:'4 · Proof', 5:'5 · Autonomy', 6:'6 · The Grown-Up Slide' };
+      var target = chapterStarts.filter(function(c){ return c.label === map[e.key]; })[0];
+      if(target) activate(target.index, 1);
+    }
+  });
+  document.addEventListener('click', function(e){
+    if(e.target.closest('a, button, .rail, #brand')) return;
+    if(document.getElementById('help').classList.contains('open')){
+      document.getElementById('help').classList.remove('open'); return;
+    }
+    next();
+  });
+  var tx = null;
+  addEventListener('touchstart', function(e){ tx = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', function(e){
+    if(tx === null) return;
+    var dx = e.changedTouches[0].clientX - tx; tx = null;
+    if(dx < -40) next(); else if(dx > 40) prev();
+  }, { passive: true });
+
+  window.deck = { go: function(i){ activate(i, 1); }, next: next, prev: prev, slides: slides };
+  activate(0, 1);
+})();
+</script>
+</body>
+</html>
