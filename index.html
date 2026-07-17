@@ -535,12 +535,14 @@
   .fm-bad p, .fm-fix p{ font-size: clamp(12.5px,1.5vw,15px); line-height: 1.5; color: var(--mut) }
   .fm-bad p strong, .fm-fix p strong{ color: var(--ink) }
   .fm-arr{ align-self: center; font-size: clamp(18px,2.2vw,26px); font-weight: 700; color: var(--accent) }
-  #s-failmodes{ gap: 1.3vh; padding-top: 4vh; padding-bottom: 4vh }
-  #s-failmodes .fmrow{ width: min(820px, 92vw) }
-  #s-failmodes .fm-bad, #s-failmodes .fm-fix{ padding: 9px 15px }
-  #s-failmodes .fm-bad p, #s-failmodes .fm-fix p{ font-size: clamp(11.5px,1.3vw,13.5px); line-height:1.4 }
-  #s-failmodes .fm-bad b, #s-failmodes .fm-fix b{ margin-bottom: 3px }
-  #s-failmodes .eqcap{ font-size: clamp(12px,1.4vw,15px) }
+  #s-failmodes{ gap: 2.4vh; padding-top: 5vh; padding-bottom: 5vh }
+  #s-failmodes h2{ max-width: 30ch; font-size: clamp(26px,3.8vw,44px) }
+  #s-failmodes .eqcap{ font-size: clamp(12.5px,1.5vw,15.5px) }
+  #s-failmodes .fmgrid{ display:flex; flex-direction:column; gap: 13px; width: min(860px, 92vw) }
+  #s-failmodes .fmrow{ width: 100% }
+  #s-failmodes .fm-bad, #s-failmodes .fm-fix{ padding: 12px 18px }
+  #s-failmodes .fm-bad p, #s-failmodes .fm-fix p{ font-size: clamp(12.5px,1.4vw,14.5px); line-height:1.5 }
+  #s-failmodes .fm-bad b, #s-failmodes .fm-fix b{ margin-bottom: 5px }
   [data-step].on .fm-bad{ animation: fmL .35s cubic-bezier(.16,1,.3,1) backwards }
   [data-step].on .fm-arr{ animation: fmPop .25s ease .15s backwards }
   [data-step].on .fm-fix{ animation: fmR .35s cubic-bezier(.16,1,.3,1) .2s backwards }
@@ -1460,20 +1462,22 @@
     <p class="kicker" data-anim>The skill-issue reframe</p>
     <h2 data-anim style="--d:.08s">It's a harness gap, not a model gap</h2>
     <p class="eqcap" data-anim style="--d:.2s">"A decent model with a great harness <strong>beats</strong> a great model with a bad harness." — Addy Osmani</p>
-    <div class="fmrow" data-step="1">
-      <div class="fm-bad"><b>🧠 AMNESIA</b><p>Every session starts from zero — <strong>yesterday's work is gone.</strong></p></div>
-      <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS</b><p><strong>Filesystem &amp; git</strong> — durable state and progress files that survive the session.</p></div>
-    </div>
-    <div class="fmrow" data-step="2">
-      <div class="fm-bad"><b>🏁 VICTORY DECLARATION</b><p><strong>"Done!"</strong> — while the tests are still red.</p></div>
-      <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS</b><p><strong>Hooks</strong> — typecheck · lint · test after every edit. <strong>Success is silent, failures are loud.</strong></p></div>
-    </div>
-    <div class="fmrow" data-step="3">
-      <div class="fm-bad"><b>🌀 LONG-HORIZON DRIFT</b><p>The context fills up — the model <strong>rushes and cuts corners.</strong></p></div>
-      <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS</b><p><strong>Compaction &amp; loops</strong> — fresh context every lap, continuation enforced.</p></div>
+    <div class="fmgrid">
+      <div class="fmrow" data-step="1">
+        <div class="fm-bad"><b>🧠 AMNESIA</b><p>Every session starts from zero — <strong>yesterday's work is gone.</strong></p></div>
+        <span class="fm-arr">→</span>
+        <div class="fm-fix"><b>HARNESS</b><p><strong>Filesystem &amp; git</strong> — durable state and progress files that survive the session.</p></div>
+      </div>
+      <div class="fmrow" data-step="2">
+        <div class="fm-bad"><b>🏁 VICTORY DECLARATION</b><p><strong>"Done!"</strong> — while the tests are still red.</p></div>
+        <span class="fm-arr">→</span>
+        <div class="fm-fix"><b>HARNESS</b><p><strong>Hooks</strong> — typecheck · lint · test after every edit. <strong>Success is silent, failures are loud.</strong></p></div>
+      </div>
+      <div class="fmrow" data-step="3">
+        <div class="fm-bad"><b>🌀 LONG-HORIZON DRIFT</b><p>The context fills up — the model <strong>rushes and cuts corners.</strong></p></div>
+        <span class="fm-arr">→</span>
+        <div class="fm-fix"><b>HARNESS</b><p><strong>Compaction &amp; loops</strong> — fresh context every lap, continuation enforced.</p></div>
+      </div>
     </div>
     <p class="sub" data-step="4"><strong>The ratchet:</strong> every agent mistake becomes a permanent rule. Every line in AGENTS.md traces back to <strong>something that actually went wrong.</strong></p>
   </section>
