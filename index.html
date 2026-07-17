@@ -1967,6 +1967,11 @@ THEN  balance = $70 + audit entry
   /* slides whose init() schedules its own step reveals */
   var selfStepping = { 's-cold': 1, 's-rewind': 1 };
 
+  /* slides paced by hand — click reveals one step at a time, no auto-timer.
+     Use this for content that needs to be taught piece by piece (e.g. RAG,
+     then GraphRAG, as two distinct ideas) rather than left to play itself out. */
+  var manualSteps = { 's-rag': 1 };
+
   /* auto-reveal: steps appear on a slow timer, no clicking needed */
   function autoSteps(s, token){
     var steps = stepsIn(s);
@@ -1995,7 +2000,7 @@ THEN  balance = $70 + audit entry
     hueTarget = +s.dataset.hue || 212;
     if(actToken) actToken.cancelled = true;
     actToken = { cancelled: false };
-    if(dir >= 0 && !selfStepping[s.id]) autoSteps(s, actToken);
+    if(dir >= 0 && !selfStepping[s.id] && !manualSteps[s.id]) autoSteps(s, actToken);
     var fn = inits[s.id];
     if(fn) setTimeout(function(){ if(!actToken.cancelled) fn(s, actToken); }, RM ? 0 : 250);
     updateHud();
@@ -2033,11 +2038,30 @@ THEN  balance = $70 + audit entry
   function next(){
     var s = slides[cur];
     var pending = stepsIn(s).filter(function(e){ return !e.classList.contains('on'); });
-    if(pending.length){ revealAll(s); updateHud(); return; } /* fast-forward the animation */
+    if(pending.length){
+      if(manualSteps[s.id]){
+        var v = Math.min.apply(null, pending.map(function(e){ return +e.dataset.step; }));
+        pending.forEach(function(e){ if(+e.dataset.step === v) e.classList.add('on'); });
+      } else {
+        revealAll(s); /* fast-forward the animation */
+      }
+      syncHides(s); updateHud();
+      return;
+    }
     if(s.id === 's-road' && cur + 1 < slides.length){ wipeTransition(cur + 1); return; }
     activate(cur + 1, 1);
   }
   function prev(){
+    var s = slides[cur];
+    if(manualSteps[s.id]){
+      var on = stepsIn(s).filter(function(e){ return e.classList.contains('on'); });
+      if(on.length){
+        var v = Math.max.apply(null, on.map(function(e){ return +e.dataset.step; }));
+        on.forEach(function(e){ if(+e.dataset.step === v) e.classList.remove('on'); });
+        syncHides(s); updateHud();
+        return;
+      }
+    }
     activate(cur - 1, -1);
   }
   function updateHud(){
