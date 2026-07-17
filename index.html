@@ -541,6 +541,79 @@
   }
   .widecard strong{ color: var(--ink) }
 
+  /* ── 2027 day-in-the-life timeline ────────────────────── */
+  .dayline{ position:relative; display:flex; align-items:flex-start; width:min(1100px,94vw); padding-top:6px }
+  .dayline::before{
+    content:''; position:absolute; top:44px; left:5%; right:5%; height:3px; border-radius:99px;
+    background: var(--accent); opacity:.3;
+    transform:scaleX(0); transform-origin:left;
+    transition: transform 1.6s cubic-bezier(.2,.7,.2,1) .35s;
+  }
+  .slide.active .dayline::before{ transform:scaleX(1) }
+  .daynode{ flex:1; text-align:center; padding:0 6px; opacity:0 }
+  .slide.active .daynode{ animation: dayin .6s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(.3s + var(--i) * .24s) }
+  @keyframes dayin{ from{ opacity:0; transform:translateY(28px) } to{ opacity:1; transform:none } }
+  .daynode .dn-time{ font-family:var(--mono); font-size:clamp(12px,1.4vw,15px); font-weight:700; color:var(--accent); display:block }
+  .daynode .dn-dot{ display:block; width:13px; height:13px; border-radius:50%; background:var(--accent); margin:8px auto 10px; box-shadow:0 0 0 5px var(--accent-soft) }
+  .daynode b{ font-size:clamp(12.5px,1.5vw,16px); display:block; margin-bottom:4px }
+  .daynode p{ font-size:clamp(11px,1.25vw,13px); color:var(--mut); line-height:1.45 }
+  .daynode .dn-badge{
+    display:inline-block; margin-top:9px; font-family:var(--mono); font-size:10px; letter-spacing:.05em;
+    color:var(--accent); background:var(--accent-soft); border-radius:99px; padding:3px 9px;
+  }
+  .dayline.compact .daynode p{ display:none }
+
+  /* ── interrupt / big quote beats ──────────────────────── */
+  .bigquote{ font-size:clamp(28px,4.6vw,58px); font-weight:800; line-height:1.3; max-width:24ch; letter-spacing:-.02em }
+  .bigquote em{ font-style:italic; color:var(--accent) }
+  .bigreply{ font-size:clamp(17px,2.2vw,26px); color:var(--mut); line-height:1.65; max-width:44ch }
+  .bigreply strong{ color:var(--ink) }
+
+  /* ── year ghost numbers ───────────────────────────────── */
+  .ghost-num.yr{ font-size:26vh; letter-spacing:-.05em }
+
+  /* ── browser tab swap (2022) ──────────────────────────── */
+  .tabswap-wrap{ display:flex; flex-direction:column; align-items:center; gap:0 }
+  .tabswap{
+    width:min(700px,90vw); display:flex; gap:8px; padding:10px 12px 0;
+    background:var(--panel); border:1px solid var(--line); border-bottom:none; border-radius:16px 16px 0 0;
+    box-shadow:0 -6px 30px -18px rgba(0,0,0,.25);
+  }
+  .btab{
+    flex:1; display:flex; align-items:center; gap:9px; padding:11px 15px;
+    font-size:clamp(12px,1.5vw,15px); border-radius:11px 11px 0 0;
+    border:1px solid var(--line); border-bottom:none; background:var(--bg);
+    transition: transform .9s cubic-bezier(.2,.7,.2,1), opacity .9s ease;
+    white-space:nowrap; overflow:hidden;
+  }
+  .btab .fav{ font-size:15px }
+  .btab.gpt{ background:var(--accent-soft); border-color:rgba(171,30,35,.4); font-weight:600 }
+  [data-step].on .btab.so{ transform:translateX(calc(100% + 8px)); opacity:.5 }
+  [data-step].on .btab.gpt{ transform:translateX(calc(-100% - 8px)) }
+  .urlbar{
+    width:min(700px,90vw); padding:9px 16px; font-family:var(--mono); font-size:12.5px; color:var(--mut);
+    background:var(--panel); border:1px solid var(--line); border-radius:0 0 16px 16px; text-align:left;
+  }
+
+  /* ── dome (just a chatbot?) ───────────────────────────── */
+  .knock{ opacity:0; transform-box:fill-box; transform-origin:center }
+  [data-step].on .knock{ animation: knockin .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  @keyframes knockin{
+    0%{ opacity:0; transform:translateX(-46px) }
+    55%{ opacity:1; transform:translateX(10px) }
+    100%{ opacity:1; transform:none }
+  }
+
+  /* ── self-healing EKG ─────────────────────────────────── */
+  .ekgtag{ font-family:var(--mono); font-size:12px; letter-spacing:.14em }
+  .beat{ transform-box:fill-box; transform-origin:center; animation: beatpulse 1.6s ease-in-out infinite }
+  @keyframes beatpulse{ 50%{ opacity:.55 } }
+
+  /* ── model routing gauge ──────────────────────────────── */
+  .routes{ display:flex; flex-direction:column; gap:9px; font-family:var(--mono); font-size:12.5px; margin:6px 0 10px }
+  .routes .rr{ display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--mut) }
+  .routes .rr .to{ color:var(--accent); font-weight:700 }
+
   /* ── ops dashboard ────────────────────────────────────── */
   .ops{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center }
   .gauge{
@@ -663,170 +736,171 @@
 
 <main id="deck">
 
-  <!-- ════════ CHAPTER 0 · COLD OPEN ════════ -->
-  <section class="slide" id="s-cold" data-hue="212" data-chlabel="Cold Open">
-    <p class="kicker live-dot" data-anim>Live from production</p>
-    <!-- EDIT: swap this terminal script for the real thing your team shipped.
-         The lines live in `coldScript` inside the <script> tag at the bottom. -->
-    <div class="term" data-anim style="--d:.15s">
-      <div class="term-head"><i></i><i></i><i></i><span>agent-loop — 80×24</span></div>
-      <div class="term-body" id="cold-term"></div>
+  <!-- ════════ ACT 0 · 2027 THE HOOK ════════ -->
+  <section class="slide" id="s-day" data-hue="212" data-chlabel="2027 · A Day">
+    <p class="kicker" data-anim>2027 · a Tuesday morning</p>
+    <h2 data-anim style="--d:.1s; font-size:clamp(28px,4.4vw,58px)">A day in the life of an AI engineer</h2>
+    <div class="dayline" data-anim style="--d:.25s">
+      <div class="daynode" style="--i:0"><span class="dn-time">09:00</span><span class="dn-dot"></span><b>requirement lands</b><p>from product — plain English</p></div>
+      <div class="daynode" style="--i:1"><span class="dn-time">09:10</span><span class="dn-dot"></span><b>spec agreed</b><p>agent drafts · human approves ✓</p></div>
+      <div class="daynode" style="--i:2"><span class="dn-time">09:15</span><span class="dn-dot"></span><b>agents pick it up</b><p>plan · build · test — in parallel</p></div>
+      <div class="daynode" style="--i:3"><span class="dn-time">10:20</span><span class="dn-dot"></span><b>tests green</b><p>PR opened, diff explained</p></div>
+      <div class="daynode" style="--i:4"><span class="dn-time">10:45</span><span class="dn-dot"></span><b>merged · deployed</b><p>canary watched by an agent</p></div>
+      <div class="daynode" style="--i:5"><span class="dn-time">11:00</span><span class="dn-dot"></span><b>☕ next requirement</b><p>the IDE never opened</p></div>
     </div>
-    <p class="sub" data-step="1"><strong>Built end-to-end by an autonomous agent loop.</strong> Spec in, service out.</p>
-    <p class="sub" data-step="2">Wall-clock: <strong class="accent">31 hours</strong>. Human keystrokes: <strong class="accent">zero</strong>.</p>
+    <p class="sub" data-step="1">No prompts. No keystrokes. Just intent → software. <strong>Development in 2027 is… seamless.</strong></p>
   </section>
 
-  <section class="slide" id="s-rewind" data-hue="212" data-chlabel="Cold Open">
+  <section class="slide" id="s-cold" data-hue="212" data-chlabel="2027 · A Day">
+    <p class="kicker live-dot" data-anim>2027 · 09:15 — the agents at work</p>
+    <div class="term" data-anim style="--d:.15s">
+      <div class="term-head"><i></i><i></i><i></i><span>agent-loop — Tue 09:15</span></div>
+      <div class="term-body" id="cold-term"></div>
+    </div>
+    <p class="sub" data-step="1"><strong>Built end-to-end by an autonomous agent loop.</strong> Spec in, service out — before the coffee got cold.</p>
+    <p class="sub" data-step="2">Wall-clock: <strong class="accent">90 minutes</strong>. Human contribution: <strong class="accent">one approval</strong>.</p>
+  </section>
+
+  <section class="slide" id="s-interrupt" data-hue="212" data-chlabel="2027 · A Day">
+    <p class="kicker" data-anim>— record scratch —</p>
+    <div class="bigquote" data-anim style="--d:.18s">“Wait… can development really be <em>this simple?</em>”</div>
+    <p class="bigreply" data-step="1">“Not always. To understand how we got here —<br><strong>we need to go back to where it all began.”</strong></p>
+  </section>
+
+  <section class="slide" id="s-rewind" data-hue="212" data-chlabel="The Road">
     <p class="rew-marks" data-anim>◀◀ REW</p>
-    <div id="yr" class="scanlines" data-anim style="--d:.1s">2026</div>
-    <h2 data-step="1" style="max-width:24ch">Two years ago, this would have taken us <span class="accent">six weeks</span>.</h2>
+    <div id="yr" class="scanlines" data-anim style="--d:.1s">2027</div>
+    <h2 data-step="1" style="max-width:26ch">In 2022, that morning took <span class="accent">six weeks</span> — and a whole team.</h2>
     <p class="sub" data-step="2">Here's how we got here. <strong>No agenda slide — just the road.</strong></p>
   </section>
 
   <section class="slide" id="s-road" data-hue="212" data-chlabel="The Road">
-    <p class="kicker" data-anim>The road</p>
+    <p class="kicker" data-anim>The road · 2022 → 2027</p>
     <svg viewBox="-60 0 1120 310" style="width:min(1180px,94vw)" data-anim aria-label="Roadmap of five eras">
       <path class="draw auto" pathLength="1000" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"
             fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="5" stroke-linecap="round" opacity=".9"/>
-      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">Conversation</text><text x="70" y="290" text-anchor="middle" class="lbl-s">chatbots · prompts · context</text></g>
-      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">Connection</text><text x="240" y="126" text-anchor="middle" class="lbl-s">MCP · RAG · GraphRAG</text></g>
-      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">Discipline</text><text x="430" y="280" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
-      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">Proof</text><text x="600" y="96" text-anchor="middle" class="lbl-s">a real shipped project</text></g>
-      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">RLMs · loop engineering</text></g>
-      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:30px">🏁</text><circle cx="930" cy="90" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">Ops</text></g>
+      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">2022 · The Beginning</text><text x="70" y="290" text-anchor="middle" class="lbl-s">ChatGPT · the second tab</text></g>
+      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">2023 · Knowledge</text><text x="240" y="126" text-anchor="middle" class="lbl-s">RAG · GraphRAG · prompts</text></g>
+      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">2024 · Connection</text><text x="430" y="280" text-anchor="middle" class="lbl-s">MCP · tool calling</text></g>
+      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">2025 · Discipline</text><text x="600" y="96" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
+      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">2026 · Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">loops · RLMs · self-healing</text></g>
+      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:30px">🌅</text><circle cx="930" cy="90" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">2027</text><text x="930" y="148" text-anchor="middle" class="lbl-s">that morning</text></g>
     </svg>
-    <p class="sub" data-step="1">Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
+    <p class="sub" data-step="1">Five years. Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
   </section>
 
-  <!-- ════════ CHAPTER 1 · CONVERSATION ════════ -->
-  <section class="slide" id="s-ch1" data-hue="36" data-chlabel="1 · Conversation">
-    <div class="ghost-num">01</div>
+  <!-- ════════ ACT 1 · 2022 THE BEGINNING ════════ -->
+  <section class="slide" id="s-ch1" data-hue="36" data-chlabel="2022 · Beginning">
+    <div class="ghost-num yr">2022</div>
     <p class="kicker" data-anim>Chapter one · the nostalgic bit</p>
-    <h1 data-anim style="--d:.12s">The Conversation Era</h1>
+    <h1 data-anim style="--d:.12s">The Beginning</h1>
     <div class="chips" data-anim style="--d:.28s">
-      <span class="chip">chatbots <span class="arr">→</span> prompt engineering <span class="arr">→</span> context engineering</span>
+      <span class="chip">ChatGPT</span><span class="chip">conversational AI</span><span class="chip">the second tab</span>
     </div>
-    <p class="sub" data-anim style="--d:.4s">We were so young. We thought talking to it was the whole job.</p>
+    <p class="sub" data-anim style="--d:.4s">The month the way developers solve problems <strong>changed forever</strong>.</p>
   </section>
 
-  <section class="slide" id="s-chatbots" data-hue="36" data-chlabel="1 · Conversation">
-    <p class="kicker" data-anim>Our first chatbots</p>
-    <div class="duo">
-      <div class="chatw" data-anim style="--d:.1s">
-        <header><span>support-bot v0.1</span><span>Mon 09:14</span></header>
-        <div class="msgs">
-          <div class="bub user">Summarize this incident report.</div>
-          <div class="bub bot">Root cause: connection pool exhaustion after the 2 a.m. deploy. Impact: 40 min of degraded checkout. Fix: pool limits + rollback.</div>
-        </div>
+  <section class="slide dense" id="s-sotab" data-hue="36" data-chlabel="2022 · Beginning">
+    <p class="kicker" data-anim>November 2022</p>
+    <h2 data-anim style="--d:.08s">Stack Overflow became the second tab</h2>
+    <div class="tabswap-wrap" data-anim style="--d:.2s">
+      <div class="tabswap" data-step="1">
+        <div class="btab so"><span class="fav">🟠</span> stackoverflow.com — [duplicate] [closed]</div>
+        <div class="btab gpt"><span class="fav">✳️</span> chat.openai.com — just answers</div>
       </div>
-      <div class="chatw" data-step="1">
-        <header><span>support-bot v0.1</span><span>Tue 09:14 — same prompt</span></header>
-        <div class="msgs">
-          <div class="bub user">Summarize this incident report.</div>
-          <div class="bub bot glitch">Certainly! An incident is an unplanned interruption. Would you like me to write a poem about uptime? ☀️</div>
-        </div>
-      </div>
+      <div class="urlbar">every debugging session, everywhere, all at once</div>
     </div>
+    <div data-step="2">
+      <svg viewBox="0 0 760 250" style="width:min(700px,90vw)" aria-label="Stack Overflow questions per month collapsing after ChatGPT launch">
+        <line x1="55" y1="20" x2="55" y2="205" stroke="var(--line)" stroke-width="1.5"/>
+        <line x1="55" y1="205" x2="730" y2="205" stroke="var(--line)" stroke-width="1.5"/>
+        <text x="46" y="42" text-anchor="end" class="lbl-s" style="font-size:12px">200k</text>
+        <text x="46" y="124" text-anchor="end" class="lbl-s" style="font-size:12px">100k</text>
+        <text x="46" y="208" text-anchor="end" class="lbl-s" style="font-size:12px">0</text>
+        <text x="100" y="228" text-anchor="middle" class="lbl-s" style="font-size:12px">2014</text>
+        <text x="330" y="228" text-anchor="middle" class="lbl-s" style="font-size:12px">2020</text>
+        <text x="480" y="228" text-anchor="middle" class="lbl-s" style="font-size:12px">2022</text>
+        <text x="700" y="228" text-anchor="middle" class="lbl-s" style="font-size:12px">2025</text>
+        <path class="draw" pathLength="1000" d="M70,38 C150,44 220,72 290,66 C315,62 330,40 355,44 C400,52 445,68 480,80 C520,96 560,140 610,172 C650,196 690,200 720,201"
+              fill="none" stroke="hsl(var(--hue) 85% 55%)" stroke-width="3.5" stroke-linecap="round"/>
+        <line class="draw" style="--d:.5s" pathLength="1000" x1="480" y1="30" x2="480" y2="205" stroke="#e2564f" stroke-width="2" stroke-dasharray="6 6"/>
+        <text x="492" y="44" class="lbl-s" style="font-size:13px" fill="#e2564f">Nov 2022 — ChatGPT launches</text>
+        <text x="640" y="150" text-anchor="middle" class="lbl" style="font-size:15px" fill="#e2564f">−90% from peak</text>
+        <text x="240" y="90" text-anchor="middle" class="lbl-s" style="font-size:12.5px">questions / month</text>
+      </svg>
+    </div>
+    <p class="sub" data-step="3"><strong>GPT became the first stop for solving problems.</strong> The chart isn't opinion — it's traffic.</p>
+  </section>
+
+  <section class="slide" id="s-dome" data-hue="36" data-chlabel="2022 · Beginning">
+    <p class="kicker" data-anim>But one question remained</p>
+    <h2 data-anim style="--d:.1s">Is this just an intelligent chatbot?</h2>
+    <svg viewBox="0 0 900 380" style="width:min(760px,88vw); --d:.25s" data-anim aria-label="The model sealed under a glass dome, blind to your systems">
+      <path d="M290,330 A160,160 0 0 1 610,330" fill="hsl(var(--hue) 80% 55% / .06)" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
+      <line x1="255" y1="330" x2="645" y2="330" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
+      <circle cx="450" cy="255" r="56" class="box-acc"/>
+      <text x="450" y="250" text-anchor="middle" class="lbl" style="font-size:17px">GPT</text>
+      <text x="450" y="270" text-anchor="middle" class="lbl-s" style="font-size:11.5px">a brain in a jar</text>
+      <text x="450" y="196" text-anchor="middle" class="lbl-s" style="font-size:13px">training data · frozen in time</text>
+      <g class="knock" data-step="1" style="--d:0s">
+        <rect class="box" x="40" y="120" width="180" height="42" rx="10"/>
+        <text x="130" y="146" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🗂 your codebase</text>
+        <text x="252" y="146" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
+      </g>
+      <g class="knock" data-step="1" style="--d:.18s">
+        <rect class="box" x="40" y="212" width="180" height="42" rx="10"/>
+        <text x="130" y="238" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🎫 your tickets</text>
+        <text x="252" y="238" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
+      </g>
+      <g class="knock" data-step="1" style="--d:.36s">
+        <rect class="box" x="680" y="120" width="180" height="42" rx="10"/>
+        <text x="770" y="146" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🗄 your database</text>
+        <text x="648" y="146" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
+      </g>
+      <g class="knock" data-step="1" style="--d:.54s">
+        <rect class="box" x="680" y="212" width="180" height="42" rx="10"/>
+        <text x="770" y="238" text-anchor="middle" class="lbl-s" style="font-size:14.5px">📰 today's date</text>
+        <text x="648" y="238" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
+      </g>
+    </svg>
     <div class="wall" data-step="2">
       <span class="wall-tag">⚠ THE WALL</span>
-      <p>Fragile prompts. Inconsistent outputs.</p>
-      <small>Same prompt · same model · different day · different answer</small>
+      <p>How do we make these models aware of <span class="accent">our</span> data and systems?</p>
+      <small>its knowledge ended where its training data ended</small>
     </div>
   </section>
 
-  <section class="slide" id="s-prompteng" data-hue="36" data-chlabel="1 · Conversation">
-    <p class="kicker" data-anim>The fix, allegedly</p>
-    <h2 data-anim style="--d:.1s">Prompt engineering</h2>
-    <div class="notes">
-      <div class="note" data-step="1" style="--r:-3deg"><b>HACK #1</b>"You are a world-class senior expert with 20 years of experience…"</div>
-      <div class="note" data-step="1" style="--r:2deg"><b>HACK #2</b>"Think step by step. Take a deep breath."</div>
-      <div class="note" data-step="2" style="--r:-1.5deg"><b>HACK #3</b>"Return ONLY valid JSON. ONLY. JSON."</div>
-      <div class="note" data-step="2" style="--r:3deg"><b>HACK #4</b>"IMPORTANT!!! (written three times, in caps)"</div>
-      <div class="note" data-step="3" style="--r:-2.5deg"><b>HACK #5</b>"I will tip you $200 💸"</div>
-    </div>
-    <div class="filebadge" data-step="3">saved as <em>prompt_final_FINAL_v37.txt</em> — we are not proud of this</div>
-    <div class="wall" data-step="4">
-      <span class="wall-tag">⚠ THE WALL</span>
-      <p>The model still didn't know <span class="accent">our</span> stuff.</p>
-      <small>internal APIs · runbooks · tribal knowledge · that one cursed Confluence page</small>
-    </div>
-  </section>
-
-  <section class="slide" id="s-ctx" data-hue="36" data-chlabel="1 · Conversation">
-    <p class="kicker" data-anim>So we fed it our world</p>
-    <h2 data-anim style="--d:.1s">Context engineering</h2>
-    <div class="ctxwrap">
-      <div class="ctxbox" data-anim style="--d:.2s">
-        <span class="docset" data-step="1">
-          <span class="doc">📄 api-docs.md</span><span class="doc">📕 runbook.md</span><span class="doc">🗄 schema.sql</span>
-          <span class="doc">🎫 JIRA-4821</span><span class="doc">📚 confluence dump</span><span class="doc">📄 README (lies)</span>
-          <span class="doc">💬 slack thread, 212 msgs</span>
-        </span>
-      </div>
-      <div class="ctx-meter" data-step="2">
-        <div class="row"><span>4k tokens</span><span class="bar"><i class="fill" style="--w:.12"></i></span><span>2023</span></div>
-        <div class="row"><span>32k tokens</span><span class="bar"><i class="fill" style="--w:.4"></i></span><span>2024</span></div>
-        <div class="row"><span>200k tokens</span><span class="bar"><i class="fill" style="--w:1"></i></span><span class="overflow-x">still not enough</span></div>
-      </div>
-    </div>
-    <div class="wall" data-step="3">
-      <span class="wall-tag">⚠ THE WALL</span>
-      <p>Stuffing context by hand doesn't scale.</p>
-      <small>the model needed to reach out and get things itself</small>
-    </div>
-  </section>
-
-  <!-- ════════ CHAPTER 2 · CONNECTION ════════ -->
-  <section class="slide" id="s-ch2" data-hue="186" data-chlabel="2 · Connection">
-    <div class="ghost-num">02</div>
+  <!-- ════════ ACT 2 · 2023 THE KNOWLEDGE ERA ════════ -->
+  <section class="slide" id="s-ch2" data-hue="148" data-chlabel="2023 · Knowledge">
+    <div class="ghost-num yr">2023</div>
     <p class="kicker" data-anim>Chapter two</p>
-    <h1 data-anim style="--d:.12s">The Connection Era</h1>
-    <div class="chips" data-anim style="--d:.28s"><span class="chip">MCP</span><span class="chip">RAG</span><span class="chip">GraphRAG</span></div>
-    <p class="sub" data-anim style="--d:.42s">The model stopped being <strong>a brain in a jar</strong> — it grew <strong>hands</strong> and got <strong>a library card</strong>.</p>
+    <h1 data-anim style="--d:.12s">The Knowledge Era</h1>
+    <div class="chips" data-anim style="--d:.28s"><span class="chip">enterprise knowledge</span><span class="chip">hallucinations</span><span class="chip">RAG</span><span class="chip">GraphRAG</span><span class="chip">prompt engineering</span></div>
+    <p class="sub" data-anim style="--d:.42s">We built a chatbot that knew <strong>our</strong> world. <strong>It fought back.</strong></p>
   </section>
 
-  <section class="slide" id="s-mcp" data-hue="186" data-chlabel="2 · Connection">
-    <p class="kicker" data-anim>Hands</p>
-    <h2 data-anim style="--d:.08s">MCP — the USB‑C moment</h2>
-    <svg viewBox="0 0 900 430" style="width:min(820px,90vw)" data-anim aria-label="MCP replaces bespoke integrations">
-      <g>
-        <rect class="box-acc" x="40" y="165" width="170" height="100" rx="14"/>
-        <text x="125" y="207" text-anchor="middle" class="lbl">AGENT</text>
-        <text x="125" y="230" text-anchor="middle" class="lbl-s">wants to do things</text>
-      </g>
-      <g id="tools">
-        <rect class="box" x="690" y="30"  width="170" height="54" rx="10"/><text x="775" y="63"  text-anchor="middle" class="lbl-s" style="font-size:16px">🗄 Postgres</text>
-        <rect class="box" x="690" y="108" width="170" height="54" rx="10"/><text x="775" y="141" text-anchor="middle" class="lbl-s" style="font-size:16px">📚 Docs / Wiki</text>
-        <rect class="box" x="690" y="186" width="170" height="54" rx="10"/><text x="775" y="219" text-anchor="middle" class="lbl-s" style="font-size:16px">🐙 GitHub</text>
-        <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:16px">🌐 Browser</text>
-        <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:16px">🚀 CI / CD</text>
-      </g>
-      <g data-hide-on="1" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
-        <path d="M210,215 C330,40 480,320 690,57"/>
-        <path d="M210,215 C400,380 420,20 690,135"/>
-        <path d="M210,215 C300,140 560,300 690,213"/>
-        <path d="M210,215 C450,100 380,420 690,291"/>
-        <path d="M210,215 C260,330 600,180 690,369"/>
-        <text x="450" y="415" text-anchor="middle" class="lbl-s" stroke="none" fill="#e2564f" style="font-size:13px">every tool × every agent = a custom adapter. N × M pain.</text>
-      </g>
-      <g data-step="1">
-        <path class="draw" pathLength="1000" d="M210,215 L415,215" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="3.5"/>
-        <rect class="box-acc" x="415" y="185" width="90" height="60" rx="10"/>
-        <text x="460" y="221" text-anchor="middle" class="lbl" style="font-weight:800">MCP</text>
-        <g fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2.5">
-          <path class="draw" style="--d:.15s" pathLength="1000" d="M505,215 C590,215 610,57 690,57"/>
-          <path class="draw" style="--d:.25s" pathLength="1000" d="M505,215 C590,215 610,135 690,135"/>
-          <path class="draw" style="--d:.35s" pathLength="1000" d="M505,215 C590,215 612,213 690,213"/>
-          <path class="draw" style="--d:.45s" pathLength="1000" d="M505,215 C590,215 610,291 690,291"/>
-          <path class="draw" style="--d:.55s" pathLength="1000" d="M505,215 C590,215 610,369 690,369"/>
-        </g>
-        <text x="450" y="415" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 85% 65%)" style="font-size:13px">one port, one protocol. N + M. plug anything in.</text>
-      </g>
-    </svg>
-    <p class="sub" data-step="2">The USB port moment: <strong>stop hand-wiring integrations — standardize the plug.</strong></p>
+  <section class="slide" id="s-gordian" data-hue="148" data-chlabel="2023 · Knowledge">
+    <p class="kicker" data-anim>A real build · not a theory</p>
+    <h2 data-anim style="--d:.08s">The Gordian Chatbot</h2>
+    <div class="split">
+      <div class="chatw" data-anim style="--d:.15s">
+        <header><span>Gordian — enterprise assistant</span><span>2023</span></header>
+        <div class="msgs">
+          <div class="bub user">What's our policy on client data retention?</div>
+          <div class="bub bot glitch">Per policy DOC-7741 (2019), client data is retained for 7 years. <em>[No such document exists.]</em></div>
+        </div>
+      </div>
+      <div class="warlist">
+        <!-- EDIT: swap these three cards for the real Gordian moments -->
+        <div class="war" data-step="1"><b>🧠 THE GOAL</b><p>One assistant that could answer anything about our enterprise knowledge — policies, projects, people.</p></div>
+        <div class="war" data-step="2"><b>🌀 THE HALLUCINATION MOMENT</b><p>It invented a policy that never existed — confidently, with a citation. <strong>Fluent ≠ true.</strong></p></div>
+        <div class="war" data-step="3"><b>🔌 THE INTEGRATION GRIND</b><p>Every new data source: another pipeline, another format, another sync job that broke on Fridays.</p></div>
+      </div>
+    </div>
+    <p class="sub" data-step="4">The problems had names now: <strong>hallucination</strong> and <strong>grounding</strong>. The fixes were about to get names too.</p>
   </section>
 
-  <section class="slide" id="s-rag" data-hue="186" data-chlabel="2 · Connection">
+  <section class="slide" id="s-rag" data-hue="148" data-chlabel="2023 · Knowledge">
     <p class="kicker" data-anim>A library card — then a librarian</p>
     <h2 data-anim style="--d:.08s">RAG &amp; GraphRAG</h2>
     <svg viewBox="0 0 900 430" style="width:min(820px,88vw)" data-anim aria-label="RAG retrieval and GraphRAG knowledge graph">
@@ -877,21 +951,113 @@
     <p class="sub" data-step="3">RAG finds the right page. <strong>GraphRAG knows the plot.</strong> The model got memory that isn't its own.</p>
   </section>
 
-  <!-- ════════ CHAPTER 3 · DISCIPLINE ════════ -->
-  <section class="slide" id="s-ch3" data-hue="222" data-chlabel="3 · Discipline">
-    <div class="ghost-num">03</div>
+  <section class="slide" id="s-prompteng" data-hue="148" data-chlabel="2023 · Knowledge">
+    <p class="kicker" data-anim>“Prompt engineering? I know a thing or two about that.”</p>
+    <h2 data-anim style="--d:.1s">Prompt engineering</h2>
+    <div class="notes">
+      <div class="note" data-step="1" style="--r:-3deg"><b>HACK #1</b>"You are a world-class senior expert with 20 years of experience…"</div>
+      <div class="note" data-step="1" style="--r:2deg"><b>HACK #2</b>"Think step by step. Take a deep breath."</div>
+      <div class="note" data-step="2" style="--r:-1.5deg"><b>HACK #3</b>"Return ONLY valid JSON. ONLY. JSON."</div>
+      <div class="note" data-step="2" style="--r:3deg"><b>HACK #4</b>"IMPORTANT!!! (written three times, in caps)"</div>
+      <div class="note" data-step="2" style="--r:-2.5deg"><b>HACK #5</b>"I will tip you $200 💸"</div>
+    </div>
+    <div class="filebadge" data-step="2">saved as <em>prompt_final_FINAL_v37.txt</em> — we are not proud of this</div>
+    <div class="fmrow" data-step="3">
+      <div class="fm-bad"><b>BEFORE</b><p>"write code for login"</p></div>
+      <span class="fm-arr">→</span>
+      <div class="fm-fix"><b>AFTER</b><p>role · context · constraints · examples · output format — <strong>structure beat vibes</strong></p></div>
+    </div>
+    <p class="sub" data-step="4">From incantations to <strong>technique</strong> — structured prompts made answers dramatically better.</p>
+  </section>
+
+  <section class="slide" id="s-kwall" data-hue="148" data-chlabel="2023 · Knowledge">
+    <p class="kicker" data-anim>Where 2023 ended</p>
+    <h2 data-anim style="--d:.08s; max-width:24ch">Better prompts. RAG in place. Still stuck.</h2>
+    <div class="wall" data-anim style="--d:.28s">
+      <span class="wall-tag">⚠ THE WALL</span>
+      <p>Every new data source still required a custom integration.</p>
+      <small>N sources × M assistants = N × M bespoke connectors</small>
+    </div>
+    <p class="sub" data-step="1">Scaling wasn't getting any easier. <strong>Something had to standardize.</strong></p>
+  </section>
+
+  <!-- ════════ ACT 3 · 2024 THE CONNECTION ERA ════════ -->
+  <section class="slide" id="s-ch2024" data-hue="186" data-chlabel="2024 · Connection">
+    <div class="ghost-num yr">2024</div>
     <p class="kicker" data-anim>Chapter three</p>
+    <h1 data-anim style="--d:.12s">The Connection Era</h1>
+    <div class="chips" data-anim style="--d:.28s"><span class="chip">MCP</span><span class="chip">tool calling</span><span class="chip">connected IDEs</span></div>
+    <p class="sub" data-anim style="--d:.42s">“And that's exactly where <strong>MCP</strong> changed everything.”</p>
+  </section>
+
+  <section class="slide" id="s-mcp" data-hue="186" data-chlabel="2024 · Connection">
+    <p class="kicker" data-anim>Hands</p>
+    <h2 data-anim style="--d:.08s">MCP — the USB‑C moment</h2>
+    <svg viewBox="0 0 900 430" style="width:min(820px,90vw)" data-anim aria-label="MCP replaces bespoke integrations">
+      <g>
+        <rect class="box-acc" x="40" y="165" width="170" height="100" rx="14"/>
+        <text x="125" y="207" text-anchor="middle" class="lbl">AGENT</text>
+        <text x="125" y="230" text-anchor="middle" class="lbl-s">wants to do things</text>
+      </g>
+      <g id="tools">
+        <rect class="box" x="690" y="30"  width="170" height="54" rx="10"/><text x="775" y="63"  text-anchor="middle" class="lbl-s" style="font-size:16px">🗄 Postgres</text>
+        <rect class="box" x="690" y="108" width="170" height="54" rx="10"/><text x="775" y="141" text-anchor="middle" class="lbl-s" style="font-size:16px">📚 Docs / Wiki</text>
+        <rect class="box" x="690" y="186" width="170" height="54" rx="10"/><text x="775" y="219" text-anchor="middle" class="lbl-s" style="font-size:16px">🐙 GitHub</text>
+        <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:16px">🌐 Browser</text>
+        <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:16px">🚀 CI / CD</text>
+      </g>
+      <g data-hide-on="1" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
+        <path d="M210,215 C330,40 480,320 690,57"/>
+        <path d="M210,215 C400,380 420,20 690,135"/>
+        <path d="M210,215 C300,140 560,300 690,213"/>
+        <path d="M210,215 C450,100 380,420 690,291"/>
+        <path d="M210,215 C260,330 600,180 690,369"/>
+        <text x="450" y="415" text-anchor="middle" class="lbl-s" stroke="none" fill="#e2564f" style="font-size:13px">every tool × every agent = a custom adapter. N × M pain.</text>
+      </g>
+      <g data-step="1">
+        <path class="draw" pathLength="1000" d="M210,215 L415,215" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="3.5"/>
+        <rect class="box-acc" x="415" y="185" width="90" height="60" rx="10"/>
+        <text x="460" y="221" text-anchor="middle" class="lbl" style="font-weight:800">MCP</text>
+        <g fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2.5">
+          <path class="draw" style="--d:.15s" pathLength="1000" d="M505,215 C590,215 610,57 690,57"/>
+          <path class="draw" style="--d:.25s" pathLength="1000" d="M505,215 C590,215 610,135 690,135"/>
+          <path class="draw" style="--d:.35s" pathLength="1000" d="M505,215 C590,215 612,213 690,213"/>
+          <path class="draw" style="--d:.45s" pathLength="1000" d="M505,215 C590,215 610,291 690,291"/>
+          <path class="draw" style="--d:.55s" pathLength="1000" d="M505,215 C590,215 610,369 690,369"/>
+        </g>
+        <text x="450" y="415" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 85% 65%)" style="font-size:13px">one port, one protocol. N + M. plug anything in.</text>
+      </g>
+    </svg>
+    <p class="sub" data-step="2">The USB port moment: <strong>stop hand-wiring integrations — standardize the plug.</strong></p>
+  </section>
+
+  <section class="slide" id="s-unlocked" data-hue="186" data-chlabel="2024 · Connection">
+    <p class="kicker" data-anim>What it unlocked</p>
+    <h2 data-anim style="--d:.08s">One protocol. Everything connects.</h2>
+    <div class="cards3" data-step="1">
+      <div class="kcard"><h4><span class="dot"></span>AI coding assistants</h4><p>The agent moved into the IDE — repo-aware, build-aware, ticket-aware.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Tool calling</h4><p>The model stopped just answering — it started <em>acting</em>: querying, filing, running.</p></div>
+      <div class="kcard"><h4><span class="dot"></span>Connected environments</h4><p>Tickets, DBs, docs, browsers — one consistent interface instead of N × M adapters.</p></div>
+    </div>
+    <p class="sub" data-step="2">The model stopped being a chatbot. <strong>It got hands.</strong> And the developer experience transformed.</p>
+  </section>
+
+  <!-- ════════ ACT 4 · 2025 THE DISCIPLINE ERA ════════ -->
+  <section class="slide" id="s-ch3" data-hue="222" data-chlabel="2025 · Discipline">
+    <div class="ghost-num yr">2025</div>
+    <p class="kicker" data-anim>Chapter four</p>
     <h1 data-anim style="--d:.12s">The Discipline Era</h1>
     <div class="chips" data-anim style="--d:.28s">
-      <span class="chip">harness engineering</span><span class="chip">OpenSpec</span><span class="chip">agent skills</span><span class="chip">spec‑driven development</span>
+      <span class="chip">agent skills</span><span class="chip">harness engineering</span><span class="chip">spec‑driven development</span><span class="chip">OpenSpec</span>
     </div>
     <div class="wall" data-anim style="--d:.48s">
-      <span class="wall-tag">⚠ THE WALL BEHIND US</span>
-      <p>Powerful, connected agents… doing unpredictable things.</p>
+      <span class="wall-tag">⚠ THE REALIZATION</span>
+      <p>Power without discipline doesn't scale.</p>
+      <small>powerful, connected agents… doing unpredictable things</small>
     </div>
   </section>
 
-  <section class="slide" id="s-virtues" data-hue="222" data-chlabel="3 · Discipline">
+  <section class="slide" id="s-virtues" data-hue="222" data-chlabel="2025 · Discipline">
     <p class="kicker" data-anim>The pivot</p>
     <h2 data-anim style="--d:.1s">The old virtues came back.</h2>
     <div class="tablets" data-step="1">
@@ -903,7 +1069,7 @@
     <p class="pivot-line" data-step="2">AI‑native didn't abandon engineering rigor.<br><em>It rediscovered it.</em></p>
   </section>
 
-  <section class="slide dense" id="s-harness" data-hue="222" data-chlabel="3 · Discipline">
+  <section class="slide dense" id="s-harness" data-hue="222" data-chlabel="2025 · Discipline">
     <p class="kicker" data-anim>Taming the tiger</p>
     <h2 data-anim style="--d:.08s">Harness engineering</h2>
     <div class="eq" data-anim style="--d:.22s">
@@ -924,7 +1090,7 @@
     <p class="sub" data-step="2"><strong>The model is the engine. The harness is the vehicle.</strong> We engineer the vehicle.</p>
   </section>
 
-  <section class="slide dense" id="s-failmodes" data-hue="222" data-chlabel="3 · Discipline">
+  <section class="slide dense" id="s-failmodes" data-hue="222" data-chlabel="2025 · Discipline">
     <p class="kicker" data-anim>Why it matters</p>
     <h2 data-anim style="--d:.08s">Failure modes no prompt can fix</h2>
     <p class="eqcap" data-anim style="--d:.2s">These are properties of the <strong>model</strong>. They get solved in the <strong>harness</strong>.</p>
@@ -946,7 +1112,7 @@
     <p class="sub" data-step="4"><strong>It's not about the cockpit.</strong> Claude Code, Codex, Kiro, Cursor — every tool ships <em>a</em> harness. Engineering <em>yours</em> — for your codebase, your gates — is the job.</p>
   </section>
 
-  <section class="slide" id="s-sdd" data-hue="222" data-chlabel="3 · Discipline">
+  <section class="slide" id="s-sdd" data-hue="222" data-chlabel="2025 · Discipline">
     <p class="kicker" data-anim>How it works now</p>
     <h2 data-anim style="--d:.08s">Spec‑driven development</h2>
     <div class="rails" data-anim style="--d:.2s">HARNESS · permissions · sandbox · tests · CI gates · review</div>
@@ -965,16 +1131,8 @@
     <p class="sub" data-step="2"><strong>The spec became the interface to the agent.</strong> Skeptical architects: this chapter is for you.</p>
   </section>
 
-  <!-- ════════ CHAPTER 4 · PROOF ════════ -->
-  <section class="slide" id="s-ch4" data-hue="148" data-chlabel="4 · Proof">
-    <div class="ghost-num">04</div>
-    <p class="kicker" data-anim>Chapter four · receipts</p>
-    <h1 data-anim style="--d:.12s">Theertha's project</h1>
-    <p class="sub" data-anim style="--d:.3s">A real OpenSpec build. <strong>A war story, not a demo.</strong> We're not describing a theory — here's a thing we shipped.</p>
-  </section>
-
-  <section class="slide dense" id="s-openspec" data-hue="148" data-chlabel="4 · Proof">
-    <p class="kicker" data-anim>Before a line of code runs</p>
+  <section class="slide dense" id="s-openspec" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>“You've been working with SDD — how has it been?” · before a line of code runs</p>
     <h2 data-anim style="--d:.08s">OpenSpec: spec is the interface</h2>
     <div class="os2col">
       <div data-step="1">
@@ -1013,8 +1171,8 @@ R1 — <span class="kw">MUST</span> process refunds atomically
     <p class="sub" data-step="4">61k GitHub stars · 25+ tools · MIT licensed · no API key. <strong>Fluid, not rigid — no phase gates. Works with any agent, any codebase.</strong></p>
   </section>
 
-  <section class="slide" id="s-war" data-hue="148" data-chlabel="4 · Proof">
-    <p class="kicker" data-anim>What actually happened</p>
+  <section class="slide" id="s-war" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>Theertha's build · what actually happened</p>
     <div class="split">
       <!-- EDIT: replace this spec excerpt with a sanitized excerpt of your real spec -->
       <div class="speccard" data-anim style="--d:.15s">
@@ -1043,19 +1201,19 @@ THEN  balance = $70 + audit entry
     <p class="sub" data-step="4">Honest friction is the point — <strong>that's why you can believe the rest of this talk.</strong></p>
   </section>
 
-  <!-- ════════ CHAPTER 5 · AUTONOMY ════════ -->
-  <section class="slide" id="s-ch5" data-hue="282" data-chlabel="5 · Autonomy">
-    <div class="ghost-num">05</div>
+  <!-- ════════ ACT 5 · 2026 THE AUTONOMY ERA ════════ -->
+  <section class="slide" id="s-ch5" data-hue="282" data-chlabel="2026 · Autonomy">
+    <div class="ghost-num yr">2026</div>
     <p class="kicker" data-anim>Chapter five · the horizon</p>
     <h1 data-anim style="--d:.12s">The Autonomy Era</h1>
-    <div class="chips" data-anim style="--d:.28s"><span class="chip">RLMs</span><span class="chip">loop engineering</span><span class="chip">Ralph loops</span></div>
+    <div class="chips" data-anim style="--d:.28s"><span class="chip">RLMs</span><span class="chip">Ralph loops</span><span class="chip">loop engineering</span><span class="chip">self‑healing apps</span></div>
     <div class="wall" data-anim style="--d:.46s">
       <span class="wall-tag">⚠ THE WALL</span>
       <p>Even with specs — a human still drives every step.</p>
     </div>
   </section>
 
-  <section class="slide dense" id="s-loop" data-hue="282" data-chlabel="5 · Autonomy">
+  <section class="slide dense" id="s-loop" data-hue="282" data-chlabel="2026 · Autonomy">
     <p class="kicker" data-anim>The frontier</p>
     <h2 data-anim style="--d:.08s; font-size:clamp(26px,4.2vw,54px)">What if the loop closes itself?</h2>
     <div class="loopwrap">
@@ -1083,7 +1241,7 @@ THEN  balance = $70 + audit entry
     </div>
   </section>
 
-  <section class="slide dense" id="s-rlm" data-hue="282" data-chlabel="5 · Autonomy">
+  <section class="slide dense" id="s-rlm" data-hue="282" data-chlabel="2026 · Autonomy">
     <p class="kicker" data-anim>Frontier 1 · the model recurses</p>
     <h2 data-anim style="--d:.08s">Recursive Language Models</h2>
     <svg viewBox="0 0 1000 400" style="width:min(940px,94vw)" data-anim aria-label="RLM: context collapses into a REPL variable, root model spawns recursive sub-calls">
@@ -1119,7 +1277,7 @@ THEN  balance = $70 + audit entry
     <p class="sub" data-step="4"><strong>The context window stopped being a wall.</strong> No single call ever reads the whole thing — reading became a program.</p>
   </section>
 
-  <section class="slide dense" id="s-ralph" data-hue="282" data-chlabel="5 · Autonomy">
+  <section class="slide dense" id="s-ralph" data-hue="282" data-chlabel="2026 · Autonomy">
     <p class="kicker" data-anim>Frontier 2 · brute force meets persistence</p>
     <h2 data-anim style="--d:.08s">The Ralph loop</h2>
     <div class="ralphwrap">
@@ -1154,7 +1312,7 @@ THEN  balance = $70 + audit entry
     <p class="sub" data-step="3"><strong>“Deterministically bad in an undeterministic world.”</strong> — Geoffrey Huntley. The loop is dumb. The persistence isn't.</p>
   </section>
 
-  <section class="slide dense" id="s-loopeng" data-hue="282" data-chlabel="5 · Autonomy">
+  <section class="slide dense" id="s-loopeng" data-hue="282" data-chlabel="2026 · Autonomy">
     <p class="kicker" data-anim>Frontier 3 · the new discipline</p>
     <h2 data-anim style="--d:.08s">Loop engineering</h2>
     <div class="stairwrap" data-anim style="--d:.1s">
@@ -1173,8 +1331,40 @@ THEN  balance = $70 + audit entry
     <p class="sub" data-step="3"><strong>“I don't prompt Claude anymore.”</strong> — Boris Cherny, creator of Claude Code. The prompt became an artifact. The loop became the job.</p>
   </section>
 
-  <!-- ════════ CHAPTER 6 · OPS + CLOSE ════════ -->
-  <section class="slide" id="s-ops" data-hue="205" data-chlabel="6 · The Grown-Up Slide">
+  <section class="slide dense" id="s-selfheal" data-hue="282" data-chlabel="2026 · Autonomy">
+    <p class="kicker" data-anim>Frontier 4 · nobody was awake</p>
+    <h2 data-anim style="--d:.08s">Self‑healing applications</h2>
+    <svg viewBox="0 0 1000 300" style="width:min(940px,94vw)" data-anim aria-label="An EKG line flatlines at 2 AM, an agent repairs it, the heartbeat resumes">
+      <path class="draw auto" pathLength="1000" d="M20,150 L120,150 L138,150 L150,96 L162,204 L174,150 L280,150 L298,150 L310,96 L322,204 L334,150 L400,150"
+            fill="none" stroke="hsl(var(--hue) 80% 55%)" stroke-width="3" stroke-linecap="round"/>
+      <g data-step="1">
+        <path class="draw" pathLength="1000" d="M400,150 L560,150" fill="none" stroke="#e2564f" stroke-width="3" stroke-linecap="round"/>
+        <line class="draw" style="--d:.2s" pathLength="1000" x1="480" y1="60" x2="480" y2="140" stroke="#e2564f" stroke-width="2" stroke-dasharray="5 5"/>
+        <text x="480" y="44" text-anchor="middle" class="ekgtag" fill="#e2564f">⚠ 02:13 — EXCEPTION SPIKE</text>
+      </g>
+      <g data-step="2">
+        <circle cx="620" cy="150" r="34" fill="hsl(var(--hue) 80% 55% / .14)" stroke="hsl(var(--hue) 85% 60%)" stroke-width="2"/>
+        <text x="620" y="157" text-anchor="middle" class="lbl" style="font-size:13.5px">agent</text>
+        <text x="620" y="216" text-anchor="middle" class="lbl-s" style="font-size:12.5px">trace → patch → test → deploy</text>
+        <text x="620" y="238" text-anchor="middle" class="lbl-s" style="font-size:11.5px">02:14 → 02:29 · zero humans paged</text>
+      </g>
+      <g data-step="3">
+        <path class="draw" pathLength="1000" d="M680,150 L760,150 L778,150 L790,96 L802,204 L814,150 L880,150 L898,150 L910,96 L922,204 L934,150 L980,150"
+              fill="none" stroke="#1f9d5c" stroke-width="3" stroke-linecap="round"/>
+        <text x="860" y="60" text-anchor="middle" class="ekgtag" fill="#1f9d5c">✓ 02:31 — RECOVERED</text>
+      </g>
+    </svg>
+    <p class="sub" data-step="4">Detect → diagnose → patch → verify. <strong>The incident report reads like a changelog.</strong> Humans review it at breakfast.</p>
+  </section>
+
+  <!-- ════════ FINAL ACT · THE PRICE OF ADMISSION ════════ -->
+  <section class="slide" id="s-costq" data-hue="205" data-chlabel="The Price">
+    <p class="kicker" data-anim>— one last interruption —</p>
+    <div class="bigquote" data-anim style="--d:.18s">“This all sounds incredible… but won't it <em>cost too much?</em>”</div>
+    <p class="bigreply" data-step="1">“The future isn't about using <strong>more</strong> AI.<br>It's about using AI <strong>intelligently.”</strong></p>
+  </section>
+
+  <section class="slide" id="s-ops" data-hue="205" data-chlabel="The Price">
     <p class="kicker" data-anim>The grown‑up slide</p>
     <h2 data-anim style="--d:.08s">The price of admission</h2>
     <div class="ops" data-anim style="--d:.22s">
@@ -1207,21 +1397,37 @@ THEN  balance = $70 + audit entry
         </div>
         <div class="note-s">right-size the brain to the task</div>
       </div>
+      <div class="gauge">
+        <h5>MODEL ROUTING</h5>
+        <div class="routes">
+          <div class="rr"><span>classify · triage</span><span class="to">→ haiku · $</span></div>
+          <div class="rr"><span>build · refactor</span><span class="to">→ sonnet · $$</span></div>
+          <div class="rr"><span>architect · review</span><span class="to">→ opus · $$$</span></div>
+        </div>
+        <div class="note-s">right model · right task · right price — balance capability, latency, cost</div>
+      </div>
     </div>
     <p class="sub" data-step="1"><strong>Autonomy is only responsible when you can observe it — and afford it.</strong></p>
   </section>
 
+  <section class="slide" id="s-takeaway" data-hue="205" data-chlabel="The Price">
+    <p class="kicker" data-anim>The takeaway</p>
+    <p class="pivot-line" data-anim style="--d:.15s">The future of AI‑native engineering isn't determined by <em>who has the biggest models</em> —</p>
+    <p class="pivot-line" data-step="1">it's determined by <em>who uses them most effectively.</em></p>
+  </section>
+
   <section class="slide" id="s-close" data-hue="212" data-chlabel="Close">
-    <div class="term" data-anim style="width:min(640px,84vw)">
-      <div class="term-head"><i></i><i></i><i></i><span>agent-loop — that thing from slide one</span></div>
-      <div class="term-body small">
-        <div class="tl ok">verify — acceptance scenarios 9/9 ✓</div>
-        <div class="tl ok">PR #482 opened → merged → deployed ✓</div>
-        <div class="tl acc">● loop complete — 31h wall-clock · 0 human keystrokes</div>
-      </div>
+    <p class="kicker" data-anim>2027 · that Tuesday morning, again</p>
+    <div class="dayline compact" data-anim style="--d:.15s">
+      <div class="daynode" style="--i:0"><span class="dn-time">09:00</span><span class="dn-dot"></span><b>requirement</b><span class="dn-badge">plain English · 2022</span></div>
+      <div class="daynode" style="--i:1"><span class="dn-time">09:10</span><span class="dn-dot"></span><b>spec agreed</b><span class="dn-badge">discipline · 2025</span></div>
+      <div class="daynode" style="--i:2"><span class="dn-time">09:15</span><span class="dn-dot"></span><b>agents build</b><span class="dn-badge">MCP · 2024 + loops · 2026</span></div>
+      <div class="daynode" style="--i:3"><span class="dn-time">10:20</span><span class="dn-dot"></span><b>tests green</b><span class="dn-badge">harness · 2025</span></div>
+      <div class="daynode" style="--i:4"><span class="dn-time">10:45</span><span class="dn-dot"></span><b>deployed</b><span class="dn-badge">autonomy · 2026</span></div>
+      <div class="daynode" style="--i:5"><span class="dn-time">11:00</span><span class="dn-dot"></span><b>☕ grounded</b><span class="dn-badge">knowledge · 2023</span></div>
     </div>
-    <h2 data-step="1">Remember this?</h2>
-    <p class="sub" data-step="2" style="font-size:clamp(17px,2.2vw,24px)">Now you know <strong class="accent">everything underneath it</strong> — five eras, four walls, one road.</p>
+    <h2 data-step="1">Now you know how.</h2>
+    <p class="sub" data-step="2" style="font-size:clamp(17px,2.2vw,24px)">Five years, five eras — <strong class="accent">every one of them lives inside that one effortless morning.</strong></p>
     <div class="thanks" data-step="3">Thank you.</div>
     <!-- EDIT: your team name goes here -->
     <p class="teamline" data-step="3">— YOUR TEAM NAME · TechDay 2026</p>
@@ -1230,7 +1436,7 @@ THEN  balance = $70 + audit entry
 </main>
 
 <div id="hud">
-  <span id="chlabel">Cold Open</span>
+  <span id="chlabel">2027 · A Day</span>
   <span class="rail" id="rail"></span>
   <span id="counter">1 / 19 · press ?</span>
 </div>
@@ -1411,17 +1617,17 @@ THEN  balance = $70 + audit entry
     })();
   }
 
-  /* EDIT: the cold-open story — swap these lines for what YOUR team actually shipped */
+  /* EDIT: the 2027 cold-open story — swap for whatever feels most real to your team */
   var coldScript = [
-    { cmd: true, text: 'agent run --loop --spec specs/refund-service.md', pause: 500 },
-    { text: '▸ reading spec … 14 requirements · 9 acceptance scenarios', cls: 'dim' },
-    { text: '▸ iteration 1 — plan → build → test ……… 11 failing' },
-    { text: '▸ iteration 2 — fix: idempotency keys ……… 6 failing' },
-    { text: '▸ iteration 3 — fix: race in ledger sync …… 2 failing' },
-    { text: '▸ iteration 4 — fix: rounding on partials … 0 failing ✓', cls: 'ok' },
-    { text: '▸ verify — acceptance scenarios 9/9 ✓', cls: 'ok', pause: 420 },
-    { text: '▸ PR #482 opened → reviewed → merged → deployed ✓', cls: 'ok', pause: 500 },
-    { text: '● loop complete — 31h wall-clock · 0 human keystrokes', cls: 'acc' }
+    { cmd: true, text: 'agent run --loop --spec specs/customer-alerts.md', pause: 500 },
+    { text: '▸ 09:15 reading spec … 12 requirements · 8 acceptance scenarios', cls: 'dim' },
+    { text: '▸ 09:22 iteration 1 — plan → build → test ……… 7 failing' },
+    { text: '▸ 09:41 iteration 2 — fix: webhook retries ……… 3 failing' },
+    { text: '▸ 10:02 iteration 3 — fix: rate-limit backoff … 0 failing ✓', cls: 'ok' },
+    { text: '▸ 10:20 verify — acceptance scenarios 8/8 ✓', cls: 'ok', pause: 420 },
+    { text: '▸ 10:38 PR #1024 — reviewed: 1 agent · 1 human ✓', cls: 'ok', pause: 460 },
+    { text: '▸ 10:45 merged → canary → 100% rollout ✓', cls: 'ok', pause: 500 },
+    { text: '● 11:00 loop idle — picking next item from backlog', cls: 'acc' }
   ];
 
   /* ── per-slide activations ────────────────────────────── */
@@ -1431,17 +1637,17 @@ THEN  balance = $70 + audit entry
     },
     's-rewind': function(s, token){
       var el = document.getElementById('yr');
-      if(RM){ el.textContent = '2024'; return; }
+      if(RM){ el.textContent = '2022'; return; }
       el.classList.add('spin');
-      var t0 = performance.now(), DUR = 2100;
+      var t0 = performance.now(), DUR = 2600;
       (function tick(now){
         if(token.cancelled) return;
         var t = Math.min(1, (now - t0) / DUR);
         var e = 1 - Math.pow(1 - t, 3);
-        var y = 2026 - e * 2;
+        var y = 2027 - e * 5;
         el.textContent = Math.ceil(y);
         if(t < 1) requestAnimationFrame(tick);
-        else { el.textContent = '2024'; el.classList.remove('spin'); }
+        else { el.textContent = '2022'; el.classList.remove('spin'); }
       })(t0);
     },
     's-ops': function(s, token){
@@ -1473,7 +1679,7 @@ THEN  balance = $70 + audit entry
       else document.documentElement.requestFullscreen();
     }
     else if(/^[0-6]$/.test(e.key)){
-      var map = { 0:'Cold Open', 1:'1 · Conversation', 2:'2 · Connection', 3:'3 · Discipline', 4:'4 · Proof', 5:'5 · Autonomy', 6:'6 · The Grown-Up Slide' };
+      var map = { 0:'2027 · A Day', 1:'2022 · Beginning', 2:'2023 · Knowledge', 3:'2024 · Connection', 4:'2025 · Discipline', 5:'2026 · Autonomy', 6:'The Price' };
       var target = chapterStarts.filter(function(c){ return c.label === map[e.key]; })[0];
       if(target) activate(target.index, 1);
     }
