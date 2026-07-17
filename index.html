@@ -694,6 +694,67 @@
     100%{ opacity:1; transform:none }
   }
 
+  /* ── dome slide auto-cinematics ───────────────────────── */
+  #s-dome .dome-arc{ stroke-dasharray:100; stroke-dashoffset:100; fill-opacity:0 }
+  .slide.active#s-dome .dome-arc{ animation: domedraw 1s cubic-bezier(.4,0,.2,1) .35s forwards }
+  @keyframes domedraw{ 55%{ fill-opacity:0 } 100%{ stroke-dashoffset:0; fill-opacity:1 } }
+  #s-dome .dome-base{ stroke-dasharray:100; stroke-dashoffset:100 }
+  .slide.active#s-dome .dome-base{ animation: dash .5s ease .3s forwards }
+  #s-dome .dome-core{ transform-box:fill-box; transform-origin:center }
+  .slide.active#s-dome .dome-core{
+    animation: popin .5s cubic-bezier(.16,1.4,.3,1) 1.05s both,
+               breathe 3.4s ease-in-out 1.75s infinite;
+  }
+  @keyframes breathe{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.04) } }
+  #s-dome .dome-cap{ opacity:0 }
+  .slide.active#s-dome .dome-cap{ animation: capfade .6s ease 1.35s forwards }
+  @keyframes capfade{ to{ opacity:1 } }
+  #s-dome .dome-sheen{ opacity:0 }
+  .slide.active#s-dome .dome-sheen{ animation: capfade .7s ease 1.2s forwards }
+  #s-dome .dome-flake{ opacity:0; transform-box:fill-box; transform-origin:center }
+  .slide.active#s-dome .dome-flake{ animation: flakefall 5.5s linear var(--d) infinite }
+  @keyframes flakefall{
+    0%{ opacity:0; transform:translateY(0) rotate(0deg) }
+    12%{ opacity:.45 }
+    82%{ opacity:.45 }
+    100%{ opacity:0; transform:translateY(48px) rotate(60deg) }
+  }
+  .slide.active#s-dome .knock.kl{ animation: knockL .7s cubic-bezier(.3,0,.4,1) forwards; animation-delay: var(--d) }
+  .slide.active#s-dome .knock.kr{ animation: knockR .7s cubic-bezier(.3,0,.4,1) forwards; animation-delay: var(--d) }
+  @keyframes knockL{
+    0%{ opacity:0; transform:translateX(-80px) }
+    45%{ opacity:1; transform:translateX(26px) }
+    62%{ transform:translateX(-8px) }
+    80%{ transform:translateX(4px) }
+    100%{ opacity:1; transform:none }
+  }
+  @keyframes knockR{
+    0%{ opacity:0; transform:translateX(80px) }
+    45%{ opacity:1; transform:translateX(-26px) }
+    62%{ transform:translateX(8px) }
+    80%{ transform:translateX(-4px) }
+    100%{ opacity:1; transform:none }
+  }
+  .slide.active#s-dome .dome-g{ animation: domejolt 1.72s linear 1.8s }
+  @keyframes domejolt{
+    0%{ transform:none } 1%{ transform:translateX(4px) } 3.5%{ transform:translateX(-3px) } 6%{ transform:none }
+    30%{ transform:none } 31%{ transform:translateX(4px) } 33.5%{ transform:translateX(-3px) } 36%{ transform:none }
+    59%{ transform:none } 60%{ transform:translateX(-4px) } 62.5%{ transform:translateX(3px) } 65%{ transform:none }
+    88%{ transform:none } 89%{ transform:translateX(-4px) } 91.5%{ transform:translateX(3px) } 94%,100%{ transform:none }
+  }
+  #s-dome .shock{
+    fill:none; stroke:hsl(var(--hue) 90% 50%); stroke-width:2.5; opacity:0;
+    transform-box:fill-box; transform-origin:center;
+  }
+  .slide.active#s-dome .shock{ animation: shockring .55s ease-out forwards; animation-delay: var(--d) }
+  @keyframes shockring{ 0%{ opacity:.85; transform:scale(.25) } 100%{ opacity:0; transform:scale(1.6) } }
+  #s-dome .xstamp{ opacity:0; transform-box:fill-box; transform-origin:center }
+  .slide.active#s-dome .xstamp{ animation: xstampin .4s cubic-bezier(.16,1.6,.3,1) forwards; animation-delay: var(--d) }
+  @keyframes xstampin{ 0%{ opacity:0; transform:scale(2.6) rotate(14deg) } 100%{ opacity:1; transform:scale(1) rotate(0deg) } }
+  .slide.active#s-dome .wall{
+    animation: slam .55s cubic-bezier(.16,1,.3,1) 3.8s both, shake .35s 4.32s;
+  }
+
   /* ── self-healing EKG ─────────────────────────────────── */
   .ekgtag{ font-family:var(--mono); font-size:12px; letter-spacing:.14em }
   .beat{ transform-box:fill-box; transform-origin:center; animation: beatpulse 1.6s ease-in-out infinite }
@@ -947,34 +1008,48 @@
     <p class="kicker" data-anim>But one question remained</p>
     <h2 data-anim style="--d:.1s">Is this just an intelligent chatbot?</h2>
     <svg viewBox="0 0 900 380" style="width:min(760px,88vw); --d:.25s" data-anim aria-label="The model sealed under a glass dome, blind to your systems">
-      <path d="M290,330 A160,160 0 0 1 610,330" fill="hsl(var(--hue) 80% 55% / .06)" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
-      <line x1="255" y1="330" x2="645" y2="330" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
-      <circle cx="450" cy="255" r="56" class="box-acc"/>
-      <text x="450" y="250" text-anchor="middle" class="lbl" style="font-size:17px">GPT</text>
-      <text x="450" y="270" text-anchor="middle" class="lbl-s" style="font-size:11.5px">a brain in a jar</text>
-      <text x="450" y="196" text-anchor="middle" class="lbl-s" style="font-size:13px">training data · frozen in time</text>
-      <g class="knock" data-step="1" style="--d:0s">
+      <g class="dome-g">
+        <path class="dome-arc" pathLength="100" d="M290,300 A160,160 0 0 1 610,300" fill="hsl(var(--hue) 80% 55% / .06)" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
+        <line class="dome-base" pathLength="100" x1="255" y1="300" x2="645" y2="300" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2.5"/>
+        <path class="dome-sheen" d="M323,241 A140,140 0 0 1 391,173" fill="none" stroke="hsl(var(--hue) 45% 82%)" stroke-width="7" stroke-linecap="round"/>
+        <text class="dome-flake" x="348" y="205" text-anchor="middle" style="--d:1.6s; font-size:15px">❄</text>
+        <text class="dome-flake" x="542" y="192" text-anchor="middle" style="--d:2.6s; font-size:12px">❄</text>
+        <g class="dome-core">
+          <circle cx="450" cy="225" r="56" class="box-acc"/>
+          <text x="450" y="220" text-anchor="middle" class="lbl" style="font-size:17px">GPT</text>
+          <text x="450" y="240" text-anchor="middle" class="lbl-s" style="font-size:11.5px">a brain in a jar</text>
+        </g>
+        <g class="dome-cap">
+          <rect class="box" x="330" y="318" width="240" height="34" rx="8"/>
+          <text x="450" y="340" text-anchor="middle" class="lbl-s" style="font-size:13.5px">❄ training data · frozen in time</text>
+        </g>
+      </g>
+      <g class="knock kl" style="--d:1.5s">
         <rect class="box" x="40" y="120" width="180" height="42" rx="10"/>
         <text x="130" y="146" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🗂 your codebase</text>
-        <text x="252" y="146" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
       </g>
-      <g class="knock" data-step="1" style="--d:.18s">
+      <g class="knock kl" style="--d:2s">
         <rect class="box" x="40" y="212" width="180" height="42" rx="10"/>
         <text x="130" y="238" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🎫 your tickets</text>
-        <text x="252" y="238" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
       </g>
-      <g class="knock" data-step="1" style="--d:.36s">
+      <g class="knock kr" style="--d:2.5s">
         <rect class="box" x="680" y="120" width="180" height="42" rx="10"/>
         <text x="770" y="146" text-anchor="middle" class="lbl-s" style="font-size:14.5px">🗄 your database</text>
-        <text x="648" y="146" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
       </g>
-      <g class="knock" data-step="1" style="--d:.54s">
+      <g class="knock kr" style="--d:3s">
         <rect class="box" x="680" y="212" width="180" height="42" rx="10"/>
         <text x="770" y="238" text-anchor="middle" class="lbl-s" style="font-size:14.5px">📰 today's date</text>
-        <text x="648" y="238" text-anchor="middle" fill="#e2564f" style="font-size:17px; font-weight:700">✗</text>
       </g>
+      <circle class="shock" cx="307" cy="229" r="26" style="--d:1.82s"/>
+      <circle class="shock" cx="293" cy="267" r="26" style="--d:2.32s"/>
+      <circle class="shock" cx="593" cy="229" r="26" style="--d:2.82s"/>
+      <circle class="shock" cx="607" cy="267" r="26" style="--d:3.32s"/>
+      <text class="xstamp" x="252" y="146" text-anchor="middle" fill="#e2564f" style="--d:1.9s; font-size:20px; font-weight:800">✗</text>
+      <text class="xstamp" x="252" y="238" text-anchor="middle" fill="#e2564f" style="--d:2.4s; font-size:20px; font-weight:800">✗</text>
+      <text class="xstamp" x="648" y="146" text-anchor="middle" fill="#e2564f" style="--d:2.9s; font-size:20px; font-weight:800">✗</text>
+      <text class="xstamp" x="648" y="238" text-anchor="middle" fill="#e2564f" style="--d:3.4s; font-size:20px; font-weight:800">✗</text>
     </svg>
-    <div class="wall" data-step="2">
+    <div class="wall">
       <span class="wall-tag">⚠ THE WALL</span>
       <p>How do we make these models aware of <span class="accent">our</span> data and systems?</p>
       <small>its knowledge ended where its training data ended</small>
