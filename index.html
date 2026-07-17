@@ -196,6 +196,14 @@
   .slide.active .draw.auto,
   [data-step].on .draw{ animation: dash .9s cubic-bezier(.4,0,.2,1) forwards; animation-delay: var(--d,0s) }
   @keyframes dash{ to{ stroke-dashoffset: 0 } }
+
+  /* ── MCP diagram: loop chaos ↔ solved like a gif ───────── */
+  #s-mcp .mcp-chaos, #s-mcp .mcp-solved{ opacity: 0; transition: opacity .5s ease }
+  #s-mcp .mcp-chaos.show, #s-mcp .mcp-solved.show{ opacity: 1 }
+  #s-mcp .mcp-chaos.show .draw, #s-mcp .mcp-solved.show .draw{
+    animation: dash .9s cubic-bezier(.4,0,.2,1) forwards;
+    animation-delay: var(--d,0s);
+  }
   .pop{ opacity:0; transform-box: fill-box; transform-origin:center; }
   .slide.active .pop{ animation: popin .35s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes popin{ from{ opacity:0; transform:scale(.3) } to{ opacity:1; transform:scale(1) } }
@@ -1294,7 +1302,7 @@
         <rect class="box" x="690" y="264" width="170" height="54" rx="10"/><text x="775" y="297" text-anchor="middle" class="lbl-s" style="font-size:16px">🌐 Browser</text>
         <rect class="box" x="690" y="342" width="170" height="54" rx="10"/><text x="775" y="375" text-anchor="middle" class="lbl-s" style="font-size:16px">🚀 CI / CD</text>
       </g>
-      <g data-hide-on="1" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
+      <g class="mcp-chaos" fill="none" stroke="#e2564f" stroke-width="2" stroke-dasharray="7 7" opacity=".65">
         <path d="M210,215 C330,40 480,320 690,57"/>
         <path d="M210,215 C400,380 420,20 690,135"/>
         <path d="M210,215 C300,140 560,300 690,213"/>
@@ -1302,7 +1310,7 @@
         <path d="M210,215 C260,330 600,180 690,369"/>
         <text x="450" y="415" text-anchor="middle" class="lbl-s" stroke="none" fill="#e2564f" style="font-size:13px">every tool × every agent = a custom adapter. N × M pain.</text>
       </g>
-      <g data-step="1">
+      <g class="mcp-solved">
         <path class="draw" pathLength="1000" d="M210,215 L415,215" fill="none" stroke="hsl(var(--hue) 85% 60%)" stroke-width="3.5"/>
         <rect class="box-acc" x="415" y="185" width="90" height="60" rx="10"/>
         <text x="460" y="221" text-anchor="middle" class="lbl" style="font-weight:800">MCP</text>
@@ -1316,7 +1324,7 @@
         <text x="450" y="415" text-anchor="middle" class="lbl-s" fill="hsl(var(--hue) 85% 65%)" style="font-size:13px">one port, one protocol. N + M. plug anything in.</text>
       </g>
     </svg>
-    <p class="sub" data-step="2">The USB port moment: <strong>stop hand-wiring integrations — standardize the plug.</strong></p>
+    <p class="sub" data-step="1">The USB port moment: <strong>stop hand-wiring integrations — standardize the plug.</strong></p>
   </section>
 
   <section class="slide" id="s-unlocked" data-hue="186" data-chlabel="2024 · Connection">
@@ -2173,6 +2181,25 @@ THEN  balance = $70 + audit entry
 
   /* ── per-slide activations ────────────────────────────── */
   var inits = {
+    's-mcp': function(s, token){
+      var chaos = s.querySelector('.mcp-chaos');
+      var solved = s.querySelector('.mcp-solved');
+      var showingChaos = true;
+      chaos.classList.add('show');
+      if(RM) return;
+      (function tick(){
+        setTimeout(function(){
+          if(token.cancelled) return;
+          (showingChaos ? chaos : solved).classList.remove('show');
+          setTimeout(function(){
+            if(token.cancelled) return;
+            showingChaos = !showingChaos;
+            (showingChaos ? chaos : solved).classList.add('show');
+            tick();
+          }, 500);
+        }, showingChaos ? 2200 : 2600);
+      })();
+    },
     's-gordian': function(s, token){
       var img = document.getElementById('gordian-shot');
       var pics = ['chatbot_pics/chatbot_1.PNG', 'chatbot_pics/chatbot_2.PNG', 'chatbot_pics/chatbot_3.PNG'];
