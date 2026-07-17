@@ -75,6 +75,7 @@
     transition-delay: var(--d, 0s);
   }
   .slide.active [data-anim]{ opacity:1; transform:none }
+  .slide:not(.active) [data-anim]{ transition-delay: 0s }
 
   /* presenter steps (revealed on →) */
   [data-step]{
@@ -197,6 +198,42 @@
   .pop{ opacity:0; transform-box: fill-box; transform-origin:center; }
   .slide.active .pop{ animation: popin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes popin{ from{ opacity:0; transform:scale(.3) } to{ opacity:1; transform:scale(1) } }
+
+  /* ── the road slide ───────────────────────────────────── */
+  #s-road .draw.auto{ animation-duration: 2.6s; animation-timing-function: linear; animation-delay:.15s }
+  #roadgrad stop:first-child{ stop-color: hsl(var(--hue) 65% 68%) }
+  #roadgrad stop:last-child{ stop-color: hsl(var(--hue) 90% 50%) }
+  .road-shadow{ fill:none; stroke: hsl(var(--hue) 80% 58% / .10); stroke-width:16; stroke-linecap:round }
+  .comet{
+    fill: hsl(var(--hue) 90% 55%); opacity:0;
+    offset-path: path("M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90");
+    offset-rotate: 0deg;
+  }
+  .slide.active .comet{ animation: comet-travel 2.6s linear .15s forwards }
+  @keyframes comet-travel{
+    0%{ offset-distance:0%; opacity:1 }
+    94%{ opacity:1 }
+    100%{ offset-distance:100%; opacity:0 }
+  }
+  .ms .dot, .ms .ring{ transform-box: fill-box; transform-origin:center }
+  .ms .dot{
+    fill: hsl(var(--hue) 90% 55%); stroke:#fff; stroke-width:3.5;
+    opacity:0;
+  }
+  .slide.active .ms .dot{ animation: dotpop .55s cubic-bezier(.16,1.4,.3,1) forwards; animation-delay: var(--d,0s) }
+  @keyframes dotpop{ from{ opacity:0; transform:scale(.2) } to{ opacity:1; transform:scale(1) } }
+  .ms .ring{ fill:none; stroke: hsl(var(--hue) 88% 55%); stroke-width:2; opacity:0 }
+  .slide.active .ms .ring{ animation: ringout .9s ease-out forwards; animation-delay: var(--d,0s) }
+  @keyframes ringout{ 0%{ opacity:.65; transform:scale(.4) } 100%{ opacity:0; transform:scale(2.4) } }
+  .ms .m-lbl{ opacity:0; transform: translateY(10px) }
+  .slide.active .ms .m-lbl{
+    animation: lblrise .55s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay: calc(var(--d,0s) + .18s);
+  }
+  @keyframes lblrise{ to{ opacity:1; transform:none } }
+  .ms .m-yr{ font-size:15px; font-weight:800; letter-spacing:.02em; fill: var(--accent); font-family: var(--mono) }
+  .ms .m-ttl{ font-size:19px; font-weight:700; letter-spacing:-.01em }
+  .ms .m-sub{ font-size:14px; fill: var(--mut); font-weight:500 }
   .float{ animation: floaty 5s ease-in-out infinite }
   @keyframes floaty{ 50%{ transform: translateY(-9px) } }
   .spinring{ transform-box: fill-box; transform-origin: center; animation: spin 14s linear infinite }
@@ -544,7 +581,7 @@
   /* ── 2027 day-in-the-life timeline ────────────────────── */
   .dayline{ position:relative; display:flex; align-items:flex-start; width:min(1100px,94vw); padding-top:6px }
   .dayline::before{
-    content:''; position:absolute; top:44px; left:5%; right:5%; height:3px; border-radius:99px;
+    content:''; position:absolute; top:36px; left:5%; right:5%; height:3px; border-radius:99px;
     background: var(--accent); opacity:.3;
     transform:scaleX(0); transform-origin:left;
     transition: transform 1.6s cubic-bezier(.2,.7,.2,1) .35s;
@@ -562,6 +599,59 @@
     color:var(--accent); background:var(--accent-soft); border-radius:99px; padding:3px 9px;
   }
   .dayline.compact .daynode p{ display:none }
+
+  /* ── opening slide (s-day) cinematics ─────────────────── */
+  #s-day::before{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(58% 46% at 50% 8%, hsl(30 95% 62% / .10), transparent 65%),
+      radial-gradient(42% 36% at 84% 80%, hsl(var(--hue) 80% 60% / .05), transparent 70%);
+    opacity:0; transition: opacity 1.6s ease .15s;
+  }
+  #s-day.active::before{ opacity:1 }
+  #s-day h2 .w{ display:inline-block; opacity:0; transform: translateY(.5em) }
+  .slide.active#s-day h2 .w{
+    animation: wordup .6s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay: calc(.12s + var(--wi) * .055s);
+  }
+  @keyframes wordup{ to{ opacity:1; transform:none } }
+  #s-day h2 .grad{
+    background: linear-gradient(94deg, var(--accent), #e8722a);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    padding-bottom:.18em; margin-bottom:-.18em;
+  }
+  .dayclock{
+    font-family:var(--mono); font-weight:800; line-height:1;
+    font-size:clamp(34px,4.6vw,58px); letter-spacing:.05em; color:var(--ink);
+    text-shadow: 0 0 42px hsl(var(--hue) 90% 55% / .3);
+  }
+  .dayclock .col{ animation: blink 1s steps(1) infinite; color:var(--accent) }
+  #s-day .dayline::before{ left:12.5%; right:12.5%; top:44px; transition: transform 2s linear 1.05s }
+  #s-day .dn-spark{
+    position:absolute; top:38px; left:12.5%; width:14px; height:14px; border-radius:50%;
+    background:#fff; transform:translateX(-50%); opacity:0; pointer-events:none;
+    box-shadow: 0 0 12px 3px hsl(var(--hue) 90% 52% / .9), 0 0 36px 12px hsl(var(--hue) 90% 52% / .3);
+  }
+  .slide.active#s-day .dn-spark{ animation: sparkrun 2s linear 1.05s forwards }
+  @keyframes sparkrun{ 0%{ left:12.5%; opacity:1 } 96%{ opacity:1 } 100%{ left:87.5%; opacity:0 } }
+  .slide.active#s-day .daynode{ animation-delay: calc(.95s + var(--i) * .4s) }
+  #s-day .dn-ico{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:38px; height:38px; margin:6px auto 10px; border-radius:50%;
+    background:#fff; border:2px solid hsl(var(--hue) 80% 55% / .5);
+    box-shadow: 0 6px 18px -6px hsl(var(--hue) 80% 40% / .4);
+    font-size:17px; line-height:1;
+  }
+  #s-day .dn-ico::after{
+    content:''; position:absolute; inset:-6px; border-radius:50%;
+    border:2px solid var(--accent); opacity:0;
+  }
+  .slide.active#s-day .dn-ico::after{
+    animation: dnring .8s ease-out forwards;
+    animation-delay: calc(1.05s + var(--i) * .4s);
+  }
+  @keyframes dnring{ 0%{ opacity:.7; transform:scale(.5) } 100%{ opacity:0; transform:scale(2.2) } }
+  body.light #s-day .dn-ico{ background:#fff }
 
   /* ── interrupt / big quote beats ──────────────────────── */
   .bigquote{ font-size:clamp(28px,4.6vw,58px); font-weight:800; line-height:1.3; max-width:24ch; letter-spacing:-.02em }
@@ -739,16 +829,18 @@
   <!-- ════════ ACT 0 · 2027 THE HOOK ════════ -->
   <section class="slide" id="s-day" data-hue="212" data-chlabel="2027 · A Day">
     <p class="kicker" data-anim>2027 · a Tuesday morning</p>
-    <h2 data-anim style="--d:.1s; font-size:clamp(28px,4.4vw,58px)">A day in the life of an AI engineer</h2>
-    <div class="dayline" data-anim style="--d:.25s">
-      <div class="daynode" style="--i:0"><span class="dn-time">09:00</span><span class="dn-dot"></span><b>requirement lands</b><p>from product — plain English</p></div>
-      <div class="daynode" style="--i:1"><span class="dn-time">09:10</span><span class="dn-dot"></span><b>spec agreed</b><p>agent drafts · human approves ✓</p></div>
-      <div class="daynode" style="--i:2"><span class="dn-time">09:15</span><span class="dn-dot"></span><b>agents pick it up</b><p>plan · build · test — in parallel</p></div>
-      <div class="daynode" style="--i:3"><span class="dn-time">10:20</span><span class="dn-dot"></span><b>tests green</b><p>PR opened, diff explained</p></div>
-      <div class="daynode" style="--i:4"><span class="dn-time">10:45</span><span class="dn-dot"></span><b>merged · deployed</b><p>canary watched by an agent</p></div>
-      <div class="daynode" style="--i:5"><span class="dn-time">11:00</span><span class="dn-dot"></span><b>☕ next requirement</b><p>the IDE never opened</p></div>
+    <h2 style="font-size:clamp(28px,4.4vw,58px)"><span class="w" style="--wi:0">A</span> <span class="w" style="--wi:1">day</span> <span class="w" style="--wi:2">in</span> <span class="w" style="--wi:3">the</span> <span class="w" style="--wi:4">life</span> <span class="w" style="--wi:5">of</span> <span class="w" style="--wi:6">an</span> <span class="w grad" style="--wi:7">AI</span> <span class="w grad" style="--wi:8">engineer</span></h2>
+    <div class="dayclock" data-anim style="--d:.4s"><span id="ck-h">09</span><span class="col">:</span><span id="ck-m">00</span></div>
+    <div class="dayline" data-anim style="--d:.55s">
+      <span class="dn-spark"></span>
+      <div class="daynode" style="--i:0"><span class="dn-time">09:00</span><span class="dn-ico">📨</span><b>requirement lands</b><p>from product — plain English</p></div>
+      <div class="daynode" style="--i:1"><span class="dn-time">09:10</span><span class="dn-ico">📋</span><b>spec agreed</b><p>agent drafts · human approves ✓</p></div>
+      <div class="daynode" style="--i:2"><span class="dn-time">09:15</span><span class="dn-ico">🤖</span><b>agents pick it up</b><p>plan · build · test — in parallel</p></div>
+      <div class="daynode" style="--i:3"><span class="dn-time">10:20</span><span class="dn-ico">✅</span><b>tests green</b><p>PR opened, diff explained</p></div>
+      <div class="daynode" style="--i:4"><span class="dn-time">10:45</span><span class="dn-ico">🚀</span><b>merged · deployed</b><p>canary watched by an agent</p></div>
+      <div class="daynode" style="--i:5"><span class="dn-time">11:00</span><span class="dn-ico">☕</span><b>next requirement</b><p>the IDE never opened</p></div>
     </div>
-    <p class="sub" data-step="1">No prompts. No keystrokes. Just intent → software. <strong>Development in 2027 is… seamless.</strong></p>
+    <p class="sub" data-anim style="--d:3.5s">No prompts. No keystrokes. Just intent → software. <strong>Development in 2027 is… seamless.</strong></p>
   </section>
 
   <section class="slide" id="s-cold" data-hue="212" data-chlabel="2027 · A Day">
@@ -761,12 +853,6 @@
     <p class="sub" data-step="2">Wall-clock: <strong class="accent">90 minutes</strong>. Human contribution: <strong class="accent">one approval</strong>.</p>
   </section>
 
-  <section class="slide" id="s-interrupt" data-hue="212" data-chlabel="2027 · A Day">
-    <p class="kicker" data-anim>— record scratch —</p>
-    <div class="bigquote" data-anim style="--d:.18s">“Wait… can development really be <em>this simple?</em>”</div>
-    <p class="bigreply" data-step="1">“Not always. To understand how we got here —<br><strong>we need to go back to where it all began.”</strong></p>
-  </section>
-
   <section class="slide" id="s-rewind" data-hue="212" data-chlabel="The Road">
     <p class="rew-marks" data-anim>◀◀ REW</p>
     <div id="yr" class="scanlines" data-anim style="--d:.1s">2027</div>
@@ -776,17 +862,42 @@
 
   <section class="slide" id="s-road" data-hue="212" data-chlabel="The Road">
     <p class="kicker" data-anim>The road · 2022 → 2027</p>
-    <svg viewBox="-60 0 1120 310" style="width:min(1180px,94vw)" data-anim aria-label="Roadmap of five eras">
+    <svg viewBox="-70 5 1140 340" style="width:min(1180px,94vw)" data-anim aria-label="Roadmap of five eras">
+      <defs>
+        <linearGradient id="roadgrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"/><stop offset="1"/>
+        </linearGradient>
+      </defs>
+      <path class="road-shadow" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"/>
       <path class="draw auto" pathLength="1000" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"
-            fill="none" stroke="hsl(var(--hue) 80% 60%)" stroke-width="5" stroke-linecap="round" opacity=".9"/>
-      <g class="pop" style="--d:.25s"><circle cx="70" cy="230" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="70" y="272" text-anchor="middle" class="lbl">2022 · The Beginning</text><text x="70" y="290" text-anchor="middle" class="lbl-s">ChatGPT · the second tab</text></g>
-      <g class="pop" style="--d:.45s"><circle cx="240" cy="140" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="240" y="108" text-anchor="middle" class="lbl">2023 · Knowledge</text><text x="240" y="126" text-anchor="middle" class="lbl-s">RAG · GraphRAG · prompts</text></g>
-      <g class="pop" style="--d:.65s"><circle cx="430" cy="220" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="430" y="262" text-anchor="middle" class="lbl">2024 · Connection</text><text x="430" y="280" text-anchor="middle" class="lbl-s">MCP · tool calling</text></g>
-      <g class="pop" style="--d:.85s"><circle cx="600" cy="110" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="600" y="78" text-anchor="middle" class="lbl">2025 · Discipline</text><text x="600" y="96" text-anchor="middle" class="lbl-s">specs · skills · harnesses</text></g>
-      <g class="pop" style="--d:1.05s"><circle cx="770" cy="210" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="770" y="252" text-anchor="middle" class="lbl">2026 · Autonomy</text><text x="770" y="270" text-anchor="middle" class="lbl-s">loops · RLMs · self-healing</text></g>
-      <g class="pop" style="--d:1.25s"><text x="930" y="60" text-anchor="middle" style="font-size:30px">🌅</text><circle cx="930" cy="90" r="13" fill="hsl(var(--hue) 90% 62%)"/><text x="930" y="130" text-anchor="middle" class="lbl">2027</text><text x="930" y="148" text-anchor="middle" class="lbl-s">that morning</text></g>
+            fill="none" stroke="url(#roadgrad)" stroke-width="5" stroke-linecap="round"/>
+      <circle class="comet" r="8"/>
+      <g class="ms" style="--d:.15s">
+        <circle class="ring" cx="70" cy="230" r="12"/><circle class="dot" cx="70" cy="230" r="11"/>
+        <g class="m-lbl"><text x="70" y="266" text-anchor="middle" class="m-yr">2022</text><text x="70" y="288" text-anchor="middle" class="m-ttl">The Beginning</text><text x="70" y="308" text-anchor="middle" class="m-sub">ChatGPT · the second tab</text></g>
+      </g>
+      <g class="ms" style="--d:.65s">
+        <circle class="ring" cx="240" cy="140" r="12"/><circle class="dot" cx="240" cy="140" r="11"/>
+        <g class="m-lbl"><text x="240" y="66" text-anchor="middle" class="m-yr">2023</text><text x="240" y="88" text-anchor="middle" class="m-ttl">Knowledge</text><text x="240" y="108" text-anchor="middle" class="m-sub">RAG · GraphRAG · prompts</text></g>
+      </g>
+      <g class="ms" style="--d:1.2s">
+        <circle class="ring" cx="430" cy="220" r="12"/><circle class="dot" cx="430" cy="220" r="11"/>
+        <g class="m-lbl"><text x="430" y="256" text-anchor="middle" class="m-yr">2024</text><text x="430" y="278" text-anchor="middle" class="m-ttl">Connection</text><text x="430" y="298" text-anchor="middle" class="m-sub">MCP · tool calling</text></g>
+      </g>
+      <g class="ms" style="--d:1.7s">
+        <circle class="ring" cx="600" cy="110" r="12"/><circle class="dot" cx="600" cy="110" r="11"/>
+        <g class="m-lbl"><text x="600" y="36" text-anchor="middle" class="m-yr">2025</text><text x="600" y="58" text-anchor="middle" class="m-ttl">Discipline</text><text x="600" y="78" text-anchor="middle" class="m-sub">specs · skills · harnesses</text></g>
+      </g>
+      <g class="ms" style="--d:2.2s">
+        <circle class="ring" cx="770" cy="210" r="12"/><circle class="dot" cx="770" cy="210" r="11"/>
+        <g class="m-lbl"><text x="770" y="246" text-anchor="middle" class="m-yr">2026</text><text x="770" y="268" text-anchor="middle" class="m-ttl">Autonomy</text><text x="770" y="288" text-anchor="middle" class="m-sub">loops · RLMs · self-healing</text></g>
+      </g>
+      <g class="ms" style="--d:2.7s">
+        <circle class="ring" cx="930" cy="90" r="12"/><circle class="dot" cx="930" cy="90" r="11"/>
+        <g class="m-lbl"><text x="930" y="42" text-anchor="middle" style="font-size:28px">🌅</text><text x="930" y="126" text-anchor="middle" class="m-yr">2027</text><text x="930" y="148" text-anchor="middle" class="m-ttl">that morning</text></g>
+      </g>
     </svg>
-    <p class="sub" data-step="1">Five years. Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
+    <p class="sub" data-anim style="--d:3.8s">Five years. Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
   </section>
 
   <!-- ════════ ACT 1 · 2022 THE BEGINNING ════════ -->
@@ -1595,12 +1706,12 @@ THEN  balance = $70 + audit entry
       else { span.classList.remove('typing'); done(); }
     })();
   }
-  function runTerminal(el, script, token){
+  function runTerminal(el, script, token, done){
     el.innerHTML = '';
     var i = 0;
     (function nextLine(){
       if(token.cancelled) return;
-      if(i >= script.length) return;
+      if(i >= script.length){ if(done) done(); return; }
       var L = script[i++];
       var div = document.createElement('div');
       div.className = 'tl ' + (L.cls || '');
@@ -1632,12 +1743,51 @@ THEN  balance = $70 + audit entry
 
   /* ── per-slide activations ────────────────────────────── */
   var inits = {
+    's-day': function(s, token){
+      var hh = document.getElementById('ck-h'), mm = document.getElementById('ck-m');
+      var times = [540, 550, 555, 620, 645, 660]; /* minutes: the six node times */
+      function set(min){
+        hh.textContent = ('0' + Math.floor(min / 60)).slice(-2);
+        mm.textContent = ('0' + Math.floor(min % 60)).slice(-2);
+      }
+      set(540);
+      if(RM){ set(660); return; }
+      setTimeout(function(){
+        if(token.cancelled) return;
+        var t0 = performance.now(), DUR = 2000;
+        (function tick(now){
+          if(token.cancelled) return;
+          var p = Math.min(1, (now - t0) / DUR);
+          var seg = Math.min(4.9999, p * 5), i = Math.floor(seg);
+          set(times[i] + (times[i + 1] - times[i]) * (seg - i));
+          if(p < 1) requestAnimationFrame(tick);
+          else set(660);
+        })(t0);
+      }, 800); /* init fires 250ms after activate; spark leaves at 1.05s */
+    },
     's-cold': function(s, token){
-      runTerminal(document.getElementById('cold-term'), coldScript, token);
+      var steps = stepsIn(s);
+      runTerminal(document.getElementById('cold-term'), coldScript, token, function(){
+        if(RM){ steps.forEach(function(e){ e.classList.add('on'); }); syncHides(s); updateHud(); return; }
+        steps.forEach(function(step){
+          var delay = 350 + (+step.dataset.step) * 500;
+          setTimeout(function(){
+            if(token.cancelled) return;
+            step.classList.add('on');
+            syncHides(s); updateHud();
+          }, delay);
+        });
+      });
     },
     's-rewind': function(s, token){
       var el = document.getElementById('yr');
-      if(RM){ el.textContent = '2022'; return; }
+      var steps = stepsIn(s);
+      if(RM){
+        el.textContent = '2022';
+        steps.forEach(function(e){ e.classList.add('on'); });
+        syncHides(s); updateHud();
+        return;
+      }
       el.classList.add('spin');
       var t0 = performance.now(), DUR = 2600;
       (function tick(now){
@@ -1647,7 +1797,17 @@ THEN  balance = $70 + audit entry
         var y = 2027 - e * 5;
         el.textContent = Math.ceil(y);
         if(t < 1) requestAnimationFrame(tick);
-        else { el.textContent = '2022'; el.classList.remove('spin'); }
+        else {
+          el.textContent = '2022'; el.classList.remove('spin');
+          steps.forEach(function(step){
+            var delay = 400 + (+step.dataset.step) * 500;
+            setTimeout(function(){
+              if(token.cancelled) return;
+              step.classList.add('on');
+              syncHides(s); updateHud();
+            }, delay);
+          });
+        }
       })(t0);
     },
     's-ops': function(s, token){
