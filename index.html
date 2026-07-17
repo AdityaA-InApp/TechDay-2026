@@ -7,7 +7,8 @@
 <!--
   ══════════════════════════════════════════════════════════════════
   HOW TO PRESENT
-    → / Space / click ......... next step or slide
+    → / Space / click ......... skip animation, then next slide
+                                (content auto-reveals on a timer)
     ← ......................... previous
     0–6 ....................... jump to chapter
     F ......................... fullscreen
@@ -313,20 +314,6 @@
   [data-step].on .fill{ transform: scaleX(var(--w,1)) }
   .overflow-x{ color:#ff5d6e; font-weight:700 }
 
-  /* ── stone tablets (discipline) ───────────────────────── */
-  .tablets{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center }
-  .tablet{
-    width: 195px; padding: 30px 14px 26px; border-radius: 12px 12px 6px 6px;
-    background: linear-gradient(180deg, #18202f, #0e1420);
-    border: 1px solid #2c3a52;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 22px 50px -18px rgba(0,0,0,.7);
-  }
-  .tablet .glyph{ font-size: 30px; margin-bottom: 12px }
-  .tablet h3{ font-size: clamp(15px,1.8vw,19px); letter-spacing:.03em; margin-bottom:8px }
-  .tablet p{ font-size: 13.5px; color: var(--mut); line-height:1.5 }
-  [data-step].on .tablet{ animation: rise .6s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .tablet:nth-child(2){ animation-delay:.12s } [data-step].on .tablet:nth-child(3){ animation-delay:.24s }
-  [data-step].on .tablet:nth-child(4){ animation-delay:.36s }
   @keyframes rise{ from{ opacity:0; transform: translateY(70px) } }
   .pivot-line{
     font-size: clamp(22px, 3.4vw, 40px); font-weight:800; letter-spacing:-.015em; max-width: 24ch; line-height:1.25;
@@ -418,21 +405,34 @@
   }
   .eqcap{ font-size: clamp(13.5px,1.6vw,17px); color: var(--mut) }
   .eqcap strong{ color: var(--ink) }
-  .hlayers{ display:flex; gap: 18px; flex-wrap:wrap; justify-content:center; max-width: 1060px }
-  .hlayer{
-    width: 186px; text-align:left; padding: 15px 15px 16px; border-radius: 12px;
-    background: var(--panel); border: 1px solid var(--line);
-    border-top: 3px solid var(--accent);
+  /* ── harness circuit board (after Addy Osmani's diagram) ─ */
+  .pcb{ width: min(1000px, 94vw); display:block }
+  .pcb .trace{ fill:none; stroke: hsl(var(--hue) 70% 48% / .6); stroke-width:2.5; stroke-linecap:round }
+  .pcb .via{ fill: var(--accent); opacity:.85 }
+  .pcb .pin{ fill: #93a1b5; opacity:.65 }
+  .pcb .bound{ fill:none; stroke-width:1.8; stroke-dasharray: 7 7; opacity:0 }
+  .pcb .bound.agent{ stroke: var(--mut); stroke-opacity:.45 }
+  .pcb .bound.harn{ stroke: var(--accent); stroke-opacity:.8 }
+  .pcb .bound-lbl{ font-family: var(--mono); font-size: 13px; font-weight:800; letter-spacing:.3em; opacity:0 }
+  .pcb .bound-lbl.agent{ fill: var(--mut) }
+  .pcb .bound-lbl.harn{ fill: var(--accent) }
+  .slide.active .pcb .bound,
+  .slide.active .pcb .bound-lbl{ animation: boundfade .8s ease var(--d,3s) forwards }
+  @keyframes boundfade{ to{ opacity:1 } }
+  .pcb .blk-lbl{ font-family: var(--mono); font-size: 15px; font-weight:800; letter-spacing:.16em; fill: var(--ink) }
+  .pcb .blk-sub{ font-size: 12.5px; fill: var(--mut) }
+  .pcb .chip-lbl{ font-size: 23px; font-weight:800; letter-spacing:.06em }
+  .pcb .chip-sub{ font-size: 12.5px; fill: var(--mut); font-style: italic }
+  .pcb .flowdash{
+    fill:none; stroke: var(--accent); stroke-width:2.5; stroke-linecap:round;
+    stroke-dasharray: 3 30; opacity:0;
   }
-  .hlayer .hl-num{ font-family: var(--mono); font-size: 11px; letter-spacing: .24em; color: var(--accent) }
-  .hlayer h4{ font-size: 14.5px; margin: 7px 0 6px }
-  .hlayer p{ font-size: 12.5px; color: var(--mut); line-height: 1.55 }
-  [data-step].on .hlayer{ animation: unpack .6s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .hlayer:nth-child(2){ animation-delay:.1s }
-  [data-step].on .hlayer:nth-child(3){ animation-delay:.2s }
-  [data-step].on .hlayer:nth-child(4){ animation-delay:.3s }
-  [data-step].on .hlayer:nth-child(5){ animation-delay:.4s }
-  @keyframes unpack{ from{ opacity:0; transform: translateY(-38px) scale(.82) } }
+  .slide.active .pcb .flowdash{
+    animation: traceflow 1.5s linear infinite, boundfade .6s ease var(--d,3.4s) forwards;
+  }
+  @keyframes traceflow{ to{ stroke-dashoffset: -66 } }
+  body.light .pcb .pin{ fill:#c4aeaf }
+  body.light .pcb .trace{ stroke: rgba(171,30,35,.42) }
 
   /* ── failure modes → harness fixes ────────────────────── */
   .fmrow{ display:flex; align-items:stretch; gap: 14px; width: min(880px, 92vw) }
@@ -792,6 +792,14 @@
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent }
   .teamline{ font-family: var(--mono); font-size: clamp(13px,1.6vw,16px); color: var(--mut); letter-spacing:.12em }
 
+  /* ── circle-wipe transition (road → next milestone) ─────── */
+  #circwipe{
+    position:fixed; left:0; top:0; width:26px; height:26px; border-radius:50%;
+    transform: translate(-50%,-50%) scale(0); opacity:0;
+    z-index:12; pointer-events:none; will-change: transform;
+    transition: opacity .25s ease;
+  }
+
   /* ── HUD / chrome ─────────────────────────────────────── */
   #progbar{ position:fixed; top:0; left:0; height:3px; z-index:10; background: var(--accent); width:0%;
     transition: width .45s cubic-bezier(.2,.7,.2,1); box-shadow: 0 0 12px hsl(var(--hue) 90% 60% / .8) }
@@ -859,7 +867,6 @@
   body.light .doc{ background:#faf6f6; border-color:#e3d5d6; color:#5d4f50 }
   body.light .ctx-meter .bar{ background:#f2eaea }
   body.light .overflow-x{ color:#c2242a }
-  body.light .tablet{ background: linear-gradient(180deg,#fffdfd,#f8f2f2); border-color:#e7dbdc; box-shadow: inset 0 1px 0 #fff, 0 20px 44px -22px rgba(90,40,42,.3) }
   body.light .stage{ border-color: rgba(171,30,35,.6) }
   body.light .rails{ border-color:#e3d6d7 }
   body.light .war p{ color:#4c3f40 }
@@ -881,6 +888,7 @@
 <body class="light">
 
 <canvas id="bg"></canvas>
+<div id="circwipe"></div>
 <div id="glow"></div>
 <div id="progbar"></div>
 <div id="brand"><img src="InApp-Logo-RGB.png" alt="InApp"></div>
@@ -918,7 +926,7 @@
     <p class="rew-marks" data-anim>◀◀ REW</p>
     <div id="yr" class="scanlines" data-anim style="--d:.1s">2027</div>
     <h2 data-step="1" style="max-width:26ch">In 2022, that morning took <span class="accent">six weeks</span> — and a whole team.</h2>
-    <p class="sub" data-step="2">Here's how we got here. <strong>No agenda slide — just the road.</strong></p>
+    <p class="sub" data-step="2">Here's how we got here.</p>
   </section>
 
   <section class="slide" id="s-road" data-hue="212" data-chlabel="The Road">
@@ -1243,59 +1251,129 @@
     </div>
   </section>
 
-  <section class="slide" id="s-virtues" data-hue="222" data-chlabel="2025 · Discipline">
-    <p class="kicker" data-anim>The pivot</p>
-    <h2 data-anim style="--d:.1s">The old virtues came back.</h2>
-    <div class="tablets" data-step="1">
-      <div class="tablet"><div class="glyph">📜</div><h3>Specifications</h3><p>say what "done" means before anything runs</p></div>
-      <div class="tablet"><div class="glyph">🤝</div><h3>Contracts</h3><p>typed interfaces between human intent and agent action</p></div>
-      <div class="tablet"><div class="glyph">🛡</div><h3>Guardrails</h3><p>permissions, sandboxes, review gates — by design</p></div>
-      <div class="tablet"><div class="glyph">🔁</div><h3>Repeatability</h3><p>same spec, same harness, same outcome</p></div>
-    </div>
-    <p class="pivot-line" data-step="2">AI‑native didn't abandon engineering rigor.<br><em>It rediscovered it.</em></p>
-  </section>
-
   <section class="slide dense" id="s-harness" data-hue="222" data-chlabel="2025 · Discipline">
     <p class="kicker" data-anim>Taming the tiger</p>
     <h2 data-anim style="--d:.08s">Harness engineering</h2>
-    <div class="eq" data-anim style="--d:.22s">
+    <div class="eq" data-anim style="--d:.2s">
       <span class="eqbox eq-agent">AGENT</span>
       <span class="eqop">=</span>
       <span class="eqbox">MODEL</span>
       <span class="eqop">+</span>
       <span class="eqbox eq-harness">HARNESS</span>
     </div>
-    <p class="eqcap" data-anim style="--d:.36s">The model is the raw intelligence. <strong>The harness is everything wrapped around it that makes it dependable.</strong></p>
-    <div class="hlayers" data-step="1">
-      <div class="hlayer"><span class="hl-num">01</span><h4>Tool orchestration</h4><p>What it may call, in what order — and what happens when a call fails.</p></div>
-      <div class="hlayer"><span class="hl-num">02</span><h4>Verification loops</h4><p>Tests and self-critique run <em>during</em> the work, not after it.</p></div>
-      <div class="hlayer"><span class="hl-num">03</span><h4>Context &amp; memory</h4><p>CLAUDE.md, indexed code, state that survives the session.</p></div>
-      <div class="hlayer"><span class="hl-num">04</span><h4>Guardrails</h4><p>Permissions, sandboxes, budgets, human approval gates.</p></div>
-      <div class="hlayer"><span class="hl-num">05</span><h4>Observability</h4><p>Telemetry and audit trails — you can see <em>why</em> it did what it did.</p></div>
-    </div>
-    <p class="sub" data-step="2"><strong>The model is the engine. The harness is the vehicle.</strong> We engineer the vehicle.</p>
+    <svg class="pcb" viewBox="0 0 1140 545" data-anim style="--d:.3s" aria-label="Agent circuit board: the model is one chip; the harness — context injection, control, action, observe and verify, persist — is everything wired around it">
+      <!-- boundaries -->
+      <rect class="bound agent" x="95"  y="28" width="950" height="505" rx="14" style="--d:3.3s"/>
+      <rect class="bound harn"  x="165" y="72" width="810" height="430" rx="12" style="--d:3s"/>
+      <text class="bound-lbl agent" x="120" y="56"  style="--d:3.5s">AGENT</text>
+      <text class="bound-lbl harn"  x="190" y="100" style="--d:3.2s">HARNESS</text>
+
+      <!-- MODEL chip -->
+      <g class="pop" style="--d:.4s">
+        <circle class="pulse-ring" cx="570" cy="270" r="72" fill="none" stroke="hsl(var(--hue) 85% 55%)" stroke-width="2"/>
+        <rect class="box-acc" x="480" y="210" width="180" height="120" rx="10"/>
+        <!-- pins -->
+        <rect class="pin" x="516" y="198" width="8" height="12"/><rect class="pin" x="546" y="198" width="8" height="12"/>
+        <rect class="pin" x="586" y="198" width="8" height="12"/><rect class="pin" x="616" y="198" width="8" height="12"/>
+        <rect class="pin" x="515" y="330" width="8" height="12"/><rect class="pin" x="545" y="330" width="8" height="12"/>
+        <rect class="pin" x="595" y="330" width="8" height="12"/><rect class="pin" x="625" y="330" width="8" height="12"/>
+        <rect class="pin" x="468" y="241" width="12" height="8"/><rect class="pin" x="468" y="266" width="12" height="8"/><rect class="pin" x="468" y="291" width="12" height="8"/>
+        <rect class="pin" x="660" y="241" width="12" height="8"/><rect class="pin" x="660" y="266" width="12" height="8"/><rect class="pin" x="660" y="291" width="12" height="8"/>
+        <text class="chip-lbl" x="570" y="265" text-anchor="middle">MODEL</text>
+        <text class="chip-sub" x="570" y="292" text-anchor="middle">reasons → decides</text>
+      </g>
+
+      <!-- top · CONTEXT INJECTION (RAM) -->
+      <path class="trace draw auto" pathLength="1000" style="--d:.7s"  d="M540,204 V173"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:.78s" d="M570,204 V173"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:.86s" d="M600,204 V173"/>
+      <g class="pop" style="--d:1s">
+        <text class="blk-lbl" x="570" y="106" text-anchor="middle">CONTEXT INJECTION</text>
+        <text class="blk-sub" x="570" y="125" text-anchor="middle">prompts · memory · skills · conversation</text>
+        <rect class="box" x="450" y="134" width="240" height="32" rx="4"/>
+        <rect class="pin" x="462" y="166" width="16" height="7"/><rect class="pin" x="490" y="166" width="16" height="7"/>
+        <rect class="pin" x="518" y="166" width="16" height="7"/><rect class="pin" x="546" y="166" width="16" height="7"/>
+        <rect class="pin" x="574" y="166" width="16" height="7"/><rect class="pin" x="602" y="166" width="16" height="7"/>
+        <rect class="pin" x="630" y="166" width="16" height="7"/><rect class="pin" x="658" y="166" width="16" height="7"/>
+      </g>
+
+      <!-- left · CONTROL -->
+      <path class="trace draw auto" pathLength="1000" style="--d:1.15s" d="M468,245 H355"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:1.23s" d="M468,270 H355"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:1.31s" d="M468,295 H355"/>
+      <g class="pop" style="--d:1.45s">
+        <rect class="box" x="205" y="205" width="150" height="130" rx="10"/>
+        <text class="blk-lbl" x="280" y="248" text-anchor="middle">CONTROL</text>
+        <text class="blk-sub" x="280" y="272" text-anchor="middle">compaction</text>
+        <text class="blk-sub" x="280" y="290" text-anchor="middle">orchestration</text>
+        <text class="blk-sub" x="280" y="308" text-anchor="middle">ralph loops</text>
+      </g>
+
+      <!-- right · ACTION -->
+      <path class="trace draw auto" pathLength="1000" style="--d:1.6s"  d="M672,245 H785"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:1.68s" d="M672,270 H785"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:1.76s" d="M672,295 H785"/>
+      <g class="pop" style="--d:1.9s">
+        <rect class="box" x="785" y="205" width="150" height="130" rx="10"/>
+        <text class="blk-lbl" x="860" y="248" text-anchor="middle">ACTION</text>
+        <text class="blk-sub" x="860" y="272" text-anchor="middle">bash · tools · MCPs</text>
+        <rect class="box" x="812" y="288" width="26" height="20" rx="3"/>
+        <rect class="box" x="847" y="288" width="26" height="20" rx="3"/>
+        <rect class="box" x="882" y="288" width="26" height="20" rx="3"/>
+      </g>
+
+      <!-- bottom-left · OBSERVE & VERIFY -->
+      <path class="trace draw auto" pathLength="1000" style="--d:2.05s" d="M519,342 V420 H445"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:2.13s" d="M549,342 V445 H445"/>
+      <circle class="via pop" cx="519" cy="420" r="4" style="--d:2.3s"/>
+      <circle class="via pop" cx="549" cy="445" r="4" style="--d:2.34s"/>
+      <g class="pop" style="--d:2.35s">
+        <rect class="box" x="235" y="395" width="210" height="75" rx="10"/>
+        <text class="blk-lbl" x="340" y="426" text-anchor="middle" style="font-size:13.5px">OBSERVE &amp; VERIFY</text>
+        <text class="blk-sub" x="340" y="449" text-anchor="middle">screenshots · tests · logs</text>
+      </g>
+
+      <!-- bottom-right · PERSIST -->
+      <path class="trace draw auto" pathLength="1000" style="--d:2.5s"  d="M599,342 V420 H695"/>
+      <path class="trace draw auto" pathLength="1000" style="--d:2.58s" d="M629,342 V445 H695"/>
+      <circle class="via pop" cx="599" cy="420" r="4" style="--d:2.72s"/>
+      <circle class="via pop" cx="629" cy="445" r="4" style="--d:2.76s"/>
+      <g class="pop" style="--d:2.8s">
+        <rect class="box" x="695" y="395" width="210" height="75" rx="10"/>
+        <text class="blk-lbl" x="800" y="426" text-anchor="middle">PERSIST</text>
+        <text class="blk-sub" x="800" y="449" text-anchor="middle">filesystem · git · progress files</text>
+      </g>
+
+      <!-- live current on the bus -->
+      <path class="flowdash" style="--d:3.4s" d="M570,173 V204"/>
+      <path class="flowdash" style="--d:3.5s" d="M355,270 H468"/>
+      <path class="flowdash" style="--d:3.6s" d="M672,270 H785"/>
+      <path class="flowdash" style="--d:3.7s" d="M519,342 V420 H445"/>
+      <path class="flowdash" style="--d:3.8s" d="M599,342 V420 H695"/>
+    </svg>
+    <p class="sub" data-anim style="--d:3.6s"><em>The model is one chip on the board.</em> <strong>The harness is everything else that makes it useful.</strong></p>
   </section>
 
   <section class="slide dense" id="s-failmodes" data-hue="222" data-chlabel="2025 · Discipline">
-    <p class="kicker" data-anim>Why it matters</p>
-    <h2 data-anim style="--d:.08s">Failure modes no prompt can fix</h2>
-    <p class="eqcap" data-anim style="--d:.2s">These are properties of the <strong>model</strong>. They get solved in the <strong>harness</strong>.</p>
+    <p class="kicker" data-anim>The skill-issue reframe</p>
+    <h2 data-anim style="--d:.08s">It's a harness gap, not a model gap</h2>
+    <p class="eqcap" data-anim style="--d:.2s">"A decent model with a great harness <strong>beats</strong> a great model with a bad harness." — Addy Osmani</p>
     <div class="fmrow" data-step="1">
-      <div class="fm-bad"><b>🏁 VICTORY DECLARATION</b><p><strong>"Done!"</strong> — task marked complete, outcome never verified.</p></div>
+      <div class="fm-bad"><b>🧠 AMNESIA</b><p>Every session starts from zero — <strong>yesterday's work is gone.</strong></p></div>
       <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS FIX</b><p>Verification loops — <strong>"done" doesn't exist until the tests say so.</strong></p></div>
+      <div class="fm-fix"><b>HARNESS</b><p><strong>Filesystem &amp; git</strong> — durable state and progress files that survive the session.</p></div>
     </div>
     <div class="fmrow" data-step="2">
-      <div class="fm-bad"><b>😰 CONTEXT ANXIETY</b><p>The context window fills up — the model <strong>panics and rushes</strong>, cutting corners.</p></div>
+      <div class="fm-bad"><b>🏁 VICTORY DECLARATION</b><p><strong>"Done!"</strong> — while the tests are still red.</p></div>
       <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS FIX</b><p>Progress trackers and memory that <strong>survive across sessions</strong>.</p></div>
+      <div class="fm-fix"><b>HARNESS</b><p><strong>Hooks</strong> — typecheck · lint · test after every edit. <strong>Success is silent, failures are loud.</strong></p></div>
     </div>
     <div class="fmrow" data-step="3">
-      <div class="fm-bad"><b>🌀 ONE-SHOT OVERREACH</b><p>Attacks the whole problem at once — an <strong>undocumented tangle</strong> of changes.</p></div>
+      <div class="fm-bad"><b>🌀 LONG-HORIZON DRIFT</b><p>The context fills up — the model <strong>rushes and cuts corners.</strong></p></div>
       <span class="fm-arr">→</span>
-      <div class="fm-fix"><b>HARNESS FIX</b><p>Plan/build separation — <strong>small, reviewable diffs</strong>.</p></div>
+      <div class="fm-fix"><b>HARNESS</b><p><strong>Compaction &amp; loops</strong> — fresh context every lap, continuation enforced.</p></div>
     </div>
-    <p class="sub" data-step="4"><strong>It's not about the cockpit.</strong> Claude Code, Codex, Kiro, Cursor — every tool ships <em>a</em> harness. Engineering <em>yours</em> — for your codebase, your gates — is the job.</p>
+    <p class="sub" data-step="4"><strong>The ratchet:</strong> every agent mistake becomes a permanent rule. Every line in AGENTS.md traces back to <strong>something that actually went wrong.</strong></p>
   </section>
 
   <section class="slide" id="s-sdd" data-hue="222" data-chlabel="2025 · Discipline">
@@ -1318,7 +1396,7 @@
   </section>
 
   <section class="slide dense" id="s-openspec" data-hue="222" data-chlabel="2025 · Discipline">
-    <p class="kicker" data-anim>“You've been working with SDD — how has it been?” · before a line of code runs</p>
+    <p class="kicker" data-anim>Before a line of code runs</p>
     <h2 data-anim style="--d:.08s">OpenSpec: spec is the interface</h2>
     <div class="os2col">
       <div data-step="1">
@@ -1358,7 +1436,7 @@ R1 — <span class="kw">MUST</span> process refunds atomically
   </section>
 
   <section class="slide" id="s-war" data-hue="222" data-chlabel="2025 · Discipline">
-    <p class="kicker" data-anim>Theertha's build · what actually happened</p>
+    <p class="kicker" data-anim>A real build · what actually happened</p>
     <div class="split">
       <!-- EDIT: replace this spec excerpt with a sanitized excerpt of your real spec -->
       <div class="speccard" data-anim style="--d:.15s">
@@ -1544,12 +1622,6 @@ THEN  balance = $70 + audit entry
   </section>
 
   <!-- ════════ FINAL ACT · THE PRICE OF ADMISSION ════════ -->
-  <section class="slide" id="s-costq" data-hue="205" data-chlabel="The Price">
-    <p class="kicker" data-anim>— one last interruption —</p>
-    <div class="bigquote" data-anim style="--d:.18s">“This all sounds incredible… but won't it <em>cost too much?</em>”</div>
-    <p class="bigreply" data-step="1">“The future isn't about using <strong>more</strong> AI.<br>It's about using AI <strong>intelligently.”</strong></p>
-  </section>
-
   <section class="slide" id="s-ops" data-hue="205" data-chlabel="The Price">
     <p class="kicker" data-anim>The grown‑up slide</p>
     <h2 data-anim style="--d:.08s">The price of admission</h2>
@@ -1629,7 +1701,7 @@ THEN  balance = $70 + audit entry
 
 <div id="help">
   <div class="card">
-    <div><kbd>→</kbd><kbd>Space</kbd> next step / slide</div>
+    <div><kbd>→</kbd><kbd>Space</kbd> skip animation / next slide</div>
     <div><kbd>←</kbd> previous</div>
     <div><kbd>0</kbd>–<kbd>6</kbd> jump to chapter</div>
     <div><kbd>F</kbd> fullscreen</div>
@@ -1674,6 +1746,26 @@ THEN  balance = $70 + audit entry
   function resetSteps(s){ stepsIn(s).forEach(function(e){ e.classList.remove('on'); }); syncHides(s); }
   function revealAll(s){ stepsIn(s).forEach(function(e){ e.classList.add('on'); }); syncHides(s); }
 
+  /* slides whose init() schedules its own step reveals */
+  var selfStepping = { 's-cold': 1, 's-rewind': 1 };
+
+  /* auto-reveal: steps appear on a slow timer, no clicking needed */
+  function autoSteps(s, token){
+    var steps = stepsIn(s);
+    if(!steps.length) return;
+    if(RM){ revealAll(s); updateHud(); return; }
+    var vals = [];
+    steps.forEach(function(e){ var v = +e.dataset.step; if(vals.indexOf(v) < 0) vals.push(v); });
+    vals.sort(function(a, b){ return a - b; });
+    vals.forEach(function(v, idx){
+      setTimeout(function(){
+        if(token.cancelled) return;
+        steps.forEach(function(e){ if(+e.dataset.step === v) e.classList.add('on'); });
+        syncHides(s); updateHud();
+      }, 1400 + idx * 1600);
+    });
+  }
+
   /* ── activation ───────────────────────────────────────── */
   function activate(i, dir){
     if(i === cur || i < 0 || i >= slides.length) return;
@@ -1685,28 +1777,49 @@ THEN  balance = $70 + audit entry
     hueTarget = +s.dataset.hue || 212;
     if(actToken) actToken.cancelled = true;
     actToken = { cancelled: false };
+    if(dir >= 0 && !selfStepping[s.id]) autoSteps(s, actToken);
     var fn = inits[s.id];
     if(fn) setTimeout(function(){ if(!actToken.cancelled) fn(s, actToken); }, RM ? 0 : 250);
     updateHud();
   }
+  /* ── circle-wipe transition: the road's first milestone dot
+         expands to swallow the screen, then shrinks away to reveal
+         the next slide underneath ──────────────────────────────── */
+  function wipeTransition(nextIndex){
+    if(RM){ activate(nextIndex, 1); return; }
+    var dot = slides[cur].querySelector('.ms .dot');
+    var w = document.getElementById('circwipe');
+    if(!dot){ activate(nextIndex, 1); return; }
+    var r = dot.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    var maxR = Math.hypot(Math.max(cx, innerWidth - cx), Math.max(cy, innerHeight - cy));
+    var scaleTarget = (maxR * 2.15) / 26;
+    var hue = +slides[nextIndex].dataset.hue || 212;
+    w.style.left = cx + 'px'; w.style.top = cy + 'px';
+    w.style.background = 'hsl(' + hue + ' 88% 54%)';
+    w.style.opacity = '1';
+    w.style.transform = 'translate(-50%,-50%) scale(0)';
+    var expandAnim = w.animate(
+      [{ transform: 'translate(-50%,-50%) scale(0)' }, { transform: 'translate(-50%,-50%) scale(' + scaleTarget + ')' }],
+      { duration: 850, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' }
+    );
+    expandAnim.finished.then(function(){
+      activate(nextIndex, 1);
+      var shrinkAnim = w.animate(
+        [{ transform: 'translate(-50%,-50%) scale(' + scaleTarget + ')' }, { transform: 'translate(-50%,-50%) scale(0)' }],
+        { duration: 600, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' }
+      );
+      shrinkAnim.finished.then(function(){ w.style.opacity = '0'; }).catch(function(){});
+    }).catch(function(){ activate(nextIndex, 1); w.style.opacity = '0'; });
+  }
   function next(){
     var s = slides[cur];
     var pending = stepsIn(s).filter(function(e){ return !e.classList.contains('on'); });
-    if(pending.length){
-      var v = Math.min.apply(null, pending.map(function(e){ return +e.dataset.step; }));
-      pending.forEach(function(e){ if(+e.dataset.step === v) e.classList.add('on'); });
-      syncHides(s); updateHud(); return;
-    }
+    if(pending.length){ revealAll(s); updateHud(); return; } /* fast-forward the animation */
+    if(s.id === 's-road' && cur + 1 < slides.length){ wipeTransition(cur + 1); return; }
     activate(cur + 1, 1);
   }
   function prev(){
-    var s = slides[cur];
-    var on = stepsIn(s).filter(function(e){ return e.classList.contains('on'); });
-    if(on.length){
-      var v = Math.max.apply(null, on.map(function(e){ return +e.dataset.step; }));
-      on.forEach(function(e){ if(+e.dataset.step === v) e.classList.remove('on'); });
-      syncHides(s); updateHud(); return;
-    }
     activate(cur - 1, -1);
   }
   function updateHud(){
