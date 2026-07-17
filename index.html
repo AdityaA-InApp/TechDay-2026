@@ -62,17 +62,17 @@
     text-align:center;
     opacity:0; visibility:hidden;
     transform: translateY(34px) scale(.985);
-    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), visibility 0s .55s;
+    transition: opacity .38s ease, transform .38s cubic-bezier(.2,.7,.2,1), visibility 0s .38s;
   }
   .slide.active{
     opacity:1; visibility:visible; transform:none; z-index:2;
-    transition: opacity .55s ease, transform .55s cubic-bezier(.2,.7,.2,1), visibility 0s;
+    transition: opacity .38s ease, transform .38s cubic-bezier(.2,.7,.2,1), visibility 0s;
   }
 
   /* staggered entrances */
   [data-anim]{
     opacity:0; transform: translateY(26px);
-    transition: opacity .7s ease, transform .7s cubic-bezier(.16,1,.3,1);
+    transition: opacity .42s ease, transform .42s cubic-bezier(.16,1,.3,1);
     transition-delay: var(--d, 0s);
   }
   .slide.active [data-anim]{ opacity:1; transform:none }
@@ -81,10 +81,10 @@
   /* presenter steps (revealed on →) */
   [data-step]{
     opacity:0; transform: translateY(16px);
-    transition: opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+    transition: opacity .32s ease, transform .32s cubic-bezier(.16,1,.3,1);
   }
   [data-step].on{ opacity:1; transform:none }
-  .hidden{ opacity:0 !important; transition: opacity .6s ease }
+  .hidden{ opacity:0 !important; transition: opacity .4s ease }
 
   /* ── typography ───────────────────────────────────────── */
   .kicker{
@@ -134,7 +134,7 @@
   }
   .wall p{ font-size: clamp(18px, 2.6vw, 30px); font-weight:700; letter-spacing:-.01em }
   .wall small{ display:block; margin-top:6px; color: var(--mut); font-size: clamp(12px,1.4vw,15px); font-weight:400 }
-  [data-step].on.wall{ animation: slam .55s cubic-bezier(.16,1,.3,1), shake .35s .45s }
+  [data-step].on.wall{ animation: slam .4s cubic-bezier(.16,1,.3,1), shake .25s .32s }
   @keyframes slam{ from{ transform: rotate(-1.4deg) scale(1.7); opacity:0 } to{ transform: rotate(-1.4deg) scale(1); opacity:1 } }
   @keyframes shake{
     20%{ transform: rotate(-1.4deg) translateX(-5px) } 40%{ transform: rotate(-1.4deg) translateX(4px) }
@@ -194,14 +194,14 @@
   svg .box-acc{ fill: hsl(var(--hue) 80% 55% / .14); stroke: hsl(var(--hue) 85% 60%); stroke-width:2 }
   .draw{ stroke-dasharray: 1000; stroke-dashoffset: 1000 }
   .slide.active .draw.auto,
-  [data-step].on .draw{ animation: dash 1.3s cubic-bezier(.4,0,.2,1) forwards; animation-delay: var(--d,0s) }
+  [data-step].on .draw{ animation: dash .9s cubic-bezier(.4,0,.2,1) forwards; animation-delay: var(--d,0s) }
   @keyframes dash{ to{ stroke-dashoffset: 0 } }
   .pop{ opacity:0; transform-box: fill-box; transform-origin:center; }
-  .slide.active .pop{ animation: popin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  .slide.active .pop{ animation: popin .35s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes popin{ from{ opacity:0; transform:scale(.3) } to{ opacity:1; transform:scale(1) } }
 
   /* ── the road slide ───────────────────────────────────── */
-  #s-road .draw.auto{ animation-duration: 2.6s; animation-timing-function: linear; animation-delay:.15s }
+  #s-road .draw.auto{ animation-duration: 1.7s; animation-timing-function: linear; animation-delay:.1s }
   #roadgrad stop:first-child{ stop-color: hsl(var(--hue) 65% 68%) }
   #roadgrad stop:last-child{ stop-color: hsl(var(--hue) 90% 50%) }
   .road-shadow{ fill:none; stroke: hsl(var(--hue) 80% 58% / .10); stroke-width:16; stroke-linecap:round }
@@ -210,7 +210,7 @@
     offset-path: path("M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90");
     offset-rotate: 0deg;
   }
-  .slide.active .comet{ animation: comet-travel 2.6s linear .15s forwards }
+  .slide.active .comet{ animation: comet-travel 1.7s linear .1s forwards }
   @keyframes comet-travel{
     0%{ offset-distance:0%; opacity:1 }
     94%{ opacity:1 }
@@ -221,15 +221,15 @@
     fill: hsl(var(--hue) 90% 55%); stroke:#fff; stroke-width:3.5;
     opacity:0;
   }
-  .slide.active .ms .dot{ animation: dotpop .55s cubic-bezier(.16,1.4,.3,1) forwards; animation-delay: var(--d,0s) }
+  .slide.active .ms .dot{ animation: dotpop .4s cubic-bezier(.16,1.4,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes dotpop{ from{ opacity:0; transform:scale(.2) } to{ opacity:1; transform:scale(1) } }
   .ms .ring{ fill:none; stroke: hsl(var(--hue) 88% 55%); stroke-width:2; opacity:0 }
-  .slide.active .ms .ring{ animation: ringout .9s ease-out forwards; animation-delay: var(--d,0s) }
+  .slide.active .ms .ring{ animation: ringout .65s ease-out forwards; animation-delay: var(--d,0s) }
   @keyframes ringout{ 0%{ opacity:.65; transform:scale(.4) } 100%{ opacity:0; transform:scale(2.4) } }
   .ms .m-lbl{ opacity:0; transform: translateY(10px) }
   .slide.active .ms .m-lbl{
-    animation: lblrise .55s cubic-bezier(.16,1,.3,1) forwards;
-    animation-delay: calc(var(--d,0s) + .18s);
+    animation: lblrise .4s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay: calc(var(--d,0s) + .12s);
   }
   @keyframes lblrise{ to{ opacity:1; transform:none } }
   .ms .m-yr{ font-size:15px; font-weight:800; letter-spacing:.02em; fill: var(--accent); font-family: var(--mono) }
@@ -255,6 +255,7 @@
     display:flex; justify-content:space-between;
   }
   .chatw .msgs{ padding: 16px; display:flex; flex-direction:column; gap:10px; min-height: 176px }
+  .chatshot{ display:block; width:100%; height: 260px; object-fit: cover; object-position: top }
   .bub{
     max-width: 85%; padding: 9px 14px; border-radius: 14px;
     font-size: clamp(13px,1.5vw,15.5px); line-height:1.45;
@@ -268,6 +269,84 @@
     96%{ text-shadow: -2px 0 #ff3d5e, 2px 0 #2dd4ff; transform: translateX(-1px) }
   }
 
+  /* ── screenshot walkthrough (NER platform proof slides) ─ */
+  .shot-slide{ gap: 1.9vh; padding-top: 4.5vh; padding-bottom: 9.5vh }
+  .shot-slide h2{ font-size: clamp(24px, 3.4vw, 44px) }
+
+  /* stepper strip — ties the 6 walkthrough slides together */
+  .shotsteps{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center }
+  .shotstep{
+    display:flex; align-items:center; gap:7px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing:.06em;
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--mut);
+    white-space:nowrap;
+  }
+  .shotstep b{ font-size: 10px; letter-spacing:.14em; opacity:.7 }
+  .shotstep.done{
+    border-color: hsl(var(--hue) 70% 45% / .35);
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .shotstep.done b::before{ content:'✓ '; }
+  .shotstep.here{
+    border-color: var(--accent); background: var(--accent); color:#fff; font-weight:700;
+    box-shadow: 0 8px 22px -8px hsl(var(--hue) 80% 40% / .55);
+  }
+  .shotstep.here b{ opacity:.85 }
+  .slide.active .shotstep{ animation: stepin .38s cubic-bezier(.16,1,.3,1) backwards; animation-delay: calc(.12s + var(--i) * .05s) }
+  @keyframes stepin{ from{ opacity:0; transform: translateY(14px) } }
+
+  /* browser-chrome frame — matches the .term / .speccard light aesthetic */
+  .shotframe{
+    width: min(1060px, 94vw); text-align:left;
+    display:flex; flex-direction:column;
+    flex: 1 1 auto; min-height:0;
+    background: #fffdfd; border: 1px solid #eadedf; border-radius: 16px; overflow:hidden;
+    box-shadow: 0 36px 90px -30px hsl(var(--hue) 70% 30% / .35), 0 0 0 1px rgba(0,0,0,.02);
+    opacity:0; transform: perspective(1200px) translateY(46px) rotateX(5deg) scale(.965);
+  }
+  .slide.active .shotframe{ animation: shotin .6s cubic-bezier(.16,1,.3,1) .15s forwards }
+  @keyframes shotin{ to{ opacity:1; transform:none } }
+  .shotframe .shotbar{
+    flex: 0 0 auto; display:flex; align-items:center; gap:8px;
+    padding: 10px 16px; background:#f8f2f2; border-bottom: 1px solid #f0e5e6;
+  }
+  .shotframe .shotbar i{ width:12px; height:12px; border-radius:50%; display:block }
+  .shotframe .shotbar i:nth-child(1){ background:#ff5f57 }
+  .shotframe .shotbar i:nth-child(2){ background:#febc2e }
+  .shotframe .shotbar i:nth-child(3){ background:#28c840 }
+  .shotframe .url{
+    flex:1; margin-left:10px; display:flex; align-items:center; gap:8px;
+    font-family: var(--mono); font-size: 12.5px; color:#a39394;
+    background:#fff; border:1px solid #efe3e4; border-radius: 8px; padding: 5px 14px;
+    overflow:hidden; white-space:nowrap;
+  }
+  .shotframe .url em{ color: var(--accent); font-style:normal; font-weight:700 }
+  .shotframe .shottag{
+    font-family: var(--mono); font-size: 10.5px; letter-spacing:.18em; font-weight:700;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid hsl(var(--hue) 70% 45% / .3);
+    padding: 4px 12px; border-radius: 999px; white-space:nowrap;
+  }
+  .shotframe .view{
+    position:relative; flex:1 1 auto; min-height:0; overflow:hidden; background:#fff;
+  }
+  .shotframe .view img{
+    display:block; width:100%; height:100%; object-fit:contain;
+    transform-origin: center;
+  }
+  /* slow Ken Burns drift while the slide is up */
+  .slide.active .shotframe .view img{ animation: kenburns 16s ease-out .8s forwards }
+  @keyframes kenburns{ from{ transform: scale(1) } to{ transform: scale(1.035) } }
+  /* sheen sweep after the frame lands */
+  .shotframe .view::after{
+    content:''; position:absolute; top:-10%; bottom:-10%; width:34%; left:-50%;
+    transform: skewX(-18deg); pointer-events:none; opacity:0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+  }
+  .slide.active .shotframe .view::after{ animation: sheen 1.15s ease .8s forwards }
+  @keyframes sheen{ 0%{ left:-50%; opacity:1 } 100%{ left:118%; opacity:0 } }
+
   /* ── sticky notes (prompt engineering) ────────────────── */
   .notes{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; max-width: 900px }
   .note{
@@ -278,7 +357,7 @@
     transform: rotate(var(--r, -2deg));
   }
   .note b{ display:block; margin-bottom:5px; font-size:10.5px; letter-spacing:.14em; opacity:.65 }
-  [data-step].on.note{ animation: notedrop .5s cubic-bezier(.16,1,.3,1) }
+  [data-step].on.note{ animation: notedrop .35s cubic-bezier(.16,1,.3,1) }
   @keyframes notedrop{ from{ transform: rotate(var(--r)) translateY(-70px) scale(1.15); opacity:0 } }
   .filebadge{
     font-family: var(--mono); font-size: clamp(12px,1.5vw,15px);
@@ -302,10 +381,10 @@
     font-family:var(--mono); font-size:13px; padding:7px 11px; border-radius:7px;
     background:#151d30; border:1px solid #2a3a58; color:#b9c6da; white-space:nowrap;
   }
-  [data-step].on .doc{ animation: docfly .55s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .doc:nth-child(2){ animation-delay:.08s } [data-step].on .doc:nth-child(3){ animation-delay:.16s }
-  [data-step].on .doc:nth-child(4){ animation-delay:.24s } [data-step].on .doc:nth-child(5){ animation-delay:.32s }
-  [data-step].on .doc:nth-child(6){ animation-delay:.40s } [data-step].on .doc:nth-child(7){ animation-delay:.48s }
+  [data-step].on .doc{ animation: docfly .4s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .doc:nth-child(2){ animation-delay:.06s } [data-step].on .doc:nth-child(3){ animation-delay:.12s }
+  [data-step].on .doc:nth-child(4){ animation-delay:.18s } [data-step].on .doc:nth-child(5){ animation-delay:.24s }
+  [data-step].on .doc:nth-child(6){ animation-delay:.30s } [data-step].on .doc:nth-child(7){ animation-delay:.36s }
   @keyframes docfly{ from{ opacity:0; transform: translate(-120px, -60px) rotate(-9deg) scale(1.2) } }
   .ctx-meter{ text-align:left; font-family:var(--mono); font-size:clamp(13px,1.6vw,16px); color:var(--mut); display:flex; flex-direction:column; gap:10px }
   .ctx-meter .row{ display:flex; align-items:center; gap:12px }
@@ -448,9 +527,15 @@
   .fm-bad p, .fm-fix p{ font-size: clamp(12.5px,1.5vw,15px); line-height: 1.5; color: var(--mut) }
   .fm-bad p strong, .fm-fix p strong{ color: var(--ink) }
   .fm-arr{ align-self: center; font-size: clamp(18px,2.2vw,26px); font-weight: 700; color: var(--accent) }
-  [data-step].on .fm-bad{ animation: fmL .5s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .fm-arr{ animation: fmPop .35s ease .22s backwards }
-  [data-step].on .fm-fix{ animation: fmR .5s cubic-bezier(.16,1,.3,1) .3s backwards }
+  #s-failmodes{ gap: 1.3vh; padding-top: 4vh; padding-bottom: 4vh }
+  #s-failmodes .fmrow{ width: min(820px, 92vw) }
+  #s-failmodes .fm-bad, #s-failmodes .fm-fix{ padding: 9px 15px }
+  #s-failmodes .fm-bad p, #s-failmodes .fm-fix p{ font-size: clamp(11.5px,1.3vw,13.5px); line-height:1.4 }
+  #s-failmodes .fm-bad b, #s-failmodes .fm-fix b{ margin-bottom: 3px }
+  #s-failmodes .eqcap{ font-size: clamp(12px,1.4vw,15px) }
+  [data-step].on .fm-bad{ animation: fmL .35s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .fm-arr{ animation: fmPop .25s ease .15s backwards }
+  [data-step].on .fm-fix{ animation: fmR .35s cubic-bezier(.16,1,.3,1) .2s backwards }
   @keyframes fmL{ from{ opacity:0; transform: translateX(-48px) } }
   @keyframes fmR{ from{ opacity:0; transform: translateX(48px) } }
   @keyframes fmPop{ from{ opacity:0; transform: scale(.3) } }
@@ -470,14 +555,14 @@
     margin-left:8px; background:var(--accent-soft); color:var(--accent);
     vertical-align:middle; letter-spacing:.1em;
   }
-  [data-step].on .tl{ animation:treefly .42s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .tl:nth-child(2){ animation-delay:.07s }
-  [data-step].on .tl:nth-child(3){ animation-delay:.14s }
-  [data-step].on .tl:nth-child(4){ animation-delay:.21s }
-  [data-step].on .tl:nth-child(5){ animation-delay:.28s }
-  [data-step].on .tl:nth-child(6){ animation-delay:.35s }
-  [data-step].on .tl:nth-child(7){ animation-delay:.42s }
-  [data-step].on .tl:nth-child(8){ animation-delay:.49s }
+  [data-step].on .tl{ animation:treefly .3s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .tl:nth-child(2){ animation-delay:.05s }
+  [data-step].on .tl:nth-child(3){ animation-delay:.1s }
+  [data-step].on .tl:nth-child(4){ animation-delay:.15s }
+  [data-step].on .tl:nth-child(5){ animation-delay:.2s }
+  [data-step].on .tl:nth-child(6){ animation-delay:.25s }
+  [data-step].on .tl:nth-child(7){ animation-delay:.3s }
+  [data-step].on .tl:nth-child(8){ animation-delay:.35s }
   @keyframes treefly{ from{ opacity:0; transform:translateX(-22px) } }
 
   .specsnip{
@@ -490,7 +575,7 @@
   .specsnip .sh{ color:var(--accent); font-weight:700 }
   .specsnip .kw{ color:#4aae6b; font-weight:700 }
   .specsnip .gw{ color:hsl(var(--hue) 78% 62%) }
-  [data-step].on .specsnip{ animation:sniprise .5s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .specsnip{ animation:sniprise .35s cubic-bezier(.16,1,.3,1) backwards }
   @keyframes sniprise{ from{ opacity:0; transform:translateY(28px) scale(.96) } }
 
   .phase-strip{ display:flex; align-items:stretch; gap:0; flex-wrap:wrap; justify-content:center }
@@ -505,17 +590,17 @@
   .pbox .ph-sub{ font-size:10px; color:var(--mut); margin-top:3px; letter-spacing:.04em; font-weight:400; text-transform:none }
   .pbox.ph-active{ border-color:var(--accent); background:var(--accent-soft) }
   .ph-arr{ align-self:center; font-size:clamp(16px,2vw,22px); color:var(--accent); padding:0 12px; font-weight:700; line-height:1 }
-  [data-step].on .pbox{ animation:phaseup .5s cubic-bezier(.16,1,.3,1) var(--ad,0s) backwards }
-  [data-step].on .ph-arr{ animation:fmPop .3s ease var(--ad,0s) backwards }
+  [data-step].on .pbox{ animation:phaseup .35s cubic-bezier(.16,1,.3,1) var(--ad,0s) backwards }
+  [data-step].on .ph-arr{ animation:fmPop .22s ease var(--ad,0s) backwards }
   @keyframes phaseup{ from{ opacity:0; transform:translateY(26px) } }
 
   /* enhanced war cards */
-  .war[data-step].on{ animation:warslide .52s cubic-bezier(.16,1,.3,1) backwards }
+  .war[data-step].on{ animation:warslide .38s cubic-bezier(.16,1,.3,1) backwards }
   @keyframes warslide{ from{ opacity:0; transform:translateX(52px) } }
 
   /* ── RLM: recursive language models ──────────────────── */
   .rlm-child{ transform-box: fill-box; transform-origin: center; opacity:0 }
-  [data-step].on .rlm-child{ animation: popin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  [data-step].on .rlm-child{ animation: popin .35s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   .stats3{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center }
   .statcard{
     width: 216px; padding: 16px 17px 14px; border-radius: 14px; text-align:left;
@@ -523,9 +608,9 @@
   }
   .statcard .stat-num{ font-family: var(--mono); font-size: clamp(20px,2.6vw,26px); font-weight:800; color: var(--accent) }
   .statcard p{ font-size: 12.5px; color: var(--mut); line-height:1.5; margin-top:6px }
-  [data-step].on .statcard{ animation: rise .55s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .statcard:nth-child(2){ animation-delay:.1s }
-  [data-step].on .statcard:nth-child(3){ animation-delay:.2s }
+  [data-step].on .statcard{ animation: rise .4s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .statcard:nth-child(2){ animation-delay:.07s }
+  [data-step].on .statcard:nth-child(3){ animation-delay:.14s }
 
   /* ── Ralph loop ───────────────────────────────────────── */
   .rline{ opacity:0 }
@@ -542,9 +627,21 @@
   .receipt .rnum{ font-size: clamp(19px,2.4vw,24px); font-weight:800; color: var(--accent) }
   .receipt p{ font-size: 12px; color: var(--mut); margin-top:6px; line-height:1.5; font-family: var(--sans) }
   .fm-bad.ralph-fail{ width:min(300px,90vw) }
-  [data-step].on .receipt, [data-step].on .fm-bad.ralph-fail{ animation: rise .55s cubic-bezier(.16,1,.3,1) backwards }
-  [data-step].on .receipt:nth-child(2){ animation-delay:.1s }
-  [data-step].on .fm-bad.ralph-fail{ animation-delay:.2s }
+  [data-step].on .receipt, [data-step].on .fm-bad.ralph-fail{ animation: rise .4s cubic-bezier(.16,1,.3,1) backwards }
+  [data-step].on .receipt:nth-child(2){ animation-delay:.07s }
+  [data-step].on .fm-bad.ralph-fail{ animation-delay:.14s }
+  #s-ralph{ gap: 1.1vh; padding-top: 3vh; padding-bottom: 3vh }
+  #s-ralph .ralphwrap{ gap: 16px }
+  #s-ralph .term-head{ padding: 8px 14px }
+  #s-ralph .term-body.small{ min-height: 0; padding: 10px 16px; line-height: 1.6 }
+  #s-ralph .loopcol{ gap: 8px }
+  #s-ralph .candor{ padding: 8px 14px; font-size: clamp(11px,1.3vw,13px) }
+  #s-ralph .receipts{ gap: 10px }
+  #s-ralph .receipt{ width: 160px; padding: 10px }
+  #s-ralph .receipt .rnum{ font-size: clamp(16px,2vw,20px) }
+  #s-ralph .fm-bad.ralph-fail{ padding: 8px 13px }
+  #s-ralph .fm-bad.ralph-fail p, #s-ralph .receipt p{ font-size: 11.5px; margin-top: 4px }
+  #s-ralph .sub{ font-size: clamp(13px,1.5vw,17px) }
 
   /* ── loop engineering staircase ──────────────────────── */
   .stairwrap{ display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; justify-content:center }
@@ -557,7 +654,7 @@
   .stair:nth-child(2){ margin-bottom:26px }
   .stair:nth-child(3){ margin-bottom:52px }
   .stair:nth-child(4){ margin-bottom:78px }
-  .slide.active .stair{ animation: stairup .6s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  .slide.active .stair{ animation: stairup .42s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes stairup{ to{ opacity:1; transform: translateY(0) } }
   .stair .st-era{ font-family: var(--mono); font-size:11px; letter-spacing:.14em; color: var(--accent) }
   .stair .st-txt{ font-size: 13.5px; color: var(--mut); margin-top:6px; line-height:1.4 }
@@ -565,9 +662,9 @@
   .stair.stair-top .st-era{ color: var(--ink); font-weight:800 }
   .slide.active .stair.stair-top{
     animation-name: stairup, eqglow;
-    animation-duration: .6s, 2.4s;
+    animation-duration: .42s, 2.4s;
     animation-timing-function: cubic-bezier(.16,1,.3,1), ease-out;
-    animation-delay: var(--d,0s), calc(var(--d,0s) + .6s);
+    animation-delay: var(--d,0s), calc(var(--d,0s) + .42s);
     animation-iteration-count: 1, infinite;
     animation-fill-mode: forwards, none;
   }
@@ -588,7 +685,7 @@
   }
   .slide.active .dayline::before{ transform:scaleX(1) }
   .daynode{ flex:1; text-align:center; padding:0 6px; opacity:0 }
-  .slide.active .daynode{ animation: dayin .6s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(.3s + var(--i) * .24s) }
+  .slide.active .daynode{ animation: dayin .42s cubic-bezier(.16,1,.3,1) forwards; animation-delay: calc(.2s + var(--i) * .17s) }
   @keyframes dayin{ from{ opacity:0; transform:translateY(28px) } to{ opacity:1; transform:none } }
   .daynode .dn-time{ font-family:var(--mono); font-size:clamp(12px,1.4vw,15px); font-weight:700; color:var(--accent); display:block }
   .daynode .dn-dot{ display:block; width:13px; height:13px; border-radius:50%; background:var(--accent); margin:8px auto 10px; box-shadow:0 0 0 5px var(--accent-soft) }
@@ -611,8 +708,8 @@
   #s-day.active::before{ opacity:1 }
   #s-day h2 .w{ display:inline-block; opacity:0; transform: translateY(.5em) }
   .slide.active#s-day h2 .w{
-    animation: wordup .6s cubic-bezier(.16,1,.3,1) forwards;
-    animation-delay: calc(.12s + var(--wi) * .055s);
+    animation: wordup .42s cubic-bezier(.16,1,.3,1) forwards;
+    animation-delay: calc(.08s + var(--wi) * .04s);
   }
   @keyframes wordup{ to{ opacity:1; transform:none } }
   #s-day h2 .grad{
@@ -626,15 +723,15 @@
     text-shadow: 0 0 42px hsl(var(--hue) 90% 55% / .3);
   }
   .dayclock .col{ animation: blink 1s steps(1) infinite; color:var(--accent) }
-  #s-day .dayline::before{ left:12.5%; right:12.5%; top:44px; transition: transform 2s linear 1.05s }
+  #s-day .dayline::before{ left:12.5%; right:12.5%; top:44px; transition: transform 1.3s linear .68s }
   #s-day .dn-spark{
     position:absolute; top:38px; left:12.5%; width:14px; height:14px; border-radius:50%;
     background:#fff; transform:translateX(-50%); opacity:0; pointer-events:none;
     box-shadow: 0 0 12px 3px hsl(var(--hue) 90% 52% / .9), 0 0 36px 12px hsl(var(--hue) 90% 52% / .3);
   }
-  .slide.active#s-day .dn-spark{ animation: sparkrun 2s linear 1.05s forwards }
+  .slide.active#s-day .dn-spark{ animation: sparkrun 1.3s linear .68s forwards }
   @keyframes sparkrun{ 0%{ left:12.5%; opacity:1 } 96%{ opacity:1 } 100%{ left:87.5%; opacity:0 } }
-  .slide.active#s-day .daynode{ animation-delay: calc(.95s + var(--i) * .4s) }
+  .slide.active#s-day .daynode{ animation-delay: calc(.62s + var(--i) * .26s) }
   #s-day .dn-ico{
     position:relative; display:flex; align-items:center; justify-content:center;
     width:38px; height:38px; margin:6px auto 10px; border-radius:50%;
@@ -647,8 +744,8 @@
     border:2px solid var(--accent); opacity:0;
   }
   .slide.active#s-day .dn-ico::after{
-    animation: dnring .8s ease-out forwards;
-    animation-delay: calc(1.05s + var(--i) * .4s);
+    animation: dnring .55s ease-out forwards;
+    animation-delay: calc(.68s + var(--i) * .26s);
   }
   @keyframes dnring{ 0%{ opacity:.7; transform:scale(.5) } 100%{ opacity:0; transform:scale(2.2) } }
   body.light #s-day .dn-ico{ background:#fff }
@@ -687,7 +784,7 @@
 
   /* ── dome (just a chatbot?) ───────────────────────────── */
   .knock{ opacity:0; transform-box:fill-box; transform-origin:center }
-  [data-step].on .knock{ animation: knockin .75s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
+  [data-step].on .knock{ animation: knockin .5s cubic-bezier(.16,1,.3,1) forwards; animation-delay: var(--d,0s) }
   @keyframes knockin{
     0%{ opacity:0; transform:translateX(-46px) }
     55%{ opacity:1; transform:translateX(10px) }
@@ -909,7 +1006,7 @@
       <div class="daynode" style="--i:4"><span class="dn-time">10:45</span><span class="dn-ico">🚀</span><b>merged · deployed</b><p>canary watched by an agent</p></div>
       <div class="daynode" style="--i:5"><span class="dn-time">11:00</span><span class="dn-ico">☕</span><b>next requirement</b><p>the IDE never opened</p></div>
     </div>
-    <p class="sub" data-anim style="--d:3.5s">No prompts. No keystrokes. Just intent → software. <strong>Development in 2027 is… seamless.</strong></p>
+    <p class="sub" data-anim style="--d:2.3s">No prompts. No keystrokes. Just intent → software. <strong>Development in 2027 is… seamless.</strong></p>
   </section>
 
   <section class="slide" id="s-cold" data-hue="212" data-chlabel="2027 · A Day">
@@ -941,32 +1038,32 @@
       <path class="draw auto" pathLength="1000" d="M70,230 C140,230 170,140 240,140 S360,220 430,220 S530,110 600,110 S700,210 770,210 S860,90 930,90"
             fill="none" stroke="url(#roadgrad)" stroke-width="5" stroke-linecap="round"/>
       <circle class="comet" r="8"/>
-      <g class="ms" style="--d:.15s">
+      <g class="ms" style="--d:.1s">
         <circle class="ring" cx="70" cy="230" r="12"/><circle class="dot" cx="70" cy="230" r="11"/>
         <g class="m-lbl"><text x="70" y="266" text-anchor="middle" class="m-yr">2022</text><text x="70" y="288" text-anchor="middle" class="m-ttl">The Beginning</text><text x="70" y="308" text-anchor="middle" class="m-sub">ChatGPT · the second tab</text></g>
       </g>
-      <g class="ms" style="--d:.65s">
+      <g class="ms" style="--d:.43s">
         <circle class="ring" cx="240" cy="140" r="12"/><circle class="dot" cx="240" cy="140" r="11"/>
         <g class="m-lbl"><text x="240" y="66" text-anchor="middle" class="m-yr">2023</text><text x="240" y="88" text-anchor="middle" class="m-ttl">Knowledge</text><text x="240" y="108" text-anchor="middle" class="m-sub">RAG · GraphRAG · prompts</text></g>
       </g>
-      <g class="ms" style="--d:1.2s">
+      <g class="ms" style="--d:.79s">
         <circle class="ring" cx="430" cy="220" r="12"/><circle class="dot" cx="430" cy="220" r="11"/>
         <g class="m-lbl"><text x="430" y="256" text-anchor="middle" class="m-yr">2024</text><text x="430" y="278" text-anchor="middle" class="m-ttl">Connection</text><text x="430" y="298" text-anchor="middle" class="m-sub">MCP · tool calling</text></g>
       </g>
-      <g class="ms" style="--d:1.7s">
+      <g class="ms" style="--d:1.11s">
         <circle class="ring" cx="600" cy="110" r="12"/><circle class="dot" cx="600" cy="110" r="11"/>
         <g class="m-lbl"><text x="600" y="36" text-anchor="middle" class="m-yr">2025</text><text x="600" y="58" text-anchor="middle" class="m-ttl">Discipline</text><text x="600" y="78" text-anchor="middle" class="m-sub">specs · skills · harnesses</text></g>
       </g>
-      <g class="ms" style="--d:2.2s">
+      <g class="ms" style="--d:1.44s">
         <circle class="ring" cx="770" cy="210" r="12"/><circle class="dot" cx="770" cy="210" r="11"/>
         <g class="m-lbl"><text x="770" y="246" text-anchor="middle" class="m-yr">2026</text><text x="770" y="268" text-anchor="middle" class="m-ttl">Autonomy</text><text x="770" y="288" text-anchor="middle" class="m-sub">loops · RLMs · self-healing</text></g>
       </g>
-      <g class="ms" style="--d:2.7s">
+      <g class="ms" style="--d:1.77s">
         <circle class="ring" cx="930" cy="90" r="12"/><circle class="dot" cx="930" cy="90" r="11"/>
         <g class="m-lbl"><text x="930" y="42" text-anchor="middle" style="font-size:28px">🌅</text><text x="930" y="126" text-anchor="middle" class="m-yr">2027</text><text x="930" y="148" text-anchor="middle" class="m-ttl">that morning</text></g>
       </g>
     </svg>
-    <p class="sub" data-anim style="--d:3.8s">Five years. Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
+    <p class="sub" data-anim style="--d:2.3s">Five years. Five eras. <strong>Each one ends at a wall — and each wall births the next era.</strong></p>
   </section>
 
   <!-- ════════ ACT 1 · 2022 THE BEGINNING ════════ -->
@@ -1079,14 +1176,11 @@
     <div class="split">
       <div class="chatw" data-anim style="--d:.15s">
         <header><span>Gordian — enterprise assistant</span><span>2023</span></header>
-        <div class="msgs">
-          <div class="bub user">What's our policy on client data retention?</div>
-          <div class="bub bot glitch">Per policy DOC-7741 (2019), client data is retained for 7 years. <em>[No such document exists.]</em></div>
-        </div>
+        <img id="gordian-shot" class="chatshot" src="chatbot_pics/chatbot_1.PNG" alt="Gordian chatbot screenshot">
       </div>
       <div class="warlist">
         <!-- EDIT: swap these three cards for the real Gordian moments -->
-        <div class="war" data-step="1"><b>🧠 THE GOAL</b><p>One assistant that could answer anything about our enterprise knowledge — policies, projects, people.</p></div>
+        <div class="war" data-step="1"><b>🧠 THE GOAL</b><p>Questions based on the proposals and invoices under owners and contractors should be answered.</p></div>
         <div class="war" data-step="2"><b>🌀 THE HALLUCINATION MOMENT</b><p>It invented a policy that never existed — confidently, with a citation. <strong>Fluent ≠ true.</strong></p></div>
         <div class="war" data-step="3"><b>🔌 THE INTEGRATION GRIND</b><p>Every new data source: another pipeline, another format, another sync job that broke on Fridays.</p></div>
       </div>
@@ -1146,16 +1240,16 @@
   </section>
 
   <section class="slide" id="s-prompteng" data-hue="148" data-chlabel="2023 · Knowledge">
-    <p class="kicker" data-anim>“Prompt engineering? I know a thing or two about that.”</p>
+    <p class="kicker" data-anim>Now this is something we all deal with daily!</p>
     <h2 data-anim style="--d:.1s">Prompt engineering</h2>
     <div class="notes">
       <div class="note" data-step="1" style="--r:-3deg"><b>HACK #1</b>"You are a world-class senior expert with 20 years of experience…"</div>
       <div class="note" data-step="1" style="--r:2deg"><b>HACK #2</b>"Think step by step. Take a deep breath."</div>
       <div class="note" data-step="2" style="--r:-1.5deg"><b>HACK #3</b>"Return ONLY valid JSON. ONLY. JSON."</div>
-      <div class="note" data-step="2" style="--r:3deg"><b>HACK #4</b>"IMPORTANT!!! (written three times, in caps)"</div>
+      <div class="note" data-step="2" style="--r:3deg"><b>HACK #4</b>"IMPORTANT!!!"</div>
       <div class="note" data-step="2" style="--r:-2.5deg"><b>HACK #5</b>"I will tip you $200 💸"</div>
     </div>
-    <div class="filebadge" data-step="2">saved as <em>prompt_final_FINAL_v37.txt</em> — we are not proud of this</div>
+    <div class="filebadge" data-step="2">saved as <em>prompt_final_FINAL_v37.txt</em></div>
     <div class="fmrow" data-step="3">
       <div class="fm-bad"><b>BEFORE</b><p>"write code for login"</p></div>
       <span class="fm-arr">→</span>
@@ -1427,10 +1521,10 @@ R1 — <span class="kw">MUST</span> process refunds atomically
     </div>
     <div class="phase-strip" data-step="3">
       <div class="pbox ph-active" style="--ad:0s"><div class="ph-label">/opsx:propose</div><div class="ph-sub">generate artifacts · review before code</div></div>
-      <span class="ph-arr" style="--ad:.12s">→</span>
-      <div class="pbox" style="--ad:.2s"><div class="ph-label">/opsx:apply</div><div class="ph-sub">implement with harness · iterate freely</div></div>
-      <span class="ph-arr" style="--ad:.32s">→</span>
-      <div class="pbox" style="--ad:.4s"><div class="ph-label">/opsx:archive</div><div class="ph-sub">delta merges into living specs</div></div>
+      <span class="ph-arr" style="--ad:.08s">→</span>
+      <div class="pbox" style="--ad:.14s"><div class="ph-label">/opsx:apply</div><div class="ph-sub">implement with harness · iterate freely</div></div>
+      <span class="ph-arr" style="--ad:.22s">→</span>
+      <div class="pbox" style="--ad:.28s"><div class="ph-label">/opsx:archive</div><div class="ph-sub">delta merges into living specs</div></div>
     </div>
     <p class="sub" data-step="4">61k GitHub stars · 25+ tools · MIT licensed · no API key. <strong>Fluid, not rigid — no phase gates. Works with any agent, any codebase.</strong></p>
   </section>
@@ -1462,7 +1556,138 @@ THEN  balance = $70 + audit entry
         <div class="war" data-step="3"><b>🚫 WHAT WE'D NEVER DO AGAIN</b><p>Leave "obvious" things unwritten. If it's not in the spec, <strong>it does not exist.</strong></p></div>
       </div>
     </div>
-    <p class="sub" data-step="4">Honest friction is the point — <strong>that's why you can believe the rest of this talk.</strong></p>
+  </section>
+
+  <section class="slide" id="s-proof" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>No live demo — here's what shipped</p>
+    <h2 data-anim style="--d:.08s">The Multi-Tenant NER Platform</h2>
+    <div class="stats3" data-step="1">
+      <div class="statcard"><div class="stat-num">40 days</div><p>first spec to today — 2026‑06‑08 → 2026‑07‑17</p></div>
+      <div class="statcard"><div class="stat-num">69</div><p>spec-driven changes shipped, proposal → archive</p></div>
+      <div class="statcard"><div class="stat-num">60</div><p>living specs now governing the platform</p></div>
+    </div>
+    <p class="sub" data-step="2">Every one of those 69 changes went through the same gate — propose → design → spec → build → verify. <strong>The discipline is what made the speed possible.</strong> Here's what it built.</p>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot1" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Logging in</h2>
+    <div class="shotsteps">
+      <span class="shotstep here" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/login</em></span>
+        <span class="shottag">1 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/1%20login%20page.png" alt="NER platform login page"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot2" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Annotating documents</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep here" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/annotate</em></span>
+        <span class="shottag">2 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/2%20annotation%20page.png" alt="Annotation workspace screenshot"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot3" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Submitting a training job</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep here" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/training</em></span>
+        <span class="shottag">3 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/3%20training.png" alt="Submitting a model training job"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot4" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Trained model metrics</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep here" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/models/metrics</em></span>
+        <span class="shottag">4 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/4%20model%20metrics.png" alt="Trained model metrics"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot5" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Running an extraction</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep done" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep here" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/extraction</em></span>
+        <span class="shottag">5 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/5%20extraction1.png" alt="Extraction results, view 1"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot6" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Extraction results</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep done" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep done" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep here" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/extraction/results</em></span>
+        <span class="shottag">6 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/6%20extraction2.png" alt="Extraction results, view 2"></div>
+    </div>
+    <p class="sub" data-step="1" style="font-size:clamp(13px,1.5vw,17px)">That's the platform running — <strong>no live demo needed.</strong></p>
   </section>
 
   <!-- ════════ ACT 5 · 2026 THE AUTONOMY ERA ════════ -->
@@ -1543,9 +1768,9 @@ THEN  balance = $70 + audit entry
 
   <section class="slide dense" id="s-ralph" data-hue="282" data-chlabel="2026 · Autonomy">
     <p class="kicker" data-anim>Frontier 2 · brute force meets persistence</p>
-    <h2 data-anim style="--d:.08s">The Ralph loop</h2>
+    <h2 data-anim style="--d:.08s; font-size:clamp(24px,3.6vw,46px)">The Ralph loop</h2>
     <div class="ralphwrap">
-      <div class="term" data-anim style="--d:.15s; width:min(560px,88vw)">
+      <div class="term" data-anim style="--d:.15s; width:min(460px,72vw)">
         <div class="term-head"><i></i><i></i><i></i><span>ralph.sh — the whole strategy</span></div>
         <div class="term-body small">
           <div class="tl rline" style="--d:.1s">while :; do</div>
@@ -1554,7 +1779,7 @@ THEN  balance = $70 + audit entry
         </div>
       </div>
       <div class="loopcol">
-        <svg viewBox="0 0 420 420" style="width:min(300px,50vw)" data-step="1" aria-label="Ralph loop: prompt to agent to tests to fail and back">
+        <svg viewBox="0 0 420 420" style="width:min(190px,26vw)" data-step="1" aria-label="Ralph loop: prompt to agent to tests to fail and back">
           <circle class="spinring" cx="210" cy="210" r="150" fill="none" stroke="hsl(var(--hue) 85% 62%)" stroke-width="2.5" stroke-dasharray="10 14" opacity=".8"/>
           <g><circle cx="210" cy="60" r="44" class="box-acc"/><text x="210" y="55" text-anchor="middle" class="lbl" style="font-size:12.5px">PROMPT.md</text><text x="210" y="71" text-anchor="middle" class="lbl-s" style="font-size:10.5px">fresh, every time</text></g>
           <g><circle cx="360" cy="210" r="44" class="box-acc"/><text x="360" y="217" text-anchor="middle" class="lbl">agent</text></g>
@@ -1581,9 +1806,9 @@ THEN  balance = $70 + audit entry
     <h2 data-anim style="--d:.08s">Loop engineering</h2>
     <div class="stairwrap" data-anim style="--d:.1s">
       <div class="stair" style="--d:.1s"><div class="st-era">PROMPT ENGINEERING · 2023</div><div class="st-txt">sharper words</div></div>
-      <div class="stair" style="--d:.28s"><div class="st-era">CONTEXT ENGINEERING · 2025</div><div class="st-txt">sharper input</div></div>
-      <div class="stair" style="--d:.46s"><div class="st-era">HARNESS ENGINEERING · 2026</div><div class="st-txt">sharper cage</div></div>
-      <div class="stair stair-top" style="--d:.64s"><div class="st-era">LOOP ENGINEERING · now</div><div class="st-txt">sharper cycles</div></div>
+      <div class="stair" style="--d:.2s"><div class="st-era">CONTEXT ENGINEERING · 2025</div><div class="st-txt">sharper input</div></div>
+      <div class="stair" style="--d:.32s"><div class="st-era">HARNESS ENGINEERING · 2026</div><div class="st-txt">sharper cage</div></div>
+      <div class="stair stair-top" style="--d:.44s"><div class="st-era">LOOP ENGINEERING · now</div><div class="st-txt">sharper cycles</div></div>
     </div>
     <div class="chips" data-step="1">
       <span class="chip">⏱ heartbeat — every N minutes</span>
@@ -1668,12 +1893,6 @@ THEN  balance = $70 + audit entry
     <p class="sub" data-step="1"><strong>Autonomy is only responsible when you can observe it — and afford it.</strong></p>
   </section>
 
-  <section class="slide" id="s-takeaway" data-hue="205" data-chlabel="The Price">
-    <p class="kicker" data-anim>The takeaway</p>
-    <p class="pivot-line" data-anim style="--d:.15s">The future of AI‑native engineering isn't determined by <em>who has the biggest models</em> —</p>
-    <p class="pivot-line" data-step="1">it's determined by <em>who uses them most effectively.</em></p>
-  </section>
-
   <section class="slide" id="s-close" data-hue="212" data-chlabel="Close">
     <p class="kicker" data-anim>2027 · that Tuesday morning, again</p>
     <div class="dayline compact" data-anim style="--d:.15s">
@@ -1687,8 +1906,7 @@ THEN  balance = $70 + audit entry
     <h2 data-step="1">Now you know how.</h2>
     <p class="sub" data-step="2" style="font-size:clamp(17px,2.2vw,24px)">Five years, five eras — <strong class="accent">every one of them lives inside that one effortless morning.</strong></p>
     <div class="thanks" data-step="3">Thank you.</div>
-    <!-- EDIT: your team name goes here -->
-    <p class="teamline" data-step="3">— YOUR TEAM NAME · TechDay 2026</p>
+    <p class="teamline" data-step="3">— Team 'Four' The People · TechDay 2026</p>
   </section>
 
 </main>
@@ -1890,7 +2108,7 @@ THEN  balance = $70 + audit entry
     (function tick(){
       if(token.cancelled) return;
       span.textContent = text.slice(0, ++i);
-      if(i < text.length) setTimeout(tick, 10 + Math.random() * 22);
+      if(i < text.length) setTimeout(tick, 6 + Math.random() * 14);
       else { span.classList.remove('typing'); done(); }
     })();
   }
@@ -1908,29 +2126,41 @@ THEN  balance = $70 + audit entry
         var tp = document.createElement('span'); tp.className = 'tp'; tp.textContent = '$ ';
         div.appendChild(tp);
         var sp = document.createElement('span'); div.appendChild(sp);
-        typeText(sp, L.text, token, function(){ setTimeout(nextLine, RM ? 0 : (L.pause || 380)); });
+        typeText(sp, L.text, token, function(){ setTimeout(nextLine, RM ? 0 : (L.pause || 260)); });
       } else {
         div.textContent = L.text;
-        setTimeout(nextLine, RM ? 0 : (L.pause || 300));
+        setTimeout(nextLine, RM ? 0 : (L.pause || 200));
       }
     })();
   }
 
   /* EDIT: the 2027 cold-open story — swap for whatever feels most real to your team */
   var coldScript = [
-    { cmd: true, text: 'agent run --loop --spec specs/customer-alerts.md', pause: 500 },
+    { cmd: true, text: 'agent run --loop --spec specs/customer-alerts.md', pause: 340 },
     { text: '▸ 09:15 reading spec … 12 requirements · 8 acceptance scenarios', cls: 'dim' },
     { text: '▸ 09:22 iteration 1 — plan → build → test ……… 7 failing' },
     { text: '▸ 09:41 iteration 2 — fix: webhook retries ……… 3 failing' },
     { text: '▸ 10:02 iteration 3 — fix: rate-limit backoff … 0 failing ✓', cls: 'ok' },
-    { text: '▸ 10:20 verify — acceptance scenarios 8/8 ✓', cls: 'ok', pause: 420 },
-    { text: '▸ 10:38 PR #1024 — reviewed: 1 agent · 1 human ✓', cls: 'ok', pause: 460 },
-    { text: '▸ 10:45 merged → canary → 100% rollout ✓', cls: 'ok', pause: 500 },
+    { text: '▸ 10:20 verify — acceptance scenarios 8/8 ✓', cls: 'ok', pause: 280 },
+    { text: '▸ 10:38 PR #1024 — reviewed: 1 agent · 1 human ✓', cls: 'ok', pause: 300 },
+    { text: '▸ 10:45 merged → canary → 100% rollout ✓', cls: 'ok', pause: 340 },
     { text: '● 11:00 loop idle — picking next item from backlog', cls: 'acc' }
   ];
 
   /* ── per-slide activations ────────────────────────────── */
   var inits = {
+    's-gordian': function(s, token){
+      var img = document.getElementById('gordian-shot');
+      var pics = ['chatbot_pics/chatbot_1.PNG', 'chatbot_pics/chatbot_2.PNG', 'chatbot_pics/chatbot_3.PNG'];
+      var idx = 0;
+      if(RM) return;
+      (function loopPics(){
+        if(token.cancelled) return;
+        idx = (idx + 1) % pics.length;
+        img.src = pics[idx];
+        setTimeout(loopPics, 1800);
+      })();
+    },
     's-day': function(s, token){
       var hh = document.getElementById('ck-h'), mm = document.getElementById('ck-m');
       var times = [540, 550, 555, 620, 645, 660]; /* minutes: the six node times */
@@ -1942,7 +2172,7 @@ THEN  balance = $70 + audit entry
       if(RM){ set(660); return; }
       setTimeout(function(){
         if(token.cancelled) return;
-        var t0 = performance.now(), DUR = 2000;
+        var t0 = performance.now(), DUR = 1300;
         (function tick(now){
           if(token.cancelled) return;
           var p = Math.min(1, (now - t0) / DUR);
@@ -1951,14 +2181,14 @@ THEN  balance = $70 + audit entry
           if(p < 1) requestAnimationFrame(tick);
           else set(660);
         })(t0);
-      }, 800); /* init fires 250ms after activate; spark leaves at 1.05s */
+      }, 430); /* init fires 250ms after activate; spark leaves at .68s */
     },
     's-cold': function(s, token){
       var steps = stepsIn(s);
       runTerminal(document.getElementById('cold-term'), coldScript, token, function(){
         if(RM){ steps.forEach(function(e){ e.classList.add('on'); }); syncHides(s); updateHud(); return; }
         steps.forEach(function(step){
-          var delay = 350 + (+step.dataset.step) * 500;
+          var delay = 220 + (+step.dataset.step) * 320;
           setTimeout(function(){
             if(token.cancelled) return;
             step.classList.add('on');
@@ -1977,7 +2207,7 @@ THEN  balance = $70 + audit entry
         return;
       }
       el.classList.add('spin');
-      var t0 = performance.now(), DUR = 2600;
+      var t0 = performance.now(), DUR = 1700;
       (function tick(now){
         if(token.cancelled) return;
         var t = Math.min(1, (now - t0) / DUR);
@@ -1988,7 +2218,7 @@ THEN  balance = $70 + audit entry
         else {
           el.textContent = '2022'; el.classList.remove('spin');
           steps.forEach(function(step){
-            var delay = 400 + (+step.dataset.step) * 500;
+            var delay = 260 + (+step.dataset.step) * 320;
             setTimeout(function(){
               if(token.cancelled) return;
               step.classList.add('on');
@@ -2000,7 +2230,7 @@ THEN  balance = $70 + audit entry
     },
     's-ops': function(s, token){
       Array.prototype.forEach.call(s.querySelectorAll('.count'), function(el){
-        var to = +el.dataset.to, t0 = performance.now(), DUR = RM ? 1 : 1500;
+        var to = +el.dataset.to, t0 = performance.now(), DUR = RM ? 1 : 1000;
         (function tick(now){
           if(token.cancelled) return;
           var t = Math.min(1, (now - t0) / DUR);
