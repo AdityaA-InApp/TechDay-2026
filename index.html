@@ -268,6 +268,84 @@
     96%{ text-shadow: -2px 0 #ff3d5e, 2px 0 #2dd4ff; transform: translateX(-1px) }
   }
 
+  /* ── screenshot walkthrough (NER platform proof slides) ─ */
+  .shot-slide{ gap: 1.9vh; padding-top: 4.5vh; padding-bottom: 9.5vh }
+  .shot-slide h2{ font-size: clamp(24px, 3.4vw, 44px) }
+
+  /* stepper strip — ties the 6 walkthrough slides together */
+  .shotsteps{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center }
+  .shotstep{
+    display:flex; align-items:center; gap:7px;
+    font-family: var(--mono); font-size: 11.5px; letter-spacing:.06em;
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--mut);
+    white-space:nowrap;
+  }
+  .shotstep b{ font-size: 10px; letter-spacing:.14em; opacity:.7 }
+  .shotstep.done{
+    border-color: hsl(var(--hue) 70% 45% / .35);
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .shotstep.done b::before{ content:'✓ '; }
+  .shotstep.here{
+    border-color: var(--accent); background: var(--accent); color:#fff; font-weight:700;
+    box-shadow: 0 8px 22px -8px hsl(var(--hue) 80% 40% / .55);
+  }
+  .shotstep.here b{ opacity:.85 }
+  .slide.active .shotstep{ animation: stepin .38s cubic-bezier(.16,1,.3,1) backwards; animation-delay: calc(.12s + var(--i) * .05s) }
+  @keyframes stepin{ from{ opacity:0; transform: translateY(14px) } }
+
+  /* browser-chrome frame — matches the .term / .speccard light aesthetic */
+  .shotframe{
+    width: min(1060px, 94vw); text-align:left;
+    display:flex; flex-direction:column;
+    flex: 1 1 auto; min-height:0;
+    background: #fffdfd; border: 1px solid #eadedf; border-radius: 16px; overflow:hidden;
+    box-shadow: 0 36px 90px -30px hsl(var(--hue) 70% 30% / .35), 0 0 0 1px rgba(0,0,0,.02);
+    opacity:0; transform: perspective(1200px) translateY(46px) rotateX(5deg) scale(.965);
+  }
+  .slide.active .shotframe{ animation: shotin .6s cubic-bezier(.16,1,.3,1) .15s forwards }
+  @keyframes shotin{ to{ opacity:1; transform:none } }
+  .shotframe .shotbar{
+    flex: 0 0 auto; display:flex; align-items:center; gap:8px;
+    padding: 10px 16px; background:#f8f2f2; border-bottom: 1px solid #f0e5e6;
+  }
+  .shotframe .shotbar i{ width:12px; height:12px; border-radius:50%; display:block }
+  .shotframe .shotbar i:nth-child(1){ background:#ff5f57 }
+  .shotframe .shotbar i:nth-child(2){ background:#febc2e }
+  .shotframe .shotbar i:nth-child(3){ background:#28c840 }
+  .shotframe .url{
+    flex:1; margin-left:10px; display:flex; align-items:center; gap:8px;
+    font-family: var(--mono); font-size: 12.5px; color:#a39394;
+    background:#fff; border:1px solid #efe3e4; border-radius: 8px; padding: 5px 14px;
+    overflow:hidden; white-space:nowrap;
+  }
+  .shotframe .url em{ color: var(--accent); font-style:normal; font-weight:700 }
+  .shotframe .shottag{
+    font-family: var(--mono); font-size: 10.5px; letter-spacing:.18em; font-weight:700;
+    color: var(--accent); background: var(--accent-soft);
+    border: 1px solid hsl(var(--hue) 70% 45% / .3);
+    padding: 4px 12px; border-radius: 999px; white-space:nowrap;
+  }
+  .shotframe .view{
+    position:relative; flex:1 1 auto; min-height:0; overflow:hidden; background:#fff;
+  }
+  .shotframe .view img{
+    display:block; width:100%; height:100%; object-fit:contain;
+    transform-origin: center;
+  }
+  /* slow Ken Burns drift while the slide is up */
+  .slide.active .shotframe .view img{ animation: kenburns 16s ease-out .8s forwards }
+  @keyframes kenburns{ from{ transform: scale(1) } to{ transform: scale(1.035) } }
+  /* sheen sweep after the frame lands */
+  .shotframe .view::after{
+    content:''; position:absolute; top:-10%; bottom:-10%; width:34%; left:-50%;
+    transform: skewX(-18deg); pointer-events:none; opacity:0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent);
+  }
+  .slide.active .shotframe .view::after{ animation: sheen 1.15s ease .8s forwards }
+  @keyframes sheen{ 0%{ left:-50%; opacity:1 } 100%{ left:118%; opacity:0 } }
+
   /* ── sticky notes (prompt engineering) ────────────────── */
   .notes{ display:flex; gap: 16px; flex-wrap:wrap; justify-content:center; max-width: 900px }
   .note{
@@ -1400,6 +1478,138 @@ THEN  balance = $70 + audit entry
         <div class="war" data-step="3"><b>🚫 WHAT WE'D NEVER DO AGAIN</b><p>Leave "obvious" things unwritten. If it's not in the spec, <strong>it does not exist.</strong></p></div>
       </div>
     </div>
+  </section>
+
+  <section class="slide" id="s-proof" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>No live demo — here's what shipped</p>
+    <h2 data-anim style="--d:.08s">The Multi-Tenant NER Platform</h2>
+    <div class="stats3" data-step="1">
+      <div class="statcard"><div class="stat-num">40 days</div><p>first spec to today — 2026‑06‑08 → 2026‑07‑17</p></div>
+      <div class="statcard"><div class="stat-num">69</div><p>spec-driven changes shipped, proposal → archive</p></div>
+      <div class="statcard"><div class="stat-num">60</div><p>living specs now governing the platform</p></div>
+    </div>
+    <p class="sub" data-step="2">Every one of those 69 changes went through the same gate — propose → design → spec → build → verify. <strong>The discipline is what made the speed possible.</strong> Here's what it built.</p>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot1" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Logging in</h2>
+    <div class="shotsteps">
+      <span class="shotstep here" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/login</em></span>
+        <span class="shottag">1 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/1%20login%20page.png" alt="NER platform login page"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot2" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Annotating documents</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep here" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/annotate</em></span>
+        <span class="shottag">2 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/2%20annotation%20page.png" alt="Annotation workspace screenshot"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot3" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Submitting a training job</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep here" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/training</em></span>
+        <span class="shottag">3 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/3%20training.png" alt="Submitting a model training job"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot4" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Trained model metrics</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep here" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/models/metrics</em></span>
+        <span class="shottag">4 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/4%20model%20metrics.png" alt="Trained model metrics"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot5" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Running an extraction</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep done" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep here" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/extraction</em></span>
+        <span class="shottag">5 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/5%20extraction1.png" alt="Extraction results, view 1"></div>
+    </div>
+  </section>
+
+  <section class="slide shot-slide" id="s-shot6" data-hue="222" data-chlabel="2025 · Discipline">
+    <p class="kicker" data-anim>The walkthrough</p>
+    <h2 data-anim style="--d:.08s">Extraction results</h2>
+    <div class="shotsteps">
+      <span class="shotstep done" style="--i:0"><b>01</b>sign in</span>
+      <span class="shotstep done" style="--i:1"><b>02</b>annotate</span>
+      <span class="shotstep done" style="--i:2"><b>03</b>train</span>
+      <span class="shotstep done" style="--i:3"><b>04</b>metrics</span>
+      <span class="shotstep done" style="--i:4"><b>05</b>extract</span>
+      <span class="shotstep here" style="--i:5"><b>06</b>results</span>
+    </div>
+    <div class="shotframe">
+      <div class="shotbar"><i></i><i></i><i></i>
+        <span class="url">🔒 nerp.acme.dev<em>/extraction/results</em></span>
+        <span class="shottag">6 / 6</span>
+      </div>
+      <div class="view"><img src="ner_pics/6%20extraction2.png" alt="Extraction results, view 2"></div>
+    </div>
+    <p class="sub" data-step="1" style="font-size:clamp(13px,1.5vw,17px)">That's the platform running — <strong>no live demo needed.</strong></p>
   </section>
 
   <!-- ════════ ACT 5 · 2026 THE AUTONOMY ERA ════════ -->
