@@ -112,6 +112,15 @@
   }
   .chip .arr{ color: var(--accent); margin: 0 2px }
 
+  /* ── title slide ──────────────────────────────────────── */
+  .hero-title{
+    max-width: none;
+    font-size: clamp(44px, 7.6vw, 104px);
+    background: linear-gradient(92deg, var(--ink) 30%, hsl(var(--hue) 90% 60%) 55%, var(--ink) 80%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
   /* ── the wall motif ───────────────────────────────────── */
   .wall{
     position:relative;
@@ -979,6 +988,11 @@
   body.light .candor{ color:#4c3f40 }
   body.light .gauge .bar, body.light .mrow .mbar{ background:#f2eaea }
   body.light .thanks{ background: linear-gradient(92deg, var(--ink), var(--accent)); -webkit-background-clip:text; background-clip:text }
+  body.light .hero-title{
+    background: linear-gradient(92deg, var(--ink) 30%, var(--accent) 55%, var(--ink) 80%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
   body.light #hud{ color:#a08f90 }
   body.light #hud .rail b{ background:#e8dcdd }
   body.light #hud .rail b.here{ background: var(--accent); box-shadow: 0 0 10px rgba(171,30,35,.7) }
@@ -1000,6 +1014,16 @@
 <div id="brand"><img src="InApp-Logo-RGB.png" alt="InApp"></div>
 
 <main id="deck">
+
+  <!-- ════════ TITLE ════════ -->
+  <section class="slide" id="s-title" data-hue="358" data-chlabel="Welcome">
+    <h1 class="hero-title" data-anim>Paradigm Shift in AI</h1>
+    <svg viewBox="0 0 560 22" data-anim style="--d:.18s; width:min(460px,58vw); margin-top:-1.8vh" aria-hidden="true">
+      <path class="draw auto" pathLength="1000" style="--d:.4s" d="M8,15 C160,5 400,5 552,11"
+            fill="none" stroke="var(--accent)" stroke-width="3.5" stroke-linecap="round"/>
+    </svg>
+    <p class="sub" data-anim style="--d:.3s">Moving from <strong>traditional AI tools</strong> to <strong class="accent">autonomous end-to-end agentic workflows</strong></p>
+  </section>
 
   <!-- ════════ ACT 0 · 2027 THE HOOK ════════ -->
   <section class="slide" id="s-day" data-hue="212" data-chlabel="2027 · A Day">
@@ -1924,7 +1948,7 @@ THEN  balance = $70 + audit entry
 <div id="hud">
   <span id="chlabel">2027 · A Day</span>
   <span class="rail" id="rail"></span>
-  <span id="counter">1 / 19 · press ?</span>
+  <span id="counter">1 / 21 · press ?</span>
 </div>
 
 <div id="help">
